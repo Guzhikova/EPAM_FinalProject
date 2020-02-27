@@ -88,14 +88,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\header\head-bg.jpg" />
+    <Content Include="Content\Images\header\header-bg.jpg" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.css" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.min.css" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.css" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.min.css" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.css" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css" />
+    <Content Include="Content\Styles\main.css" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.js" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Index.cshtml" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.css.map" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.min.css.map" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.css.map" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.css.map" />
+    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css.map" />
     <None Include="packages.config" />
     <Content Include="Pages\Layouts\_MainLayout.cshtml" />
+    <Content Include="Pages\Partials\_Header.cshtml" />
+    <Content Include="Pages\Partials\_HorizontalMenu.cshtml" />
+    <Content Include="Pages\Partials\_AuxiliaryMenu.cshtml" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -103,9 +130,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Partial\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="~/Content/Styles/bootstrap-4.4.1/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/main.css" rel="stylesheet" />
+
+    <title>@PageData["Title"]</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                @RenderPage("/Pages/Partials/_Header.cshtml")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @RenderPage("/Pages/Partials/_HorizontalMenu.cshtml")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                @RenderBody()
+            </div>
+            <div class="col-sm-3">
+                @RenderPage("/Pages/Partials/_AuxiliaryMenu.cshtml")
+            </div>
+
+        </div>
+
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap-4.4.1/bootstrap.min.js"></script>
+</body>
+</html>

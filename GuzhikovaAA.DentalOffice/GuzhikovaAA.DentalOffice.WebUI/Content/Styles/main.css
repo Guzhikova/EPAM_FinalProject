@@ -1,0 +1,28 @@
+﻿body{
+    background-color: white;
+}
+
+
+/* HEADER */
+
+header.bg {
+    min-height: 100px;
+    background: url("/Content/Images/header/head-bg.jpg") right center no-repeat;
+    background-size: 75%;
+}
+
+header p {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Horizontal menu */
+
+#horizontal-menu a {
+    font-weight: bold;
+    color: #cafaf2;
+}
+
+#horizontal-menu a:hover{
+    color: white;
+}
