@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuzhikovaAA.DentalOffice.WebUI", "GuzhikovaAA.DentalOffice.WebUI\GuzhikovaAA.DentalOffice.WebUI.csproj", "{71A95874-92CC-4643-9023-A1AD1181DEB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalOffice.WebUI", "GuzhikovaAA.DentalOffice.WebUI\DentalOffice.WebUI.csproj", "{71A95874-92CC-4643-9023-A1AD1181DEB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4053AEB8-497D-48B1-A16C-595096812529}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{3F1DA6D5-8CB5-4DE4-8254-F11225F7D09F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +22,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{71A95874-92CC-4643-9023-A1AD1181DEB0} = {3F1DA6D5-8CB5-4DE4-8254-F11225F7D09F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0236D15B-91B3-4011-979F-05165C17B6CC}

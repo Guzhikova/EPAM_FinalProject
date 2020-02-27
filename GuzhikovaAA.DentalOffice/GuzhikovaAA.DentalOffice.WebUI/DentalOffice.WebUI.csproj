@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -90,39 +93,22 @@
   <ItemGroup>
     <Content Include="Content\Images\header\head-bg.jpg" />
     <Content Include="Content\Images\header\header-bg.jpg" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.css" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.min.css" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.css" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.min.css" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.css" />
     <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css" />
     <Content Include="Content\Styles\main.css" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.min.js" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.js" />
     <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\Log4net\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index.cshtml" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.css.map" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-grid.min.css.map" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.css.map" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.css.map" />
-    <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css.map" />
     <None Include="packages.config" />
     <Content Include="Pages\Layouts\_MainLayout.cshtml" />
     <Content Include="Pages\Partials\_Header.cshtml" />
     <Content Include="Pages\Partials\_HorizontalMenu.cshtml" />
     <Content Include="Pages\Partials\_AuxiliaryMenu.cshtml" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.js.map" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -130,7 +116,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

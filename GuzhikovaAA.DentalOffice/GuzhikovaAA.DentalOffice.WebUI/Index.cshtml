@@ -1,5 +1,9 @@
-﻿@{
+﻿@using DentalOffice.WebUI.Log4net;
+@{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+
+    Logger.InitLogger();//инициализация - требуется один раз в начале
+
+    Logger.Log.Info("Ура заработало!");
 }
-
-
