@@ -6,9 +6,9 @@
 /* HEADER */
 
 header.bg {
-    min-height: 100px;
+    height: 100px;
     background: url("/Content/Images/header/head-bg.jpg") right center no-repeat;
-    background-size: 75%;
+    background-size: auto 140px;
 }
 
 header p {

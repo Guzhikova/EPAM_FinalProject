@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4053AE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{3F1DA6D5-8CB5-4DE4-8254-F11225F7D09F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalOffice.Entities", "DentalOffice.Entities\DentalOffice.Entities.csproj", "{944AFAD7-CA0D-4D14-A32F-5D226B3142E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{71A95874-92CC-4643-9023-A1AD1181DEB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71A95874-92CC-4643-9023-A1AD1181DEB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71A95874-92CC-4643-9023-A1AD1181DEB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944AFAD7-CA0D-4D14-A32F-5D226B3142E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944AFAD7-CA0D-4D14-A32F-5D226B3142E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944AFAD7-CA0D-4D14-A32F-5D226B3142E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944AFAD7-CA0D-4D14-A32F-5D226B3142E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{71A95874-92CC-4643-9023-A1AD1181DEB0} = {3F1DA6D5-8CB5-4DE4-8254-F11225F7D09F}
+		{944AFAD7-CA0D-4D14-A32F-5D226B3142E5} = {4053AEB8-497D-48B1-A16C-595096812529}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0236D15B-91B3-4011-979F-05165C17B6CC}
