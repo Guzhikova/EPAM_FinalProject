@@ -20,5 +20,7 @@ namespace DentalOffice.WebUI.Log4net
         {
             XmlConfigurator.Configure();
         }
+
+
     }
 }
