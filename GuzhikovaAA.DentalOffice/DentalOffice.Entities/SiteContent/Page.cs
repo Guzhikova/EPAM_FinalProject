@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.Entities.Content
+namespace DentalOffice.Entities
 {
     public class Page
     {
