@@ -13,9 +13,9 @@ namespace DentalOffice.DAL.Interfaces
 
         IEnumerable<Record> GetAllOnDate(DateTime date);
 
-        IEnumerable<Record> GetAllAfterDate(DateTime date);
+        IEnumerable<Record> GetAllStartingFromDate(DateTime date);
 
-        IEnumerable<Record> GetAllBetweenDates(DateTime date1, DateTime date2);
+        IEnumerable<Record> GetAllBetweenDates(DateTime dateStart, DateTime dateEnd);
 
         Record GetById(int id);
 

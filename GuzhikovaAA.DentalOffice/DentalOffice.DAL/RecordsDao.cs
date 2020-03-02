@@ -25,7 +25,7 @@ namespace DentalOffice.DAL
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Record> GetAllAfterDate(DateTime date)
+        public IEnumerable<Record> GetAllStartingFromDate(DateTime date)
         {
             throw new NotImplementedException();
         }
