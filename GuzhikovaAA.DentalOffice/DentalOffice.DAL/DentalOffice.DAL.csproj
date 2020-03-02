@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="EmployeeFileDao.cs" />
     <Compile Include="EmployeesDao.cs" />
+    <Compile Include="EmployeeSpecialtyDao.cs" />
     <Compile Include="FilesDao.cs" />
     <Compile Include="NewsDao.cs" />
     <Compile Include="NewsFileDao.cs" />
@@ -51,7 +52,9 @@
     <Compile Include="PatientsDao.cs" />
     <Compile Include="PostsDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecordsDao.cs" />
     <Compile Include="RolesDao.cs" />
+    <Compile Include="SpecialtiesDao.cs" />
     <Compile Include="UserRoleDao.cs" />
     <Compile Include="UsersDao.cs" />
   </ItemGroup>

@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Company\Employee.cs" />
+    <Compile Include="Company\Record.cs" />
+    <Compile Include="Company\Specialty.cs" />
     <Compile Include="SiteContent\File.cs" />
     <Compile Include="Company\Patient.cs" />
     <Compile Include="Company\Post.cs" />

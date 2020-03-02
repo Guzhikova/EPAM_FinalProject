@@ -8,29 +8,29 @@ using System.Threading.Tasks;
 
 namespace DentalOffice.DAL
 {
-    public class RolesDao : IRolesDao
+    public class SpecialtiesDao : ISpecialtiesDao
     {
-        public IEnumerable<Role> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role Add(Role role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role Update(Role role)
+        public Specialty Add(Specialty specialty)
         {
             throw new NotImplementedException();
         }
 
         public void DeleteById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Specialty> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Specialty GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Specialty Update(Specialty specialty)
         {
             throw new NotImplementedException();
         }
