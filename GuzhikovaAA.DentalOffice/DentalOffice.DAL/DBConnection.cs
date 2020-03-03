@@ -9,8 +9,8 @@ namespace DentalOffice.DAL
 {
     internal class DBConnection
     {
-        public static string ConnectionString => 
-            @"Data Source=ANASTASIA\SQLEXPRESS;Initial Catalog=UsersAndAwards;Integrated Security=True";
+        public static string ConnectionString =>
+            @"Data Source=(local)\SQLEXPRESS;Initial Catalog=DentalOffice;Integrated Security=True";
 
         /// <summary>
         /// Executes stored procedure with input parameters.
@@ -20,17 +20,18 @@ namespace DentalOffice.DAL
         /// <returns>Number of processed rows</returns>
         public int ExecuteStoredProcedure(string name, SqlParameter[] parameters)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                var command = connection.CreateCommand();
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.CommandText = name;
 
-                command.Parameters.AddRange(parameters);
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    var command = connection.CreateCommand();
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.CommandText = name;
 
-                connection.Open();
-               return command.ExecuteNonQuery();
-            }
+                    command.Parameters.AddRange(parameters);
+
+                    connection.Open();
+                    return command.ExecuteNonQuery();
+                }
         }
 
         /// <summary>

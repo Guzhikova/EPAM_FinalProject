@@ -9,6 +9,7 @@ namespace DentalOffice.Entities
     public class News
     {
         public int ID { get; set; }
+        public string Title { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
         public User Author { get; set; }

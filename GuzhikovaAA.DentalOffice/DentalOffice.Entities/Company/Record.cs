@@ -12,5 +12,6 @@ namespace DentalOffice.Entities
         public DateTime Date { get; set; }
         public Patient Patient { get; set; }
         public Employee Employee { get; set; }
+        public string Comment { get; set; }
     }
 }
