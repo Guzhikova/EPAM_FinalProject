@@ -45,12 +45,62 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Page> GetAll()
         {
-            throw new NotImplementedException();
+            var pages = new List<Page>();
+            Page page = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllPages";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    page = new Page
+                    {
+                        ID = (int)reader["ID"],
+                        URL = reader["URL"] as string,
+                        Title = reader["Title"] as string,
+                        Content = reader["Content"] as string
+                    };
+
+                    pages.Add(page);
+                }
+            }
+            return pages;
         }
 
         public Page GetById(int id)
         {
-            throw new NotImplementedException();
+            Page page = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetPageById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    page = new Page
+                    {
+                        ID = id,
+                        URL = reader["URL"] as string,
+                        Title = reader["Title"] as string,
+                        Content = reader["Content"] as string
+                    };
+                }
+            }
+            return page;
         }
 
         public Page Update(Page page)

@@ -16,12 +16,57 @@ namespace DentalOffice.DAL
         DBConnection _dbConnection = new DBConnection();
         public IEnumerable<Role> GetAll()
         {
-            throw new NotImplementedException();
+            var roles = new List<Role>();
+            Role role = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllRoles";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    role = new Role
+                    {
+                        ID = (int)reader["ID"],
+                        Title = reader["Title"] as string
+                    };
+                    roles.Add(role);
+                }
+            }
+            return roles;
         }
 
         public Role GetById(int id)
         {
-            throw new NotImplementedException();
+            Role role = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetRoleById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    role = new Role
+                    {
+                        ID = id,
+                        Title = reader["Title"] as string
+                    };
+                }
+            }
+            return role;
         }
 
         public Role Add(Role role)

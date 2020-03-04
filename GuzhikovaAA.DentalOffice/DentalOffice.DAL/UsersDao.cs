@@ -27,20 +27,20 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = user.PatientData.ID },
             };
 
-            SqlParameter idParameter = 
+            SqlParameter idParameter =
                 new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Direction = ParameterDirection.Output };
 
             object result = _dbConnection.ExecuteStoredProcedure("dbo.AddUser", parameters, idParameter);
             user.ID = (int)result;
 
-            return user;            
+            return user;
         }
 
         public void DeleteById(int id)
         {
             var idParameter = new SqlParameter()
             {
-                DbType = System.Data.DbType.Int32,
+                SqlDbType = SqlDbType.Int,
                 ParameterName = "@id",
                 Value = id,
             };
@@ -50,12 +50,101 @@ namespace DentalOffice.DAL
 
         public IEnumerable<User> GetAll()
         {
-            throw new NotImplementedException();
+            var users = new List<User>();
+            User user = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllUsers";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user = new User
+                    {
+                        ID = (int)reader["ID"],
+                        Login = reader["Login"] as string,
+                        Password = reader["Password"] as string,
+                        Email = reader["Email"] as string,
+                        RegistrationDate = (reader["RegistrationDate"] != DBNull.Value)
+                            ? (DateTime)reader["RegistrationDate"]
+                            : default(DateTime),
+                        Photo = reader["Photo"] as byte[]
+                    };
+
+                    if (reader["EmployeeID"] != DBNull.Value)
+                    {
+                        user.EmployeeData = new Employee
+                        {
+                            ID = (int)reader["EmployeeID"]
+                        };
+                    }
+
+                    if (reader["PatientID"] != DBNull.Value)
+                    {
+                        user.PatientData = new Patient
+                        {
+                            ID = (int)reader["PatientID"]
+                        };
+                    }
+                    users.Add(user);
+                }
+            }
+            return users;
         }
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            User user = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetUserById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user = new User
+                    {
+                        ID = id,
+                        Login = reader["Login"] as string,
+                        Password = reader["Password"] as string,
+                       Email = reader["Email"] as string,
+                        RegistrationDate = (reader["RegistrationDate"] != DBNull.Value)
+                            ? (DateTime)reader["RegistrationDate"]
+                            : default(DateTime),
+                        Photo = reader["Photo"] as byte[]
+                    };
+
+                    if (reader["EmployeeID"] != DBNull.Value)
+                    {
+                        user.EmployeeData  = new Employee
+                        {
+                            ID = (int)reader["EmployeeID"]
+                        };
+                    }
+
+                    if (reader["PatientID"] != DBNull.Value)
+                    {
+                        user.PatientData = new Patient
+                        {
+                            ID = (int)reader["PatientID"]
+                        };
+                    }
+                }
+            }
+            return user;
         }
 
         public User Update(User user)
@@ -74,7 +163,7 @@ namespace DentalOffice.DAL
 
             _dbConnection.ExecuteStoredProcedure("dbo.AddUser", parameters);
 
-            return user;            
+            return user;
         }
     }
 }

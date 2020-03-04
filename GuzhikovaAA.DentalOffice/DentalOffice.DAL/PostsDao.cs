@@ -43,12 +43,58 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Post> GetAll()
         {
-            throw new NotImplementedException();
+            var posts = new List<Post>();
+            Post post = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllPosts";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    post = new Post
+                    {
+                        ID = (int)reader["ID"],
+                        Title = reader["Title"] as string
+                    };
+                    posts.Add(post);
+                }
+            }
+            return posts;
         }
 
         public Post GetById(int id)
         {
-            throw new NotImplementedException();
+
+            Post post = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetPostById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    post = new Post
+                    {
+                        ID = id,
+                        Title = reader["Title"] as string
+                    };
+                }
+            }
+            return post;
         }
 
         public Post Update(Post post)

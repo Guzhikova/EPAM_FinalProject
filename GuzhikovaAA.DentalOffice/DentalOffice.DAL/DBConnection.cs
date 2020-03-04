@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DentalOffice.Entities;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -9,7 +11,7 @@ namespace DentalOffice.DAL
 {
     internal class DBConnection
     {
-        public static string ConnectionString =>
+        public string ConnectionString =>
             @"Data Source=(local)\SQLEXPRESS;Initial Catalog=DentalOffice;Integrated Security=True";
 
         /// <summary>
@@ -78,6 +80,44 @@ namespace DentalOffice.DAL
 
                 return  outputParameter.Value;
             }
+        }
+
+        /// <summary>
+        /// Executes stored procedure that returns files for entity.
+        /// </summary>
+        /// <param name="name">The stored procedure name</param>
+        /// <param name="id">The entity ID</param>
+        /// <returns>Returns files for entity</returns>
+        public IEnumerable<File> GetAllFilesByEntityId(string name, int id)
+        {
+            var files = new List<File>();
+            File file = null;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "storedProcedureName";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    file = new File
+                    {
+                        ID = id,
+                        Type = reader["Type"] as string,
+                        Name = reader["Name"] as string,
+                        Content = reader["Content"] as byte[]
+                    };
+                    files.Add(file);
+                }
+            }
+            return files;
         }
 
     }

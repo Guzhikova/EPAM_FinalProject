@@ -46,12 +46,65 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Patient> GetAll()
         {
-            throw new NotImplementedException();
+            var patients = new List<Patient>();
+            Patient patient = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetAllPatients";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    patient = new Patient
+                    {
+                        ID = (int)reader["ID"],
+                        LastName = reader["LastName"] as string,
+                        FirstName = reader["FirstName"] as string,
+                        MiddleName = reader["MiddleName"] as string,
+                        Phone = reader["Phone"] as string
+                    };
+
+                    patients.Add(patient);
+                }
+            }
+            return patients;
         }
 
         public Patient GetById(int id)
         {
-            throw new NotImplementedException();
+            Patient patient = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetPatientById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    patient = new Patient
+                    {
+                        ID = id,
+                        LastName = reader["LastName"] as string,
+                        FirstName = reader["FirstName"] as string,
+                        MiddleName = reader["MiddleName"] as string,
+                        Phone = reader["Phone"] as string
+                    };
+                }
+            }
+
+            return patient;
         }
 
         public Patient Update(Patient patient)

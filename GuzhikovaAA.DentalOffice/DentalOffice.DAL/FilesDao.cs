@@ -45,12 +45,61 @@ namespace DentalOffice.DAL
 
         public IEnumerable<File> GetAll()
         {
-            throw new NotImplementedException();
+            var files = new List<File>();
+            File file = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllFiles";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    file = new File
+                    {
+                        ID = (int)reader["ID"],
+                        Type = reader["Type"] as string,
+                        Name = reader["Name"] as string,
+                        Content = reader["Content"] as byte[]
+                    };
+                    files.Add(file);
+                }
+            }
+            return files;
         }
 
         public File GetById(int id)
         {
-            throw new NotImplementedException();
+            File file = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetFileById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    file = new File
+                    {
+                        ID = id,
+                        Type = reader["Type"] as string,
+                        Name = reader["Name"] as string,
+                        Content = reader["Content"] as byte[]
+                    };
+                }
+            }
+            return file;
         }
 
         public File Update(File file)

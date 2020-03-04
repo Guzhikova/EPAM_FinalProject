@@ -46,12 +46,81 @@ namespace DentalOffice.DAL
 
         public IEnumerable<News> GetAll()
         {
-            throw new NotImplementedException();
+            var newsList = new List<News>();
+            News news = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllNews";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    news = new News
+                    {
+                        ID = (int)reader["ID"],
+                        Title = reader["Title"] as string,
+                        Date = (reader["Date"] != DBNull.Value)
+                            ? (DateTime)reader["Date"]
+                            : default(DateTime),
+                        Content = reader["Content"] as string
+                    };
+
+                    if (reader["Author"] != DBNull.Value)
+                    {
+                        news.Author = new User
+                        {
+                            ID = (int)reader["Author"]
+                        };
+                    }
+                    newsList.Add(news);
+                }
+            }
+            return newsList;
         }
 
         public News GetById(int id)
         {
-            throw new NotImplementedException();
+            News news = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetNewsById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    news = new News
+                    {
+                        ID = id,
+                        Title = reader["Title"] as string,
+                        Date = (reader["Date"] != DBNull.Value)
+                            ? (DateTime)reader["Date"]
+                            : default(DateTime),
+                        Content = reader["Content"] as string
+                    };
+
+                    if (reader["Author"] != DBNull.Value)
+                    {
+                        news.Author = new User
+                        {
+                            ID = (int)reader["Author"]
+                        };
+                    }
+                }
+            }
+            return news;
         }
 
         public News Update(News news)

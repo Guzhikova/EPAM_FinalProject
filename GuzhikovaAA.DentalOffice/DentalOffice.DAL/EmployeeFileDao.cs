@@ -37,7 +37,7 @@ namespace DentalOffice.DAL
 
         public IEnumerable<File> GetAllFilesByEmployeeId(int id)
         {
-            throw new NotImplementedException();
+            return _dbConnection.GetAllFilesByEntityId("GetAllFilesByEmployeeId", id);
         }
     }
 }

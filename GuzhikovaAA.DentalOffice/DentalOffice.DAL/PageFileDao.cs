@@ -37,7 +37,7 @@ namespace DentalOffice.DAL
 
         public IEnumerable<File> GetAllFilesByPageId(int id)
         {
-            throw new NotImplementedException();
+           return _dbConnection.GetAllFilesByEntityId("GetAllFilesByPageId", id);
         }
     }
 }

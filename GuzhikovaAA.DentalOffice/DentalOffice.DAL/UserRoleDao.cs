@@ -38,7 +38,32 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Role> GetAllRolesByUserId(int id)
         {
-            throw new NotImplementedException();
+            var roles = new List<Role>();
+            Role role = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllRolesByUserId";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    role = new Role
+                    {
+                        ID = id,
+                        Title = reader["Title"] as string
+                    };
+                    roles.Add(role);
+                }
+            }
+            return roles;
         }
     }
 }

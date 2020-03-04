@@ -44,12 +44,59 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Specialty> GetAll()
         {
-            throw new NotImplementedException();
+            var specialties = new List<Specialty>();
+            Specialty specialty = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllSpecialties";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    specialty = new Specialty
+                    {
+                        ID = (int)reader["ID"],
+                        Title = reader["Title"] as string,
+                        Category = reader["Category"] as string
+                    };
+                    specialties.Add(specialty);
+                }
+            }
+            return specialties;
         }
 
         public Specialty GetById(int id)
         {
-            throw new NotImplementedException();
+            Specialty specialty = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetSpecialtyById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    specialty = new Specialty
+                    {
+                        ID = id,
+                        Title = reader["Title"] as string,
+                        Category = reader["Category"] as string
+                    };
+                }
+            }
+            return specialty;
         }
 
         public Specialty Update(Specialty specialty)

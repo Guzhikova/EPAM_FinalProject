@@ -49,12 +49,94 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Employee> GetAll()
         {
-            throw new NotImplementedException();
+            List<Employee> employees = new List<Employee>();
+            Employee employee = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetAllEmployees";
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    employee = new Employee
+                    {
+                        ID = (int)reader["ID"],
+                        LastName = reader["LastName"] as string,
+                        FirstName = reader["FirstName"] as string,
+                        MiddleName = reader["MiddleName"] as string,
+                        DateOfBirth = (reader["DateOfBirth"] != DBNull.Value)
+                            ? (DateTime)reader["DateOfBirth"]
+                            : default(DateTime),
+                        DateOfEmployement = (reader["DateOfEmployment"] != DBNull.Value)
+                            ? (DateTime)reader["DateOfEmployment"]
+                            : default(DateTime),
+                        Note = reader["Note"] as string
+                    };
+
+                    if (reader["PostID"] != DBNull.Value)
+                    {
+                        employee.Post = new Post
+                        {
+                            ID = (int)reader["PostID"]
+                        };
+                    }
+
+                    employees.Add(employee);
+                }
+            }
+
+            return employees;
         }
 
         public Employee GetById(int id)
         {
-            throw new NotImplementedException();
+            Employee employee = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetEmployeeById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    employee = new Employee
+                    {
+                        ID = id,
+                        LastName = reader["LastName"] as string,
+                        FirstName = reader["FirstName"] as string,
+                        MiddleName = reader["MiddleName"] as string,
+                        DateOfBirth = (reader["DateOfBirth"] != DBNull.Value)
+                            ? (DateTime)reader["DateOfBirth"]
+                            : default(DateTime),
+                        DateOfEmployement = (reader["DateOfEmployment"] != DBNull.Value)
+                            ? (DateTime)reader["DateOfEmployment"]
+                            : default(DateTime),
+                        Note = reader["Note"] as string
+                    };
+
+                    if (reader["PostID"] != DBNull.Value)
+                    {
+                        employee.Post = new Post
+                        {
+                            ID = (int)reader["PostID"]
+                        }; 
+                    }
+                }
+            }
+
+            return employee;
         }
 
         public Employee Update(Employee employee)

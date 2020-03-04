@@ -46,27 +46,85 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Record> GetAll()
         {
-            throw new NotImplementedException();
+            return GetAllRecordsByParametrs("GetAllRecords");
         }
 
         public IEnumerable<Record> GetAllStartingFromDate(DateTime date)
         {
-            throw new NotImplementedException();
+            SqlParameter[] parameters =
+            {
+                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date }
+            };
+
+            return GetAllRecordsByParametrs("GetAllRecordsStartingFromDate", parameters);
         }
 
         public IEnumerable<Record> GetAllBetweenDates(DateTime date1, DateTime date2)
         {
-            throw new NotImplementedException();
+            SqlParameter[] parameters =
+            {
+                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date1 },
+                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date2 }
+            };
+
+            return GetAllRecordsByParametrs("GetAllRecordsBetweenDates", parameters);
         }
 
         public IEnumerable<Record> GetAllOnDate(DateTime date)
         {
-            throw new NotImplementedException();
+            SqlParameter[] parameters =
+            {
+                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date }
+            };
+
+            return GetAllRecordsByParametrs("GetAllRecordsOnDate", parameters);
         }
 
         public Record GetById(int id)
         {
-            throw new NotImplementedException();
+            Record record = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetRecordById";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    record = new Record
+                    {
+                        ID = id,
+                        Date = (reader["Date"] != DBNull.Value)
+                            ? (DateTime)reader["Date"]
+                            : default(DateTime),
+                        Comment = reader["Comment"] as string
+                    };
+
+                    if (reader["PatientID"] != DBNull.Value)
+                    {
+                        record.Patient = new Patient
+                        {
+                            ID = (int)reader["PatientID"]
+                        };
+                    }
+
+                    if (reader["EmployeeID"] != DBNull.Value)
+                    {
+                        record.Employee = new Employee
+                        {
+                            ID = (int)reader["EmployeeID"]
+                        };
+                    }
+                }
+            }
+            return record;
         }
 
         public Record Update(Record record)
@@ -83,6 +141,59 @@ namespace DentalOffice.DAL
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateRecord", parameters);
 
             return record;
+        }
+
+
+        private List<Record> GetAllRecordsByParametrs(string storedProcedureName, SqlParameter[] parameters = null)
+        {
+            var records = new List<Record>();
+            Record record = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = storedProcedureName;
+
+                if (parameters != null)
+                {
+                    command.Parameters.AddRange(parameters);
+                }
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    record = new Record
+                    {
+                        ID = (int)reader["ID"],
+                        Date = (reader["Date"] != DBNull.Value)
+                            ? (DateTime)reader["Date"]
+                            : default(DateTime),
+                        Comment = reader["Comment"] as string
+                    };
+
+                    if (reader["PatientID"] != DBNull.Value)
+                    {
+                        record.Patient = new Patient
+                        {
+                            ID = (int)reader["PatientID"]
+                        };
+                    }
+
+                    if (reader["EmployeeID"] != DBNull.Value)
+                    {
+                        record.Employee = new Employee
+                        {
+                            ID = (int)reader["EmployeeID"]
+                        };
+                    }
+
+                    records.Add(record);
+                }
+            }
+            return records;
         }
     }
 }
