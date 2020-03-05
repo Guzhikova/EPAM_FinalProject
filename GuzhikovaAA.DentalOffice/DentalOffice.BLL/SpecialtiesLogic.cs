@@ -11,35 +11,35 @@ namespace DentalOffice.BLL
 {
     public class SpecialtiesLogic : ISpecialtiesLogic
     {
-        private readonly IUsersDao _specialtiesDao;
+        private readonly ISpecialtiesDao _specialtiesDao;
 
-        public SpecialtiesLogic(IUsersDao specialtiesDao)
+        public SpecialtiesLogic(ISpecialtiesDao specialtiesDao)
         {
             _specialtiesDao = specialtiesDao;
         }
         public Specialty Add(Specialty specialty)
         {
-            throw new NotImplementedException();
+            return _specialtiesDao.Add(specialty);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _specialtiesDao.DeleteById(id);
         }
 
         public IEnumerable<Specialty> GetAll()
         {
-            throw new NotImplementedException();
+            return _specialtiesDao.GetAll();
         }
 
         public Specialty GetById(int id)
         {
-            throw new NotImplementedException();
+            return _specialtiesDao.GetById(id);
         }
 
         public void Update(Specialty specialty)
         {
-            throw new NotImplementedException();
+            _specialtiesDao.Update(specialty);        
         }
     }
 }

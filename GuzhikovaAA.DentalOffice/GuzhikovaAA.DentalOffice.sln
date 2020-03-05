@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalOffice.BLL", "DentalO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalOffice.BLL.Interfaces", "DentalOffice.BLL.Interfaces\DentalOffice.BLL.Interfaces.csproj", "{1D85B59D-25D9-4A28-95C6-80B71FFE49B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalOffice.Common", "DependencyResolver\DentalOffice.Common.csproj", "{EDD887D7-D018-4C7E-9D42-94DA0CD0052A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{1D85B59D-25D9-4A28-95C6-80B71FFE49B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D85B59D-25D9-4A28-95C6-80B71FFE49B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D85B59D-25D9-4A28-95C6-80B71FFE49B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD887D7-D018-4C7E-9D42-94DA0CD0052A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD887D7-D018-4C7E-9D42-94DA0CD0052A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD887D7-D018-4C7E-9D42-94DA0CD0052A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD887D7-D018-4C7E-9D42-94DA0CD0052A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{A99651FF-8BAC-4571-8B18-29C587749564} = {7F4755F5-6965-427A-8646-50ABA813D068}
 		{C9DB7872-6416-4270-A815-80B58C774060} = {6708D959-2157-47F6-A6BF-C54C2A1E9B22}
 		{1D85B59D-25D9-4A28-95C6-80B71FFE49B0} = {6708D959-2157-47F6-A6BF-C54C2A1E9B22}
+		{EDD887D7-D018-4C7E-9D42-94DA0CD0052A} = {4053AEB8-497D-48B1-A16C-595096812529}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0236D15B-91B3-4011-979F-05165C17B6CC}

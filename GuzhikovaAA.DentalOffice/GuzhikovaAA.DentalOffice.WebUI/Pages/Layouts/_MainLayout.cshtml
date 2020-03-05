@@ -1,5 +1,7 @@
-﻿@{
+﻿
+@{
     Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -17,13 +19,18 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                @RenderPage("/Pages/Partials/_Header.cshtml")
+            <div class="col-md-12" >
+                @RenderPage("~/Pages/Partials/_Header.cshtml")
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                @RenderPage("/Pages/Partials/_HorizontalMenu.cshtml")
+        <div class="row bg-info w-100 ml-1">
+            <div class="col-md-8">
+                @RenderPage("~/Pages/Partials/_HorizontalMenu.cshtml")
+
+            </div>
+            <div class="col-md-4">
+                @RenderPage("~/Pages/Partials/_Authorization.cshtml")
+
             </div>
         </div>
         <div class="row">
@@ -31,13 +38,13 @@
                 @RenderBody()
             </div>
             <div class="col-sm-3">
-                @RenderPage("/Pages/Partials/_AuxiliaryMenu.cshtml")
+                @RenderPage("~/Pages/Partials/_AuxiliaryMenu.cshtml")
             </div>
 
         </div>
 
     </div>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="~/Scripts/bootstrap-4.4.1/bootstrap.min.js"></script>
 </body>

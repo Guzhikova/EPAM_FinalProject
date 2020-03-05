@@ -25,22 +25,22 @@ namespace DentalOffice.BLL
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _employeesDao.DeleteById(id);
         }
 
         public IEnumerable<Employee> GetAll()
         {
-            throw new NotImplementedException();
+            return _employeesDao.GetAll();
         }
 
         public Employee GetById(int id)
         {
-            throw new NotImplementedException();
+            return _employeesDao.GetById(id);
         }
 
         public void Update(Employee employee)
         {
-            throw new NotImplementedException();
+            _employeesDao.Update(employee);
         }
     }
 }

@@ -27,3 +27,25 @@ header p {
 #horizontal-menu a:hover{
     color: white;
 }
+
+/* Authorization */
+
+
+#authorization, #authorization a {
+    color: #cafaf2;
+
+}
+
+#signout input{
+    height: 25px;
+    width: 120px;
+
+    margin: 10px 5px;
+}
+
+#signout button {
+    height: 25px;
+    width: 70px;
+
+    text-align:center;
+}

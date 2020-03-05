@@ -111,12 +111,29 @@
     <Content Include="Pages\Partials\_Header.cshtml" />
     <Content Include="Pages\Partials\_HorizontalMenu.cshtml" />
     <Content Include="Pages\Partials\_AuxiliaryMenu.cshtml" />
+    <Content Include="Pages\Partials\_Authorization.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="_AppStart.cshtml" />
+    <Content Include="_PageStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DentalOffice.BLL.Interfaces\DentalOffice.BLL.Interfaces.csproj">
+      <Project>{1d85b59d-25d9-4a28-95c6-80b71ffe49b0}</Project>
+      <Name>DentalOffice.BLL.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DentalOffice.BLL\DentalOffice.BLL.csproj">
+      <Project>{c9db7872-6416-4270-a815-80b58c774060}</Project>
+      <Name>DentalOffice.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DependencyResolver\DentalOffice.Common.csproj">
+      <Project>{edd887d7-d018-4c7e-9d42-94da0cd0052a}</Project>
+      <Name>DentalOffice.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -4,6 +4,7 @@ using DentalOffice.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,27 +21,36 @@ namespace DentalOffice.BLL
 
         public User Add(User user)
         {
-            throw new NotImplementedException();
+            user.Password = ConvertToMD5(user.Password);
+            return _usersDao.Add(user);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _usersDao.DeleteById(id);
         }
 
         public IEnumerable<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _usersDao.GetAll();
         }
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            return _usersDao.GetById(id);
         }
 
         public void Update(User user)
         {
-            throw new NotImplementedException();
+            _usersDao.Update(user);
+        }
+
+        private string ConvertToMD5(string password)
+        {
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            return Convert.ToBase64String(hash);
         }
     }
 }

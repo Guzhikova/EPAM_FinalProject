@@ -20,27 +20,27 @@ namespace DentalOffice.BLL
 
         public Page Add(Page page)
         {
-            throw new NotImplementedException();
+            return _pagesDao.Add(page);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _pagesDao.DeleteById(id);
         }
 
         public IEnumerable<Page> GetAll()
         {
-            throw new NotImplementedException();
+            return _pagesDao.GetAll();
         }
 
         public Page GetById(int id)
         {
-            throw new NotImplementedException();
+            return _pagesDao.GetById(id);
         }
 
         public void Update(Page page)
         {
-            throw new NotImplementedException();
+            _pagesDao.Update(page);
         }
     }
 }

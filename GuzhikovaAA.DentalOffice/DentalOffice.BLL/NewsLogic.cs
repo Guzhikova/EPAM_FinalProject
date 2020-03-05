@@ -20,27 +20,27 @@ namespace DentalOffice.BLL
 
         public News Add(News news)
         {
-            throw new NotImplementedException();
+            return _newsDao.Add(news);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _newsDao.DeleteById(id);
         }
 
         public IEnumerable<News> GetAll()
         {
-            throw new NotImplementedException();
+            return _newsDao.GetAll();
         }
 
         public News GetById(int id)
         {
-            throw new NotImplementedException();
+            return _newsDao.GetById(id);
         }
 
         public void Update(News news)
         {
-            throw new NotImplementedException();
+            _newsDao.Update(news);
         }
     }
 }

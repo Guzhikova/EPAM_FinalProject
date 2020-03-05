@@ -20,42 +20,43 @@ namespace DentalOffice.BLL
 
         public Record Add(Record record)
         {
-            throw new NotImplementedException();
+            return _recordsDao.Add(record);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _recordsDao.DeleteById(id);
+
         }
 
         public IEnumerable<Record> GetAll()
         {
-            throw new NotImplementedException();
+            return _recordsDao.GetAll();
         }
 
         public IEnumerable<Record> GetAllBetweenDates(DateTime dateStart, DateTime dateEnd)
         {
-            throw new NotImplementedException();
+            return _recordsDao.GetAllBetweenDates(dateStart, dateEnd);
         }
 
         public IEnumerable<Record> GetAllOnDate(DateTime date)
         {
-            throw new NotImplementedException();
+            return _recordsDao.GetAllOnDate(date);
         }
 
         public IEnumerable<Record> GetAllStartingFromDate(DateTime date)
         {
-            throw new NotImplementedException();
+            return _recordsDao.GetAllStartingFromDate(date);
         }
 
         public Record GetById(int id)
         {
-            throw new NotImplementedException();
+            return _recordsDao.GetById(id);
         }
 
         public void Update(Record record)
         {
-            throw new NotImplementedException();
+            _recordsDao.Update(record);
         }
     }
 }

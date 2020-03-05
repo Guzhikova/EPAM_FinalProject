@@ -20,27 +20,27 @@ namespace DentalOffice.BLL
 
         public Role Add(Role role)
         {
-            throw new NotImplementedException();
+            return _rolesDao.Add(role);
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _rolesDao.DeleteById(id);
         }
 
         public IEnumerable<Role> GetAll()
         {
-            throw new NotImplementedException();
+            return _rolesDao.GetAll();
         }
 
         public Role GetById(int id)
         {
-            throw new NotImplementedException();
+            return _rolesDao.GetById(id);
         }
 
         public void Update(Role role)
         {
-            throw new NotImplementedException();
+            _rolesDao.Update(role);
         }
     }
 }
