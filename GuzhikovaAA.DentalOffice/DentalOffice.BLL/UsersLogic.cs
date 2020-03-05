@@ -45,6 +45,20 @@ namespace DentalOffice.BLL
             _usersDao.Update(user);
         }
 
+        public User GetByLogin(string login)
+        {
+            return _usersDao.GetAll().FirstOrDefault(user => user.Login == login);
+        }
+
+        public bool isPairLoginPassword(string login, string password)
+        {
+            string passwordMD5 = ConvertToMD5(password);
+
+            var user = this.GetByLogin(login);
+
+            return (user != null && user.Password == passwordMD5);
+        }
+
         private string ConvertToMD5(string password)
         {
             var md5 = MD5.Create();

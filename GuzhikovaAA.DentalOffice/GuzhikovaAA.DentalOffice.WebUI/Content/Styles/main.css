@@ -36,16 +36,26 @@ header p {
 
 }
 
-#signout input{
-    height: 25px;
-    width: 120px;
-
-    margin: 10px 5px;
+#signin input, #signin button{
+    font-size: 13px;
 }
 
-#signout button {
+#signin input {
     height: 25px;
-    width: 70px;
+    width: 120px;
+    margin: 10px 5px;
+   
+}
 
-    text-align:center;
+#signin button {
+    height: 25px;
+    width: 60px;
+
+    padding: 0;
+}
+
+#registration {
+    margin-top: -7px;
+    padding: 0;
+    font-size: 13px;
 }

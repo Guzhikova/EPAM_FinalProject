@@ -19,6 +19,9 @@ namespace DentalOffice.BLL.Interfaces
         void DeleteById(int id);
 
         void Update(User user);
+
+        User GetByLogin(string login);
+        bool isPairLoginPassword(string login, string password);
     }
 
 }
