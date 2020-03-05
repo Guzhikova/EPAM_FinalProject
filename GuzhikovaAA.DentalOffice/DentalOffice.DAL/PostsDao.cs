@@ -97,7 +97,7 @@ namespace DentalOffice.DAL
             return post;
         }
 
-        public Post Update(Post post)
+        public void Update(Post post)
         {
             SqlParameter[] parameters =
             {
@@ -107,7 +107,6 @@ namespace DentalOffice.DAL
            
             object result = _dbConnection.ExecuteStoredProcedure("dbo.UpdatePost", parameters);
 
-            return post;
         }
     }
 }

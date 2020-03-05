@@ -17,6 +17,6 @@ namespace DentalOffice.DAL.Interfaces
 
         void DeleteById(int id);
 
-        News Update(News news);
+        void Update(News news);
     }
 }

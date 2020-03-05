@@ -107,7 +107,7 @@ namespace DentalOffice.DAL
             return patient;
         }
 
-        public Patient Update(Patient patient)
+        public void Update(Patient patient)
         {
             SqlParameter[] parameters =
             {
@@ -119,8 +119,6 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdatePatient", parameters);
-
-            return patient;
         }
     }
 }

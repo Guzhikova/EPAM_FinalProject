@@ -12,7 +12,11 @@ namespace DentalOffice.DAL
 {
     public class RecordsDao : IRecordsDao
     {
-        DBConnection _dbConnection = new DBConnection();
+       private DBConnection _dbConnection = new DBConnection();
+        private PatientsDao _patients = new PatientsDao();
+        private EmployeesDao _employees = new EmployeesDao();
+
+
         public Record Add(Record record)
         {
             SqlParameter[] parameters =
@@ -44,11 +48,26 @@ namespace DentalOffice.DAL
             _dbConnection.ExecuteStoredProcedure("dbo.DeleteRecordById", idParameter);
         }
 
-        public IEnumerable<Record> GetAll()
+        public Record GetById(int id)
         {
-            return GetAllRecordsByParametrs("GetAllRecords");
+            Record record = this.GetByIdFromSourceTable(id);
+
+            if (record != null)
+            {
+                record.Patient = _patients.GetById(record.Patient.ID);
+                record.Employee = _employees.GetById(record.Employee.ID);
+            }
+
+            return record;
         }
 
+        public IEnumerable<Record> GetAll()
+        {
+            var records = GetAllRecordsFromSourceTableByParametrs("GetAllRecords");
+
+            return SetFullPatientsAndEmployeesForRecords(records);
+        }
+        
         public IEnumerable<Record> GetAllStartingFromDate(DateTime date)
         {
             SqlParameter[] parameters =
@@ -56,7 +75,9 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date }
             };
 
-            return GetAllRecordsByParametrs("GetAllRecordsStartingFromDate", parameters);
+            var records = GetAllRecordsFromSourceTableByParametrs("GetAllRecordsStartingFromDate", parameters);
+
+            return SetFullPatientsAndEmployeesForRecords(records);
         }
 
         public IEnumerable<Record> GetAllBetweenDates(DateTime date1, DateTime date2)
@@ -67,7 +88,9 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date2 }
             };
 
-            return GetAllRecordsByParametrs("GetAllRecordsBetweenDates", parameters);
+            var records = GetAllRecordsFromSourceTableByParametrs("GetAllRecordsBetweenDates", parameters);
+
+            return SetFullPatientsAndEmployeesForRecords(records);
         }
 
         public IEnumerable<Record> GetAllOnDate(DateTime date)
@@ -77,10 +100,29 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = date }
             };
 
-            return GetAllRecordsByParametrs("GetAllRecordsOnDate", parameters);
+            var records = GetAllRecordsFromSourceTableByParametrs("GetAllRecordsOnDate", parameters);
+
+            return SetFullPatientsAndEmployeesForRecords(records);
         }
 
-        public Record GetById(int id)
+        public void Update(Record record)
+        {
+            SqlParameter[] parameters =
+             {
+                new SqlParameter() { ParameterName = "@id", SqlDbType = SqlDbType.Int, Value = record.ID},
+                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = record.Date },
+                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = record.Patient.ID },
+                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = record.Employee.ID },
+                new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, Value = record.Comment }
+            };
+
+            _dbConnection.ExecuteStoredProcedure("dbo.UpdateRecord", parameters);
+
+        }
+
+
+
+        private Record GetByIdFromSourceTable(int id)
         {
             Record record = null;
 
@@ -125,26 +167,9 @@ namespace DentalOffice.DAL
                 }
             }
             return record;
-        }
+        }        
 
-        public Record Update(Record record)
-        {
-            SqlParameter[] parameters =
-             {
-                new SqlParameter() { ParameterName = "@id", SqlDbType = SqlDbType.Int, Value = record.ID},
-                new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = record.Date },
-                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = record.Patient.ID },
-                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = record.Employee.ID },
-                new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, Value = record.Comment }
-            };
-
-            _dbConnection.ExecuteStoredProcedure("dbo.UpdateRecord", parameters);
-
-            return record;
-        }
-
-
-        private List<Record> GetAllRecordsByParametrs(string storedProcedureName, SqlParameter[] parameters = null)
+        private List<Record> GetAllRecordsFromSourceTableByParametrs(string storedProcedureName, SqlParameter[] parameters = null)
         {
             var records = new List<Record>();
             Record record = null;
@@ -195,5 +220,20 @@ namespace DentalOffice.DAL
             }
             return records;
         }
+
+        private IEnumerable<Record> SetFullPatientsAndEmployeesForRecords(IEnumerable<Record> records)
+        {
+            if (records != null)
+            {
+                foreach (var record in records)
+                {
+                    record.Patient = _patients.GetById(record.Patient.ID);
+                    record.Employee = _employees.GetById(record.Employee.ID);
+                }
+            }
+            return records;
+        }
+
+        
     }
 }

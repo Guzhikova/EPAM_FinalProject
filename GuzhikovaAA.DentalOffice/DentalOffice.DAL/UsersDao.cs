@@ -12,9 +12,72 @@ namespace DentalOffice.DAL
 {
     public class UsersDao : IUsersDao
     {
-        DBConnection _dbConnection = new DBConnection();
+        private DBConnection _dbConnection = new DBConnection();
+        private EmployeesDao _employees = new EmployeesDao();
+        private PatientsDao _patients = new PatientsDao();
+        private UserRoleDao _userRole = new UserRoleDao();
+
+        public IEnumerable<User> GetAll()
+        {
+            var users = this.GetAllFromSourceTable();
+
+            if (users != null)
+            {
+                foreach (var user in users)
+                {
+                    user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
+                    user.PatientData = _patients.GetById(user.PatientData.ID);
+                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+                }
+            }
+            return users;
+        }
+
+        public User GetById(int id)
+        {
+            User user = this.GetByIdFromSourceTable(id);
+
+            if (user != null)
+            {
+                user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
+                user.PatientData = _patients.GetById(user.PatientData.ID);
+                user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+            }
+            return user;
+        }
 
         public User Add(User user)
+        {
+            user = AddToSourceTable(user);
+
+            foreach (var role in user.Roles)
+            {
+                _userRole.AddRoleForUser(user.ID, role.ID);
+            }
+
+            return user;
+        }       
+
+        public void DeleteById(int id)
+        {
+            var idParameter = new SqlParameter()
+            {
+                SqlDbType = SqlDbType.Int,
+                ParameterName = "@id",
+                Value = id,
+            };
+
+            _dbConnection.ExecuteStoredProcedure("dbo.DeleteUserById", idParameter);
+        }
+
+        public void Update(User user)
+        {
+            this.UpdateInSourceTable(user);
+            _userRole.UpdateRolesForUser(user);
+        }
+
+
+        private User AddToSourceTable(User user)
         {
             SqlParameter[] parameters =
             {
@@ -36,19 +99,7 @@ namespace DentalOffice.DAL
             return user;
         }
 
-        public void DeleteById(int id)
-        {
-            var idParameter = new SqlParameter()
-            {
-                SqlDbType = SqlDbType.Int,
-                ParameterName = "@id",
-                Value = id,
-            };
-
-            _dbConnection.ExecuteStoredProcedure("dbo.DeleteUserById", idParameter);
-        }
-
-        public IEnumerable<User> GetAll()
+        private IEnumerable<User> GetAllFromSourceTable()
         {
             var users = new List<User>();
             User user = null;
@@ -97,7 +148,7 @@ namespace DentalOffice.DAL
             return users;
         }
 
-        public User GetById(int id)
+        private User GetByIdFromSourceTable(int id)
         {
             User user = null;
 
@@ -120,7 +171,7 @@ namespace DentalOffice.DAL
                         ID = id,
                         Login = reader["Login"] as string,
                         Password = reader["Password"] as string,
-                       Email = reader["Email"] as string,
+                        Email = reader["Email"] as string,
                         RegistrationDate = (reader["RegistrationDate"] != DBNull.Value)
                             ? (DateTime)reader["RegistrationDate"]
                             : default(DateTime),
@@ -129,7 +180,7 @@ namespace DentalOffice.DAL
 
                     if (reader["EmployeeID"] != DBNull.Value)
                     {
-                        user.EmployeeData  = new Employee
+                        user.EmployeeData = new Employee
                         {
                             ID = (int)reader["EmployeeID"]
                         };
@@ -147,7 +198,7 @@ namespace DentalOffice.DAL
             return user;
         }
 
-        public User Update(User user)
+        private void UpdateInSourceTable(User user)
         {
             SqlParameter[] parameters =
            {
@@ -162,8 +213,8 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.AddUser", parameters);
-
-            return user;
         }
+
+ 
     }
 }

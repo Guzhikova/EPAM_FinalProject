@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IUsersDao
+    public interface IPagesLogic
     {
-        IEnumerable<User> GetAll();
+        IEnumerable<Page> GetAll();
 
-        User GetById(int id);
+        Page GetById(int id);
 
-        User Add(User user);
+        Page Add(Page page);
 
         void DeleteById(int id);
 
-        void Update(User user);
+        void Update(Page page);
     }
 }

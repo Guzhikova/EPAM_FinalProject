@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IPatientsDao
+    public interface IPatientsLogic
     {
         IEnumerable<Patient> GetAll();
 

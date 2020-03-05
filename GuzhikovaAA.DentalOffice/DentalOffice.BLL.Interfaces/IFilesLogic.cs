@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IPostsDao
+    public interface IFilesLogic
     {
-        IEnumerable<Post> GetAll();
+        IEnumerable<File> GetAll();
 
-        Post GetById(int id);
+        File GetById(int id);
 
-        Post Add(Post post);
+        File Add(File file);
 
-        void Update(Post post);
+        void Update(File file);
 
         void DeleteById(int id);
     }

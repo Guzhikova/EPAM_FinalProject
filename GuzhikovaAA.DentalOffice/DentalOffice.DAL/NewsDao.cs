@@ -12,8 +12,71 @@ namespace DentalOffice.DAL
 {
     public class NewsDao : INewsDao
     {
-        DBConnection _dbConnection = new DBConnection();
+        private DBConnection _dbConnection = new DBConnection();
+        private UsersDao _users = new UsersDao();
+        private NewsFileDao _newsFile = new NewsFileDao();
+
         public News Add(News news)
+        {
+            news = this.AddToSourceTable(news);
+
+            foreach (var file in news.Files)
+            {
+                _newsFile.AddFileForNews(news.ID, file.ID);
+            }
+
+            return news;
+        }       
+
+        public void DeleteById(int id)
+        {
+            var idParameter = new SqlParameter()
+            {
+                DbType = System.Data.DbType.Int32,
+                ParameterName = "@id",
+                Value = id,
+            };
+
+            _dbConnection.ExecuteStoredProcedure("dbo.DeleteNewsById", idParameter);
+        }
+
+        public IEnumerable<News> GetAll()
+        {
+            var newsCollection = this.GetAllFromSourceTable();
+
+            if(newsCollection != null)
+            {
+                foreach (var news in newsCollection)
+                {
+                    news.Author = _users.GetById(news.Author.ID);
+                    news.Files = _newsFile.GetAllFilesByNewsId(news.ID).ToList();
+                }
+            }
+            return newsCollection;
+        }
+
+        public News GetById(int id)
+        {
+            News news = this.GetByIdFromSourceTable(id);
+
+            if(news != null)
+            {
+                news.Author = _users.GetById(news.Author.ID);
+                news.Files = _newsFile.GetAllFilesByNewsId(news.ID).ToList();
+            }
+
+            return news;
+        }
+
+        public void Update(News news)
+        {
+            this.UpdateInSourceTable(news);
+            _newsFile.UpdateFilesForNews(news);
+        }    
+
+
+
+        private News AddToSourceTable(News news)
         {
             SqlParameter[] parameters =
               {
@@ -31,20 +94,7 @@ namespace DentalOffice.DAL
 
             return news;
         }
-
-        public void DeleteById(int id)
-        {
-            var idParameter = new SqlParameter()
-            {
-                DbType = System.Data.DbType.Int32,
-                ParameterName = "@id",
-                Value = id,
-            };
-
-            _dbConnection.ExecuteStoredProcedure("dbo.DeleteNewsById", idParameter);
-        }
-
-        public IEnumerable<News> GetAll()
+        private IEnumerable<News> GetAllFromSourceTable()
         {
             var newsList = new List<News>();
             News news = null;
@@ -82,8 +132,7 @@ namespace DentalOffice.DAL
             }
             return newsList;
         }
-
-        public News GetById(int id)
+        private News GetByIdFromSourceTable(int id)
         {
             News news = null;
 
@@ -122,8 +171,7 @@ namespace DentalOffice.DAL
             }
             return news;
         }
-
-        public News Update(News news)
+        private void UpdateInSourceTable(News news)
         {
             SqlParameter[] parameters =
             {
@@ -135,8 +183,7 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateNews", parameters);
-
-            return news;
         }
+
     }
 }

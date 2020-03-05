@@ -15,7 +15,7 @@ namespace DentalOffice.DAL.Interfaces
 
         File Add(File file);
 
-        File Update(File file);
+        void Update(File file);
 
         void DeleteById(int id);
     }

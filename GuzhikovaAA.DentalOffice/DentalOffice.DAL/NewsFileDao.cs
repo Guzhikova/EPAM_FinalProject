@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DentalOffice.DAL
 {
-    public class NewsFileDao : INewsFileDao
+    internal class NewsFileDao
     {
         DBConnection _dbConnection = new DBConnection();
         public void AddFileForNews(int newsId, int fileId)
@@ -38,6 +38,24 @@ namespace DentalOffice.DAL
         public IEnumerable<File> GetAllFilesByNewsId(int id)
         {
             return _dbConnection.GetAllFilesByEntityId("GetAllFilesByNewsId", id);
+        }
+
+        public void UpdateFilesForNews(News news)
+        {
+            var oldFiles = GetAllFilesByNewsId(news.ID);
+            var newFiles = news.Files;
+
+            var filesToDelete = oldFiles.Where(n => !newFiles.Any(t => t.ID == n.ID));
+            foreach (var file in filesToDelete)
+            {
+                DeleteFileForNews(news.ID, file.ID);
+            }
+
+            var filesToAdd = newFiles.Where(n => !oldFiles.Any(t => t.ID == n.ID));
+            foreach (var file in filesToAdd)
+            {
+                AddFileForNews(news.ID, file.ID);
+            }
         }
     }
 }

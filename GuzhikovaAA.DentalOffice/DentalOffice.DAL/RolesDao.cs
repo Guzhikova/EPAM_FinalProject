@@ -85,7 +85,7 @@ namespace DentalOffice.DAL
             return role;
         }
 
-        public Role Update(Role role)
+        public void Update(Role role)
         {
             SqlParameter[] parameters =
             {
@@ -95,7 +95,6 @@ namespace DentalOffice.DAL
 
             _dbConnection.ExecuteStoredProcedure("dbo.AddRole", parameters);
 
-            return role;
         }
 
         public void DeleteById(int id)

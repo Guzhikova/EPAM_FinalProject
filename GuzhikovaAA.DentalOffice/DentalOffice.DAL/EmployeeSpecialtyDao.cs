@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DentalOffice.DAL
 {
-    public class EmployeeSpecialtyDao : IEmployeeSpecialtyDao
+    internal class EmployeeSpecialtyDao
     {
         DBConnection _dbConnection = new DBConnection();
         public void AddSpecialtyForEmployee(int employeeId, int specialtyId)
@@ -64,6 +64,24 @@ namespace DentalOffice.DAL
                 }
             }
             return specialties;
+        }
+
+        public void UpdateSpecialtiesForEmployee(Employee employee)
+        {
+            var oldSpecialties = GetAllSpecialtiesByEmployeeId(employee.ID);
+            var newSpecialties = employee.Specialties;
+
+            var specialtiesToDelete = oldSpecialties.Where(n => !newSpecialties.Any(t => t.ID == n.ID));
+            foreach (var specialty in specialtiesToDelete)
+            {
+                DeleteSpecialtyForEmployee(employee.ID, specialty.ID);
+            }
+
+            var specialtiesToAdd = newSpecialties.Where(n => !oldSpecialties.Any(t => t.ID == n.ID));
+            foreach (var specialty in specialtiesToAdd)
+            {
+                AddSpecialtyForEmployee(employee.ID, specialty.ID);
+            }
         }
     }
 }

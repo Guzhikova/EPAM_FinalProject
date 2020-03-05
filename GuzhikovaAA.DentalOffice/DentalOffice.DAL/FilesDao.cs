@@ -102,7 +102,7 @@ namespace DentalOffice.DAL
             return file;
         }
 
-        public File Update(File file)
+        public void Update(File file)
         {
             SqlParameter[] parameters =
             {
@@ -113,8 +113,6 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateFile", parameters);
-
-            return file;
         }
     }
 }

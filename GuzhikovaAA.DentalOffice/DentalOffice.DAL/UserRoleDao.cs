@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DentalOffice.DAL
 {
 
-    public class UserRoleDao : IUserRoleDao
+    internal class UserRoleDao
     {
         DBConnection _dbConnection = new DBConnection();
         public void AddRoleForUser(int userId, int roleId)
@@ -64,6 +64,24 @@ namespace DentalOffice.DAL
                 }
             }
             return roles;
+        }
+
+        public void UpdateRolesForUser(User user)
+        {
+            var oldRoles = GetAllRolesByUserId(user.ID);
+            var newRoles = user.Roles;
+
+            var rolesToDelete = oldRoles.Where(n => !newRoles.Any(t => t.ID == n.ID));
+            foreach (var file in rolesToDelete)
+            {
+                DeleteRoleForUser(user.ID, file.ID);
+            }
+
+            var rolesToAdd = newRoles.Where(n => !oldRoles.Any(t => t.ID == n.ID));
+            foreach (var file in rolesToAdd)
+            {
+                AddRoleForUser(user.ID, file.ID);
+            }
         }
     }
 }

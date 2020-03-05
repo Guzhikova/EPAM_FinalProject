@@ -12,21 +12,17 @@ namespace DentalOffice.DAL
 {
     public class PagesDao : IPagesDao
     {
-        DBConnection _dbConnection = new DBConnection();
+        private DBConnection _dbConnection = new DBConnection();
+        private PageFileDao _pageFile = new PageFileDao();
+
         public Page Add(Page page)
         {
-            SqlParameter[] parameters =
-             {
-                new SqlParameter() { ParameterName = "@url", SqlDbType = SqlDbType.NVarChar, Value = page.URL },
-                new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.NVarChar, Value = page.Title },
-                new SqlParameter() { ParameterName = "@content", SqlDbType = SqlDbType.NVarChar, Value = page.Content }
-            };
+            page = this.AddToSourceTable(page);
 
-            SqlParameter idParameter =
-                new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Direction = ParameterDirection.Output };
-
-            object result = _dbConnection.ExecuteStoredProcedure("dbo.AddPage", parameters, idParameter);
-            page.ID = (int)result;
+            foreach (var file in page.Files)
+            {
+                _pageFile.AddFileForPage(page.ID, file.ID);
+            }
 
             return page;
         }
@@ -44,6 +40,56 @@ namespace DentalOffice.DAL
         }
 
         public IEnumerable<Page> GetAll()
+        {
+            var pages = this.GetAllFromSourceTable();
+
+            if (pages != null)
+            {
+                foreach (var page in pages)
+                {
+                    page.Files = _pageFile.GetAllFilesByPageId(page.ID).ToList();
+                }
+            }
+            return pages;
+        }
+
+        public Page GetById(int id)
+        {
+            Page page = this.GetByIdFromSourceTable(id);
+
+            if (page != null)
+            {
+                page.Files = _pageFile.GetAllFilesByPageId(page.ID).ToList();
+            }
+
+            return page;
+        }
+
+        public void Update(Page page)
+        {
+            this.UpdateInSourceTable(page);
+            _pageFile.UpdateFilesForPage(page);
+        }
+
+
+        private Page AddToSourceTable(Page page)
+        {
+            SqlParameter[] parameters =
+             {
+                new SqlParameter() { ParameterName = "@url", SqlDbType = SqlDbType.NVarChar, Value = page.URL },
+                new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.NVarChar, Value = page.Title },
+                new SqlParameter() { ParameterName = "@content", SqlDbType = SqlDbType.NVarChar, Value = page.Content }
+            };
+
+            SqlParameter idParameter =
+                new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Direction = ParameterDirection.Output };
+
+            object result = _dbConnection.ExecuteStoredProcedure("dbo.AddPage", parameters, idParameter);
+            page.ID = (int)result;
+
+            return page;
+        }
+        private IEnumerable<Page> GetAllFromSourceTable()
         {
             var pages = new List<Page>();
             Page page = null;
@@ -72,8 +118,7 @@ namespace DentalOffice.DAL
             }
             return pages;
         }
-
-        public Page GetById(int id)
+        private Page GetByIdFromSourceTable(int id)
         {
             Page page = null;
 
@@ -102,8 +147,7 @@ namespace DentalOffice.DAL
             }
             return page;
         }
-
-        public Page Update(Page page)
+        private void UpdateInSourceTable(Page page)
         {
             SqlParameter[] parameters =
             {
@@ -114,8 +158,7 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdatePage", parameters);
-
-            return page;
         }
+
     }
 }

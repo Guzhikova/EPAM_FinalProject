@@ -12,28 +12,28 @@ namespace DentalOffice.DAL
 {
     public class EmployeesDao : IEmployeesDao
     {
-        DBConnection _dbConnection = new DBConnection();
+        private DBConnection _dbConnection = new DBConnection();
+        private PostsDao _post = new PostsDao();
+        private EmployeeFileDao _empFiles = new EmployeeFileDao();
+        private EmployeeSpecialtyDao _empSpecialty = new EmployeeSpecialtyDao();
+
+
         public Employee Add(Employee employee)
         {
-            SqlParameter[] parameters =
+            employee = this.AddToSourceTable(employee);
+
+            foreach (var file in employee.Files)
             {
-                new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = employee.LastName },
-                new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = employee.FirstName },
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName },
-                new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
-                new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
-                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
-                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, Value = employee.Post }
-            };
+                _empFiles.AddFileForEmployee(employee.ID, file.ID);
+            }
 
-            SqlParameter idParameter =
-                new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Direction = ParameterDirection.Output };
-
-            object result = _dbConnection.ExecuteStoredProcedure("dbo.AddEmployee", parameters, idParameter);
-            employee.ID = (int)result;
+            foreach (var specialty in employee.Specialties)
+            {
+                _empSpecialty.AddSpecialtyForEmployee(employee.ID, specialty.ID);
+            }
 
             return employee;
-        }
+        }        
 
         public void DeleteById(int id)
         {
@@ -49,7 +49,50 @@ namespace DentalOffice.DAL
 
         public IEnumerable<Employee> GetAll()
         {
-            List<Employee> employees = new List<Employee>();
+            var employees = this.GetAllFromSourceTable();
+
+            if (employees != null)
+            {
+                foreach (var employee in employees)
+                {
+                    employee.Post = _post.GetById(employee.Post.ID);
+                    employee.Files = _empFiles.GetAllFilesByEmployeeId(employee.ID).ToList();
+                    employee.Specialties = _empSpecialty.GetAllSpecialtiesByEmployeeId(employee.ID).ToList();
+                }
+            }
+            return employees;
+        }
+
+        public Employee GetById(int id)
+        {
+            Employee employee = this.GetByIdFromSourceTable(id);
+
+            if (employee != null)
+            {
+                employee.Post = _post.GetById(employee.Post.ID);
+
+                employee.Files = _empFiles.GetAllFilesByEmployeeId(employee.ID).ToList();
+                employee.Specialties = _empSpecialty.GetAllSpecialtiesByEmployeeId(employee.ID).ToList();
+            }
+
+            return employee; 
+
+        }
+
+        public void Update(Employee employee)
+        {
+            this.UpdateInSourceTable(employee);
+
+            _empFiles.UpdateFilesForEmployee(employee);
+            _empSpecialty.UpdateSpecialtiesForEmployee(employee);
+
+        }
+
+
+
+        private IEnumerable<Employee> GetAllFromSourceTable()
+        {
+            var employees = new List<Employee>();
             Employee employee = null;
 
             using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
@@ -91,9 +134,9 @@ namespace DentalOffice.DAL
             }
 
             return employees;
-        }
+        }        
 
-        public Employee GetById(int id)
+        private Employee GetByIdFromSourceTable(int id)
         {
             Employee employee = null;
 
@@ -131,15 +174,36 @@ namespace DentalOffice.DAL
                         employee.Post = new Post
                         {
                             ID = (int)reader["PostID"]
-                        }; 
+                        };
                     }
                 }
             }
+            return employee;
+        }
+
+        private Employee AddToSourceTable(Employee employee)
+        {
+            SqlParameter[] parameters =
+            {
+                new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = employee.LastName },
+                new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = employee.FirstName },
+                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName },
+                new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
+                new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
+                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
+                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, Value = employee.Post }
+            };
+
+            SqlParameter idParameter =
+                new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Direction = ParameterDirection.Output };
+
+            object result = _dbConnection.ExecuteStoredProcedure("dbo.AddEmployee", parameters, idParameter);
+            employee.ID = (int)result;
 
             return employee;
         }
 
-        public Employee Update(Employee employee)
+        private Employee UpdateInSourceTable(Employee employee)
         {
             SqlParameter[] parameters =
             {
@@ -157,5 +221,7 @@ namespace DentalOffice.DAL
 
             return employee;
         }
+
+        
     }
 }

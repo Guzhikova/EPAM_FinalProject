@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface ISpecialtiesDao
+    public interface ISpecialtiesLogic
     {
         IEnumerable<Specialty> GetAll();
 

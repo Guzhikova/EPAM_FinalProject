@@ -99,7 +99,7 @@ namespace DentalOffice.DAL
             return specialty;
         }
 
-        public Specialty Update(Specialty specialty)
+        public void Update(Specialty specialty)
         {
             SqlParameter[] parameters =
             {
@@ -109,8 +109,6 @@ namespace DentalOffice.DAL
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateSpecialty", parameters);
-
-            return specialty;
         }
     }
 }

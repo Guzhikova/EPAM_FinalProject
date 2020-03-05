@@ -15,7 +15,7 @@ namespace DentalOffice.DAL.Interfaces
 
         Role Add(Role role);
 
-        Role Update(Role role);
+        void Update(Role role);
 
         void DeleteById(int id);
 

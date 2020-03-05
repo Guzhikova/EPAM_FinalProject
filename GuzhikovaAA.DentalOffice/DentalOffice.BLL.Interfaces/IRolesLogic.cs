@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IPostsDao
+    public interface IRolesLogic
     {
-        IEnumerable<Post> GetAll();
+        IEnumerable<Role> GetAll();
 
-        Post GetById(int id);
+        Role GetById(int id);
 
-        Post Add(Post post);
+        Role Add(Role role);
 
-        void Update(Post post);
+        void Update(Role role);
 
         void DeleteById(int id);
     }

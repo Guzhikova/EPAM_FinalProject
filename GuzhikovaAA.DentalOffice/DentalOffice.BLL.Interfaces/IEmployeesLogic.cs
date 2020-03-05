@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IEmployeesDao
+    public interface IEmployeesLogic
     {
         IEnumerable<Employee> GetAll();
 
@@ -18,6 +18,5 @@ namespace DentalOffice.DAL.Interfaces
         void Update(Employee employee);
 
         void DeleteById(int id);
-
     }
 }

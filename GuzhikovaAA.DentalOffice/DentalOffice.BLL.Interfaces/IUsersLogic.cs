@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DentalOffice.DAL.Interfaces
+namespace DentalOffice.BLL.Interfaces
 {
-    public interface IUsersDao
+
+    public interface IUsersLogic
     {
         IEnumerable<User> GetAll();
 
@@ -19,4 +20,5 @@ namespace DentalOffice.DAL.Interfaces
 
         void Update(User user);
     }
+
 }
