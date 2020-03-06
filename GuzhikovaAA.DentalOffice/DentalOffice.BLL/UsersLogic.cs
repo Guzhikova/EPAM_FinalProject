@@ -47,7 +47,8 @@ namespace DentalOffice.BLL
 
         public User GetByLogin(string login)
         {
-            return _usersDao.GetAll().FirstOrDefault(user => user.Login == login);
+            return _usersDao.GetAll().FirstOrDefault
+                (user => user.Login.ToLower() == login.ToLower());
         }
 
         public bool isPairLoginPassword(string login, string password)
@@ -62,9 +63,16 @@ namespace DentalOffice.BLL
         private string ConvertToMD5(string password)
         {
             var md5 = MD5.Create();
-            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            return Convert.ToBase64String(hash);
+            byte[] inputBytes = Encoding.ASCII.GetBytes(password);
+            byte[] hash = md5.ComputeHash(inputBytes);
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 }

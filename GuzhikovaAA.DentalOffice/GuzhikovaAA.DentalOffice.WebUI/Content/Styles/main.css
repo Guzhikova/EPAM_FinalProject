@@ -18,6 +18,10 @@ header p {
 }
 
 /* Horizontal menu */
+#horizontal-menu
+{
+    height: 50px;
+}
 
 #horizontal-menu a {
     font-weight: bold;
@@ -57,5 +61,20 @@ header p {
 #registration {
     margin-top: -7px;
     padding: 0;
+    font-size: 13px;
+}
+
+
+/* Ajax */
+.error-message{
+    position: absolute;
+    right: 0;
+    top: -60px;
+
+    min-height: 55px;
+
+    padding: 3px;
+    margin:0;
+
     font-size: 13px;
 }

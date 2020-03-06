@@ -25,9 +25,20 @@ namespace DentalOffice.DAL
             {
                 foreach (var user in users)
                 {
-                    user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
-                    user.PatientData = _patients.GetById(user.PatientData.ID);
-                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+                    if (user.EmployeeData != null)
+                    {
+                        user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
+                    }
+
+                    if (user.PatientData != null)
+                    {
+                        user.PatientData = _patients.GetById(user.PatientData.ID);
+                    }
+
+                    if (user.Roles != null)
+                    {
+                        user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+                    }
                 }
             }
             return users;

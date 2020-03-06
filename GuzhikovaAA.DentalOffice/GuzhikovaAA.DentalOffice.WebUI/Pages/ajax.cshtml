@@ -5,15 +5,29 @@
     AdministrationModule adminModule = new AdministrationModule();
 
     string action = Request["action"];
+    string message = "";
+    string displayAttribute = "style=display:none";
 
     if (IsAjax)
     {
-        if(action == "signin")
+        if (action == "signin")
         {
-          action=  adminModule.TryAuthenticateUser(Request);
+            if (!adminModule.TryAuthenticateUser(Request, out message))
+            {
+                displayAttribute = "";
+            }
+
         }
 
     }
+    else
+    {
+        Response.Redirect("~");
+    }
 }
 
-@action
+<div class="alert alert-danger error-message" role="alert" @displayAttribute>
+    <strong>Ошибка:</strong> @message
+</div>
+
+@RenderPage("~/Pages/Partials/_Authorization.cshtml")
