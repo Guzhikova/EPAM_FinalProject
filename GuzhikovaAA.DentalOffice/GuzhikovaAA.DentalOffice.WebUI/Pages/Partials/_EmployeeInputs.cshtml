@@ -1,0 +1,54 @@
+﻿@using DentalOffice.Entities;
+@using DentalOffice.WebUI.Management;
+@{
+    Layout = null;
+
+    AdministrationModule adminModule = new AdministrationModule();
+
+    string checkedAttr = "checked";
+
+    List<Post> posts = adminModule.GetPosts();
+
+}
+
+
+<div class="form-group">
+    <label  for="empLastName">* Фамилия:</label>
+    <input type="text" class="form-control" name="empLastName" id="empLastName" placeholder="Фамилия" required>
+</div>
+<div class="form-group">
+    <label  for="empFirstName">* Имя:</label>
+    <input type="text" class="form-control" name="empFirstName" id="empFirstName" placeholder="Имя" required>
+</div>
+<div class="form-group">
+    <label for="empMiddleName">Отчество:</label>
+    <input type="text" class="form-control" name="empMiddleName" id="empMiddleName" placeholder="Отчество">
+</div>
+
+<div class="form-group">
+    <label for="dateOfBirth">Дата рождения:</label>
+    <input type="date" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="dd.mm.yyyy" required>
+</div>
+
+<div class="form-group">
+    <label for="dateOfEmployment">Дата трудоустройства</label>
+    <input type="date" name="dateOfEmployment" id="dateOfEmployment" class="form-control" required placeholder="dd.mm.yyyy" required>
+</div>
+
+<div class="form-group">
+    <label for="empNote">O себе:</label>
+    <textarea class="form-control" id="empNote" rows="3"></textarea>
+</div>
+
+<p class="mb-1">Должность:</p>
+
+@foreach (var post in posts)
+{
+    <div class="form-check pl-4">
+        <input class="form-check-input" type="radio" name="post" id="exampleRadios1" value=@post.ID @checkedAttr>
+        <label class="form-check-label" for="post"> @post.Title </label>
+    </div>
+
+    @(checkedAttr = "")
+
+}

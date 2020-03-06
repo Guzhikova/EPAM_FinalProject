@@ -94,11 +94,15 @@
     <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css" />
     <Content Include="Content\Styles\main.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap-4.4.1\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js" />
     <Content Include="Pages\ajax.cshtml" />
     <Content Include="Pages\Partials\_AuthorizationForm.cshtml" />
     <Content Include="Pages\Partials\_AuthorizationPersonal.cshtml" />
     <Content Include="Pages\Registration.cshtml" />
+    <Content Include="Pages\Person.cshtml" />
+    <Content Include="Pages\Partials\_PatientInputs.cshtml" />
+    <Content Include="Pages\Partials\_EmployeeInputs.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dental-office.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

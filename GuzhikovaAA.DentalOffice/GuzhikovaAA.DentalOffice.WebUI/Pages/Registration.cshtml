@@ -1,42 +1,73 @@
 ﻿@{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
+    if (User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~");
+    }
+
+    if (IsPost)
+    {
+
+    }
+
 }
 
 @section Authorization
     {
     <div class="pt-2">
-        <a href="#" class="float-right text-warning" onclick="ReturnBack()"> Отменить регистрацию</a>
+        <a href="#" class="float-right text-warning" onclick="ReturnBack()">X Отменить регистрацию</a>
     </div>
 }
 
 @section AdditionalScripts
     {
     <script src="~/Scripts/dental-office.js"></script>
+
 }
 
 <div class="row">
     <div class="col-md-6 offset-sm-3 pt-4">
-
         <h4 class="text-center">Регистрация</h4>
-        <form method="post" action="#" autocomplete="off">
+
+        <form method="post" action="" enctype="multipart/form-data" autocomplete="off">
             <div class="form-group">
-                <label for="login">Логин:</label>
-                <input name="login" type="text" class="form-control" id="email" placeholder="Введите логин">
+                <label for="login">* Логин:</label>
+                <input name="login" type="text" class="form-control" id="email" placeholder="Введите логин" required>
             </div>
             <div class="form-group">
-                <label for="email">E-mail адрес:</label>
-                <input name="email" type="email" class="form-control" id="email" placeholder="Введите email">
+                <label for="email">* E-mail адрес:</label>
+                <input name="email" type="email" class="form-control" id="email" placeholder="Введите email" required>
             </div>
             <div class="form-group">
-                <label for="password">Пароль:</label>
-                <input name="password" type="password" class="form-control" id="password" placeholder="Введите пароль">
+                <label for="password">* Пароль:</label>
+                <input name="password" type="password" class="form-control" id="password" placeholder="Введите пароль" required>
             </div>
+
+            <div class="form-group">
+                <label for="userImage">Загрузить изображение:</label>
+                <input type="file" class="form-control" data-filename-placement="inside" name="userImage" id="userImage" title="Выбрать файл" lang="ru">
+            </div>
+
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="save">
-                <label name="save" class="form-check-label" for="save">запомнить меня</label>
+                <input type="checkbox" name="patient" class="form-check-input" id="patient" onchange="showOrHide('patient', 'patientForm');" />
+                <label class="form-check-label" for="patient">Я пациент</label>
             </div>
-            <button type="submit" class="btn btn-primary">Войти</button>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="employee" id="employee" onchange="showOrHide('employee', 'employeeForm');">
+                <label class="form-check-label" for="employee">Я сотрудник компании</label>
+            </div>
+
+            <section id="patientForm" style = "display: none;">
+                @RenderPage("~/Pages/Partials/_PatientInputs.cshtml")
+            </section>
+
+            <section id="employeeForm" style = "display: none;">
+                @RenderPage("~/Pages/Partials/_EmployeeInputs.cshtml")
+            </section>
+
+                <button type="submit" class="btn btn-info my-3 w-100">Зарегистрироваться</button>
         </form>
     </div>
 </div>
