@@ -96,7 +96,11 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-4.4.1\bootstrap.min.js" />
     <Content Include="Pages\ajax.cshtml" />
+    <Content Include="Pages\Partials\_AuthorizationForm.cshtml" />
+    <Content Include="Pages\Partials\_AuthorizationPersonal.cshtml" />
+    <Content Include="Pages\Registration.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dental-office.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />

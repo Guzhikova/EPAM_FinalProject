@@ -29,7 +29,15 @@
 
             </div>
             <div class="col-md-4">
-                @RenderPage("~/Pages/Partials/_Authorization.cshtml")
+
+                @if (!IsSectionDefined("Authorization"))
+                {
+                    @RenderPage("~/Pages/Partials/_Authorization.cshtml");
+                }
+                else
+                {
+                    @RenderSection("Authorization", required: false)
+                }
 
             </div>
         </div>
@@ -50,5 +58,6 @@
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @RenderSection("AdditionalScripts", required: false)
 </body>
 </html>

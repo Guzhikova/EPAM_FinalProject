@@ -4,21 +4,39 @@
 
     AdministrationModule adminModule = new AdministrationModule();
 
-    string action = Request["action"];
+
     string message = "";
     string displayAttribute = "style=display:none";
+    var page = RenderPage("~/Pages/Partials/_AuthorizationForm.cshtml");
 
     if (IsAjax)
     {
-        if (action == "signin")
+        string action = Request["action"];
+
+        switch (action)
         {
-            if (!adminModule.TryAuthenticateUser(Request, out message))
-            {
-                displayAttribute = "";
-            }
+            case "signin":
 
+                bool authResult = adminModule.TryAuthenticateUser(Request, out message);
+
+                if (authResult)
+                {
+                    Page.UserName = Request["login"];
+                    page = RenderPage("~/Pages/Partials/_AuthorizationPersonal.cshtml");
+                }
+                else
+                {
+                    displayAttribute = "";
+                }
+
+                break;
+
+            case "signout":
+
+                FormsAuthentication.SignOut();
+                page = RenderPage("~/Pages/Partials/_AuthorizationForm.cshtml");
+                break;
         }
-
     }
     else
     {
@@ -30,4 +48,4 @@
     <strong>Ошибка:</strong> @message
 </div>
 
-@RenderPage("~/Pages/Partials/_Authorization.cshtml")
+@page

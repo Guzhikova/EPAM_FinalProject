@@ -1,0 +1,11 @@
+﻿@{
+    Layout = null;
+
+    string userName = (IsAjax) ? Page.UserName : User.Identity.Name;
+}
+
+<div class="text-right" id="personal">
+    <p class="text-dark h5">Здравствуйте, @userName!</p>
+    <p><a class="text-light" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#authorization" href="~/Pages/ajax?action=signout">Выйти</a></p>
+</div>
+
