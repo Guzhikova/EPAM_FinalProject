@@ -20,11 +20,13 @@ namespace DentalOffice.DAL
         {
             news = this.AddToSourceTable(news);
 
-            foreach (var file in news.Files)
+            if (news.Files != null)
             {
-                _newsFile.AddFileForNews(news.ID, file.ID);
+                foreach (var file in news.Files)
+                {
+                    _newsFile.AddFileForNews(news.ID, file.ID);
+                }
             }
-
             return news;
         }       
 
@@ -83,7 +85,9 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.NVarChar, Value = news.Title },
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = news.Date },
                 new SqlParameter() { ParameterName = "@content", SqlDbType = SqlDbType.NVarChar, Value = news.Content },
-                new SqlParameter() { ParameterName = "@author", SqlDbType = SqlDbType.Int, Value = news.Author.ID }
+
+                new SqlParameter() { ParameterName = "@author", SqlDbType = SqlDbType.Int, 
+                    Value = (news.Author != null) ? (object) news.Author.ID : DBNull.Value}
             };
 
             SqlParameter idParameter =
@@ -179,7 +183,9 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.NVarChar, Value = news.Title },
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = news.Date },
                 new SqlParameter() { ParameterName = "@content", SqlDbType = SqlDbType.NVarChar, Value = news.Content },
-                new SqlParameter() { ParameterName = "@author", SqlDbType = SqlDbType.Int, Value = news.Author.ID }
+
+                new SqlParameter() { ParameterName = "@author", SqlDbType = SqlDbType.Int,
+                    Value = (news.Author != null) ? (object) news.Author.ID : DBNull.Value}
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateNews", parameters);

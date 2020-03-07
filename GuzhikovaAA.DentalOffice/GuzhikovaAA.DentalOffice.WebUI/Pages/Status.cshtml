@@ -1,0 +1,20 @@
+﻿@using DentalOffice.WebUI.Management;
+@{
+    Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    var adminMod = new AdministrationModule();
+
+    string entity = Request["entity"];
+    string message = "";
+
+    if (IsPost)
+    {
+        if (entity == "user")
+        {
+            adminMod.RegisterUser(Request, out message);
+        }
+    }
+}
+
+
+@message

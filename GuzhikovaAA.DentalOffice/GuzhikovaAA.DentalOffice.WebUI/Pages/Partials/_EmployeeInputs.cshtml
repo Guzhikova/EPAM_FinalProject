@@ -7,24 +7,24 @@
 
     string checkedAttr = "checked";
 
-    List<Post> posts = adminModule.GetPosts();
+    List<Post> posts = adminModule.GetPosts() ?? new List<Post>();
 
 }
 
-    <section class="form-group" id="empFullName">
-        <div class="form-group">
-            <label for="empLastName">* Фамилия:</label>
-            <input type="text" class="form-control" name="empLastName" id="empLastName" placeholder="Фамилия" required>
-        </div>
-        <div class="form-group">
-            <label for="empFirstName">* Имя:</label>
-            <input type="text" class="form-control" name="empFirstName" id="empFirstName" placeholder="Имя" required>
-        </div>
-        <div class="form-group">
-            <label for="empMiddleName">Отчество:</label>
-            <input type="text" class="form-control" name="empMiddleName" id="empMiddleName" placeholder="Отчество">
-        </div>
-    </section>
+<section class="form-group" id="empFullName">
+    <div class="form-group">
+        <label for="empLastName">* Фамилия:</label>
+        <input type="text" class="form-control" name="empLastName" id="empLastName" placeholder="Фамилия" required>
+    </div>
+    <div class="form-group">
+        <label for="empFirstName">* Имя:</label>
+        <input type="text" class="form-control" name="empFirstName" id="empFirstName" placeholder="Имя" required>
+    </div>
+    <div class="form-group">
+        <label for="empMiddleName">Отчество:</label>
+        <input type="text" class="form-control" name="empMiddleName" id="empMiddleName" placeholder="Отчество">
+    </div>
+</section>
 <div class="form-group">
     <label for="dateOfBirth">Дата рождения:</label>
     <input type="date" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="dd.mm.yyyy" required>
@@ -40,15 +40,17 @@
     <textarea class="form-control" id="empNote" rows="3"></textarea>
 </div>
 
-<p class="mb-1">Должность:</p>
-
-@foreach (var post in posts)
+@if (posts.Count > 0)
 {
-    <div class="form-check pl-4">
-        <input class="form-check-input" type="radio" name="post" id="exampleRadios1" value=@post.ID @checkedAttr>
-        <label class="form-check-label" for="post"> @post.Title </label>
-    </div>
+    <p class="mb-1">Должность:</p>
 
-    @(checkedAttr = "")
+    foreach (var post in posts)
+    {
+        <div class="form-check pl-4">
+            <input class="form-check-input" type="radio" name="post" id="exampleRadios1" value=@post.ID @checkedAttr>
+            <label class="form-check-label" for="post"> @post.Title </label>
+        </div>
 
+        @(checkedAttr = "")
+    }
 }

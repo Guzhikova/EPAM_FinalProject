@@ -22,7 +22,7 @@ namespace DentalOffice.WebUI.Management
         public bool TryAuthenticateUser(HttpRequestBase request, out string errorMessage)
         {
             errorMessage = "";
-            bool isAuthenticated = false;            
+            bool isAuthenticated = false;
             string login = request["login"];
             string password = request["password"];
 
@@ -34,14 +34,15 @@ namespace DentalOffice.WebUI.Management
                     isAuthenticated = true;
 
                     Logger.Log.Info($"The user '{login}'  is successfully authenticated");
-                    
+
                 }
                 else
                 {
                     errorMessage = "Неверная пара логин-пароль! Проверьте регистр и язык на клавиатуре и попробуйте войти снова.";
                     Logger.Log.Warn($"Authentication for user '{login}' rejected: invalid username/password pair");
                 }
-            }else
+            }
+            else
             {
                 errorMessage = "К сожалению, не удалось получить данные логин/пароль. Обратитесь за помощью к администратору сайта.";
                 Logger.Log.Error("Received data from Request about user login and password were null or empty");
@@ -50,21 +51,123 @@ namespace DentalOffice.WebUI.Management
             return isAuthenticated;
         }
 
-        public User RegisterUser(HttpRequestBase request)
+        public void RegisterUser(HttpRequestBase request, out string message)
         {
-            string login = request["login"];
-            string password = request["password"];
-            string email = request["email"];
-            DateTime registrationDate = DateTime.Now;
-            byte[] image = GetAndResizeImageFromRequest();
+            User user = GetFullUserInfoFromRequest(request);
+            //try
+            //{
+            _userLogic.Add(user);
+            FormsAuthentication.SetAuthCookie(user.Login, createPersistentCookie: true);
+            message = "Поздравляем! Регистрация прошла успешно!";
+            //}
+            //catch
+            //{
+            // LOG --- MESSAGE
+            //}
 
-            return null;
         }
 
         public List<Post> GetPosts()
         {
             return _postLogic.GetAll().ToList();
             //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+        }
+
+        private User GetFullUserInfoFromRequest(HttpRequestBase request)
+        {
+            Patient patient = null;
+            Employee employee = null;
+
+            DateTime registrationDate = DateTime.Now;
+
+            bool isPatientExist = (request["patientExist"] == "exist");
+            bool isEmployeeExist = (request["employeeExist"] == "exist");
+
+            User user = GetOnlyUserInfoFromRequest(request);
+
+            if (isPatientExist && isEmployeeExist)
+            {
+                patient = GetNewPatientFromRequest(request);
+                employee = GetNewEmployeeFromRequest(request);
+
+                employee.LastName = patient.LastName;
+                employee.FirstName = patient.FirstName;
+                employee.MiddleName = employee.MiddleName;
+
+                user.PatientData = patient;
+                user.EmployeeData = employee;
+            }
+            else if (isPatientExist)
+            {
+                patient = GetNewPatientFromRequest(request);
+                user.PatientData = patient;
+            }
+            else if (isEmployeeExist)
+            {
+                employee = GetNewEmployeeFromRequest(request);
+                user.EmployeeData = employee;
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// Gets user data from Request without related entities info
+        /// </summary>
+        /// <returns>Return object User</returns>
+        private User GetOnlyUserInfoFromRequest(HttpRequestBase request)
+        {
+            User user = new User
+            {
+                Login = request["login"],
+                Password = request["password"],
+                Email = request["email"],
+                RegistrationDate = DateTime.Now,
+                Photo = GetAndResizeImageFromRequest()
+            };
+
+            return user;
+        }
+
+        private Employee GetNewEmployeeFromRequest(HttpRequestBase request)
+        {
+            DateTime.TryParse(request["dateOfBirth"], out DateTime dateOfBirth);
+            DateTime.TryParse(request["dateOfEmployment"], out DateTime dateOfEmployment);
+            Int32.TryParse(request["post"], out int postID);
+
+            //try
+            //{
+            Post post = _postLogic.GetById(postID) ?? new Post();
+            //}
+            //catch
+            //{
+            //    ////////////////////////////////////////////////////
+            //    ////           LOG
+            //}
+
+            Employee employee = new Employee
+            {
+                LastName = request["empLastName"],
+                FirstName = request["empFirstName"],
+                MiddleName = request["empMiddleName"],
+                DateOfBirth = dateOfBirth,
+                DateOfEmployement = dateOfEmployment,
+                Note = request["empNote"],
+                Post = post
+            };
+            return employee;
+        }
+
+        private Patient GetNewPatientFromRequest(HttpRequestBase request)
+        {
+            Patient patient = new Patient
+            {
+                LastName = request["empLastName"],
+                FirstName = request["empFirstName"],
+                MiddleName = request["empMiddleName"],
+                Phone = request["patientPhone"]
+            };
+            return patient;
         }
 
         private byte[] GetAndResizeImageFromRequest(int width = 100, int height = 100)
@@ -83,6 +186,6 @@ namespace DentalOffice.WebUI.Management
         }
 
 
-
     }
+
 }

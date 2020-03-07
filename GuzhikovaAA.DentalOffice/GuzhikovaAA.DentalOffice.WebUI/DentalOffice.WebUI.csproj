@@ -103,6 +103,7 @@
     <Content Include="Pages\Person.cshtml" />
     <Content Include="Pages\Partials\_PatientInputs.cshtml" />
     <Content Include="Pages\Partials\_EmployeeInputs.cshtml" />
+    <Content Include="Pages\Status.cshtml" />
     <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dental-office\dental-office.registration.js" />
     <Content Include="Scripts\jquery\jquery-3.4.1.js" />

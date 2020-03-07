@@ -22,14 +22,20 @@ namespace DentalOffice.DAL
         {
             employee = this.AddToSourceTable(employee);
 
-            foreach (var file in employee.Files)
+            if (employee.Files != null)
             {
-                _empFiles.AddFileForEmployee(employee.ID, file.ID);
+                foreach (var file in employee.Files)
+                {
+                    _empFiles.AddFileForEmployee(employee.ID, file.ID);
+                }
             }
 
-            foreach (var specialty in employee.Specialties)
+            if (employee.Specialties != null)
             {
-                _empSpecialty.AddSpecialtyForEmployee(employee.ID, specialty.ID);
+                foreach (var specialty in employee.Specialties)
+                {
+                    _empSpecialty.AddSpecialtyForEmployee(employee.ID, specialty.ID);
+                }
             }
 
             return employee;
@@ -187,11 +193,14 @@ namespace DentalOffice.DAL
             {
                 new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = employee.LastName },
                 new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = employee.FirstName },
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName },
+
+                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName},
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
                 new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
-                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, Value = employee.Post }
+
+                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, 
+                    Value = (employee.Post != null) ? (object) employee.Post : DBNull.Value }
             };
 
             SqlParameter idParameter =
@@ -214,7 +223,9 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
                 new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
-                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, Value = employee.Post }
+
+                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int,
+                    Value = (employee.Post != null) ? (object) employee.Post : DBNull.Value }
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateEmployee", parameters);

@@ -19,11 +19,13 @@ namespace DentalOffice.DAL
         {
             page = this.AddToSourceTable(page);
 
-            foreach (var file in page.Files)
+            if (page.Files != null)
             {
-                _pageFile.AddFileForPage(page.ID, file.ID);
+                foreach (var file in page.Files)
+                {
+                    _pageFile.AddFileForPage(page.ID, file.ID);
+                }
             }
-
             return page;
         }
 

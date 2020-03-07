@@ -61,13 +61,15 @@ namespace DentalOffice.DAL
         {
             user = AddToSourceTable(user);
 
-            foreach (var role in user.Roles)
+            if (user.Roles != null)
             {
-                _userRole.AddRoleForUser(user.ID, role.ID);
+                foreach (var role in user.Roles)
+                {
+                    _userRole.AddRoleForUser(user.ID, role.ID);
+                }
             }
-
             return user;
-        }       
+        }
 
         public void DeleteById(int id)
         {
@@ -96,9 +98,15 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@password", SqlDbType = SqlDbType.NVarChar, Value = user.Password },
                 new SqlParameter() { ParameterName = "@email", SqlDbType = SqlDbType.NVarChar, Value = user.Email },
                 new SqlParameter() { ParameterName = "@registrationDate", SqlDbType = SqlDbType.DateTime2, Value = user.RegistrationDate },
-                new SqlParameter() { ParameterName = "@photo", SqlDbType = SqlDbType.VarBinary, Value = user.Photo },
-                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = user.EmployeeData.ID },
-                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = user.PatientData.ID },
+
+                new SqlParameter() { ParameterName = "@photo", SqlDbType = SqlDbType.VarBinary,
+                    Value = (object)user.Photo ?? DBNull.Value },
+
+                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int,
+                    Value = (user.EmployeeData != null) ? (object)user.EmployeeData.ID : DBNull.Value },
+
+                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int,
+                    Value = (user.PatientData != null) ? (object)user.PatientData.ID : DBNull.Value },
             };
 
             SqlParameter idParameter =
@@ -218,14 +226,20 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@password", SqlDbType = SqlDbType.NVarChar, Value = user.Password },
                 new SqlParameter() { ParameterName = "@email", SqlDbType = SqlDbType.NVarChar, Value = user.Email },
                 new SqlParameter() { ParameterName = "@registrationDate", SqlDbType = SqlDbType.DateTime2, Value = user.RegistrationDate },
-                new SqlParameter() { ParameterName = "@photo", SqlDbType = SqlDbType.VarBinary, Value = user.Photo },
-                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = user.EmployeeData.ID },
-                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = user.PatientData.ID }
+
+                new SqlParameter() { ParameterName = "@photo", SqlDbType = SqlDbType.VarBinary,
+                    Value = (object)user.Photo ?? DBNull.Value },
+
+                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int,
+                    Value = (user.EmployeeData != null) ? (object)user.EmployeeData.ID : DBNull.Value },
+
+                new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int,
+                    Value = (user.PatientData != null) ? (object)user.PatientData.ID : DBNull.Value },
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.AddUser", parameters);
         }
 
- 
+
     }
 }

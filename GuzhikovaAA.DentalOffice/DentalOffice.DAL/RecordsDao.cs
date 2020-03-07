@@ -23,7 +23,10 @@ namespace DentalOffice.DAL
             {
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = record.Date },
                 new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = record.Patient.ID },
-                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = record.Employee.ID },
+
+                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, 
+                    Value = (record.Employee != null) ? (object) record.Employee.ID : DBNull.Value},
+
                 new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, Value = record.Comment }
             };
 
@@ -112,7 +115,10 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@id", SqlDbType = SqlDbType.Int, Value = record.ID},
                 new SqlParameter() { ParameterName = "@date", SqlDbType = SqlDbType.DateTime2, Value = record.Date },
                 new SqlParameter() { ParameterName = "@patientID", SqlDbType = SqlDbType.Int, Value = record.Patient.ID },
-                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, Value = record.Employee.ID },
+
+                new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int,
+                    Value = (record.Employee != null) ? (object) record.Employee.ID : DBNull.Value},
+
                 new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, Value = record.Comment }
             };
 
@@ -227,8 +233,11 @@ namespace DentalOffice.DAL
             {
                 foreach (var record in records)
                 {
-                    record.Patient = _patients.GetById(record.Patient.ID);
-                    record.Employee = _employees.GetById(record.Employee.ID);
+                    if (record.Patient != null && record.Employee != null)
+                    {
+                        record.Patient = _patients.GetById(record.Patient.ID);
+                        record.Employee = _employees.GetById(record.Employee.ID);
+                    }
                 }
             }
             return records;
