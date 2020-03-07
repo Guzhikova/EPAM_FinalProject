@@ -103,14 +103,14 @@
     <Content Include="Pages\Person.cshtml" />
     <Content Include="Pages\Partials\_PatientInputs.cshtml" />
     <Content Include="Pages\Partials\_EmployeeInputs.cshtml" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\dental-office.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dental-office\dental-office.registration.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -130,8 +130,8 @@
     <Content Include="Pages\Partials\_HorizontalMenu.cshtml" />
     <Content Include="Pages\Partials\_AuxiliaryMenu.cshtml" />
     <Content Include="Pages\Partials\_Authorization.cshtml" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -84,3 +84,15 @@ header p {
     margin: 0;
     font-size: 13px;
 }
+
+/* Registration */
+
+#reg_form > section
+{
+    width: 95%;
+    margin-left: 5%;
+    padding: 10px;
+
+    background-color: #eeede7;
+    border-radius: 8px;
+}
