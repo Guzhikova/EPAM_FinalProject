@@ -53,21 +53,20 @@
                 <input type="checkbox" name="patient" class="form-check-input" id="patient" onchange="showOrHide('patient', 'patientForm');" />
                 <label class="form-check-label" for="patient">Я пациент</label>
             </div>
+            <section id="patientForm" style="display: none;">
+                @RenderPage("~/Pages/Partials/_PatientInputs.cshtml")
+            </section>
 
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="employee" id="employee" onchange="showOrHide('employee', 'employeeForm');">
                 <label class="form-check-label" for="employee">Я сотрудник компании</label>
             </div>
 
-            <section id="patientForm" style = "display: none;">
-                @RenderPage("~/Pages/Partials/_PatientInputs.cshtml")
-            </section>
-
-            <section id="employeeForm" style = "display: none;">
+            <section id="employeeForm" style="display: none;">
                 @RenderPage("~/Pages/Partials/_EmployeeInputs.cshtml")
             </section>
 
-                <button type="submit" class="btn btn-info my-3 w-100">Зарегистрироваться</button>
+            <button type="submit" class="btn btn-info my-3 w-100">Зарегистрироваться</button>
         </form>
     </div>
 </div>
