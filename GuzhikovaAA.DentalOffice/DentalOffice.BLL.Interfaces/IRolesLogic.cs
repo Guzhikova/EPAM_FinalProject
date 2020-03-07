@@ -18,5 +18,7 @@ namespace DentalOffice.BLL.Interfaces
         void Update(Role role);
 
         void DeleteById(int id);
+
+        Role GetByRoleName(string roleName);
     }
 }

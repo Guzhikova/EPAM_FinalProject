@@ -86,7 +86,12 @@ namespace DentalOffice.DAL
         public void Update(User user)
         {
             this.UpdateInSourceTable(user);
-            _userRole.UpdateRolesForUser(user);
+
+            if (user.Roles != null)
+            {
+                _userRole.UpdateRolesForUser(user);
+            }
+
         }
 
 
@@ -237,7 +242,7 @@ namespace DentalOffice.DAL
                     Value = (user.PatientData != null) ? (object)user.PatientData.ID : DBNull.Value },
             };
 
-            _dbConnection.ExecuteStoredProcedure("dbo.AddUser", parameters);
+            _dbConnection.ExecuteStoredProcedure("dbo.UpdateUser", parameters);
         }
 
 

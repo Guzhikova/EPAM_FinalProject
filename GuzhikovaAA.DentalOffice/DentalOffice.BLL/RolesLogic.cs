@@ -37,7 +37,12 @@ namespace DentalOffice.BLL
         {
             return _rolesDao.GetById(id);
         }
-
+        public Role GetByRoleName(string roleName)
+        {
+           
+            return  _rolesDao.GetAll().FirstOrDefault
+                (role => role.Title.ToLower() == roleName.ToLower());
+        }
         public void Update(Role role)
         {
             _rolesDao.Update(role);

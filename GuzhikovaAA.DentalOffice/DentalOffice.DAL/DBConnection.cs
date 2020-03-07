@@ -85,10 +85,10 @@ namespace DentalOffice.DAL
         /// <summary>
         /// Executes stored procedure that returns files for entity.
         /// </summary>
-        /// <param name="name">The stored procedure name</param>
+        /// <param name="procedureName">The stored procedure name</param>
         /// <param name="id">The entity ID</param>
         /// <returns>Returns files for entity</returns>
-        public IEnumerable<File> GetAllFilesByEntityId(string name, int id)
+        public IEnumerable<File> GetAllFilesByEntityId(string procedureName, int id)
         {
             var files = new List<File>();
             File file = null;
@@ -97,7 +97,7 @@ namespace DentalOffice.DAL
             {
                 var command = connection.CreateCommand();
                 command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = "storedProcedureName";
+                command.CommandText = procedureName;
 
                 var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
                 command.Parameters.Add(idParameter);

@@ -21,6 +21,9 @@ namespace DentalOffice.BLL
 
         public User Add(User user)
         {
+            if (GetByLogin(user.Login) != null)
+                throw new OperationCanceledException("User with this login already exists! Operation to create user canceled.");
+
             user.Password = ConvertToMD5(user.Password);
             return _usersDao.Add(user);
         }

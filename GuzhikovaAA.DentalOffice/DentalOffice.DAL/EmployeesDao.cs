@@ -194,13 +194,18 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = employee.LastName },
                 new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = employee.FirstName },
 
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName},
+                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar,
+                    Value = !String.IsNullOrEmpty(employee.MiddleName) ? (object) employee.MiddleName : DBNull.Value
+                },
+
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
-                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
+               
+                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, 
+                    Value = !String.IsNullOrEmpty(employee.Note) ? (object) employee.Note : DBNull.Value },
 
                 new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, 
-                    Value = (employee.Post != null) ? (object) employee.Post : DBNull.Value }
+                    Value = (employee.Post != null) ? (object) employee.Post.ID : DBNull.Value }
             };
 
             SqlParameter idParameter =
@@ -219,13 +224,18 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@id", SqlDbType = SqlDbType.Int, Value = employee.ID},
                 new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = employee.LastName },
                 new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = employee.FirstName },
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = employee.MiddleName },
+
+                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar,
+                    Value = !String.IsNullOrEmpty(employee.MiddleName) ? (object) employee.MiddleName : DBNull.Value },
+
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
-                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, Value = employee.Note },
+               
+                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar,
+                    Value = !String.IsNullOrEmpty(employee.Note) ? (object) employee.Note : DBNull.Value },
 
                 new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int,
-                    Value = (employee.Post != null) ? (object) employee.Post : DBNull.Value }
+                    Value = (employee.Post != null) ? (object) employee.Post.ID : DBNull.Value }
             };
 
             _dbConnection.ExecuteStoredProcedure("dbo.UpdateEmployee", parameters);

@@ -74,15 +74,23 @@ header p {
     font-size: 15px;
 }
 
-/* Ajax */
-.error-message {
-    position: absolute;
-    right: 0;
-    top: -60px;
+
+/* Messages */
+.error-message 
+{
+
     min-height: 55px;
     padding: 3px;
     margin: 0;
     font-size: 13px;
+}
+
+/* Ajax */
+#ajax-mess 
+{
+    position: absolute;
+    right: 0;
+    top: -60px;
 }
 
 /* Registration */

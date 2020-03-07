@@ -17,6 +17,8 @@ namespace DentalOffice.WebUI.Management
         private IRolesLogic _roleLogic = DependencyResolver.RolesLogic;
 
         private IPostsLogic _postLogic = DependencyResolver.PostsLogic;
+        private IEmployeesLogic _employeesLogic = DependencyResolver.EmployeesLogic;
+        private IPatientsLogic _patientsLogic = DependencyResolver.PatientsLogic;
 
 
         public bool TryAuthenticateUser(HttpRequestBase request, out string errorMessage)
@@ -51,20 +53,43 @@ namespace DentalOffice.WebUI.Management
             return isAuthenticated;
         }
 
-        public void RegisterUser(HttpRequestBase request, out string message)
+        public bool RegisterUser(HttpRequestBase request, out string message)
         {
-            User user = GetFullUserInfoFromRequest(request);
-            //try
-            //{
-            _userLogic.Add(user);
-            FormsAuthentication.SetAuthCookie(user.Login, createPersistentCookie: true);
-            message = "Поздравляем! Регистрация прошла успешно!";
+            bool result = false;
+
+            User user = GetOnlyUserInfoFromRequest(request);
+
+            try
+            {
+                _userLogic.Add(user);
+
+                if (GetRelatedUserInfoFromRequest(request, user) != null)
+                {
+                    _userLogic.Update(user);
+                }
+
+                //GetFullUserInfoFromRequest(request);
+                result = true;
+                //try
+                //{
+
+                FormsAuthentication.SetAuthCookie(user.Login, createPersistentCookie: true);
+                message = "Поздравляем! Регистрация прошла успешно!";
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger.Log.Warn($"For user name '{user.Login}' occurred exception: {ex.Message}. {ex.StackTrace}");
+                message = ("Регистрация отклонена, т.к. пользователь с таким именем уже существует. Пожалуйста, измените логин и повторите попытку.");
+            }
+
+
+
             //}
             //catch
             //{
             // LOG --- MESSAGE
             //}
-
+            return result;
         }
 
         public List<Post> GetPosts()
@@ -73,17 +98,22 @@ namespace DentalOffice.WebUI.Management
             //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
         }
 
-        private User GetFullUserInfoFromRequest(HttpRequestBase request)
+        private User GetRelatedUserInfoFromRequest(HttpRequestBase request, User user)
         {
             Patient patient = null;
             Employee employee = null;
 
-            DateTime registrationDate = DateTime.Now;
-
             bool isPatientExist = (request["patientExist"] == "exist");
             bool isEmployeeExist = (request["employeeExist"] == "exist");
 
-            User user = GetOnlyUserInfoFromRequest(request);
+            if (!isPatientExist && !isEmployeeExist)
+            {
+                return null;
+            }
+
+            var patientRole = _roleLogic.GetByRoleName("patient");
+            var employeeRole = _roleLogic.GetByRoleName("Employee");
+            user.Roles = new List<Role>();
 
             if (isPatientExist && isEmployeeExist)
             {
@@ -94,18 +124,24 @@ namespace DentalOffice.WebUI.Management
                 employee.FirstName = patient.FirstName;
                 employee.MiddleName = employee.MiddleName;
 
-                user.PatientData = patient;
-                user.EmployeeData = employee;
+                user.PatientData = _patientsLogic.Add(patient);
+                user.Roles.Add(patientRole);
+
+                user.EmployeeData = _employeesLogic.Add(employee);
+                user.Roles.Add(employeeRole);
+
             }
             else if (isPatientExist)
             {
                 patient = GetNewPatientFromRequest(request);
-                user.PatientData = patient;
+                user.PatientData = _patientsLogic.Add(patient);
+                user.Roles.Add(patientRole);
             }
             else if (isEmployeeExist)
             {
                 employee = GetNewEmployeeFromRequest(request);
-                user.EmployeeData = employee;
+                user.EmployeeData = _employeesLogic.Add(employee);
+                user.Roles.Add(employeeRole);
             }
 
             return user;
@@ -162,9 +198,9 @@ namespace DentalOffice.WebUI.Management
         {
             Patient patient = new Patient
             {
-                LastName = request["empLastName"],
-                FirstName = request["empFirstName"],
-                MiddleName = request["empMiddleName"],
+                LastName = request["patientLastName"],
+                FirstName = request["patientFirstName"],
+                MiddleName = request["patientMiddleName"],
                 Phone = request["patientPhone"]
             };
             return patient;

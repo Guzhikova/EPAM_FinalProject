@@ -13,13 +13,23 @@ namespace DentalOffice.DAL
     public class PatientsDao : IPatientsDao
     {
         DBConnection _dbConnection = new DBConnection();
+
         public Patient Add(Patient patient)
         {
             SqlParameter[] parameters =
             {
                 new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = patient.LastName },
                 new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = patient.FirstName },
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = patient.MiddleName },
+
+                new SqlParameter() 
+                { 
+                    ParameterName = "@middleName", 
+                    SqlDbType = SqlDbType.NVarChar, 
+                    Value = !String.IsNullOrEmpty(patient.MiddleName) 
+                        ? (object) patient.MiddleName 
+                        : DBNull.Value
+                },
+
                 new SqlParameter() { ParameterName = "@phone", SqlDbType = SqlDbType.NVarChar, Value = patient.Phone }
             };
 
@@ -114,7 +124,16 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@id", SqlDbType = SqlDbType.Int, Value = patient.ID},
                 new SqlParameter() { ParameterName = "@lastName", SqlDbType = SqlDbType.NVarChar, Value = patient.LastName },
                 new SqlParameter() { ParameterName = "@firstName", SqlDbType = SqlDbType.NVarChar, Value = patient.FirstName },
-                new SqlParameter() { ParameterName = "@middleName", SqlDbType = SqlDbType.NVarChar, Value = patient.MiddleName },
+
+                new SqlParameter() 
+                {
+                    ParameterName = "@middleName", 
+                    SqlDbType = SqlDbType.NVarChar,
+                    Value = !String.IsNullOrEmpty(patient.MiddleName)
+                        ? (object) patient.MiddleName
+                        : DBNull.Value
+                },
+
                 new SqlParameter() { ParameterName = "@phone", SqlDbType = SqlDbType.NVarChar, Value = patient.Phone }
             };
 

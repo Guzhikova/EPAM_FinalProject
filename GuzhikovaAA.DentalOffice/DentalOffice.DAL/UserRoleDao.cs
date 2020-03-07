@@ -72,15 +72,15 @@ namespace DentalOffice.DAL
             var newRoles = user.Roles;
 
             var rolesToDelete = oldRoles.Where(n => !newRoles.Any(t => t.ID == n.ID));
-            foreach (var file in rolesToDelete)
+            foreach (var role in rolesToDelete)
             {
-                DeleteRoleForUser(user.ID, file.ID);
+                DeleteRoleForUser(user.ID, role.ID);
             }
 
             var rolesToAdd = newRoles.Where(n => !oldRoles.Any(t => t.ID == n.ID));
-            foreach (var file in rolesToAdd)
+            foreach (var role in rolesToAdd)
             {
-                AddRoleForUser(user.ID, file.ID);
+                AddRoleForUser(user.ID, role.ID);
             }
         }
     }
