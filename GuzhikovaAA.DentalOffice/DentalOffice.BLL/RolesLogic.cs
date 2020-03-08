@@ -20,6 +20,9 @@ namespace DentalOffice.BLL
 
         public Role Add(Role role)
         {
+            if (GetByRoleName(role.Title) != null)
+                throw new OperationCanceledException("Role with this title already exists! The role creation canceled.");
+
             return _rolesDao.Add(role);
         }
 

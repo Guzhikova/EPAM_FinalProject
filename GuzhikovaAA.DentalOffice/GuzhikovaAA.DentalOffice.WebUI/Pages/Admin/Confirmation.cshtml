@@ -1,0 +1,32 @@
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Entities;
+@{
+    Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    var roleManage = new RolesManagment();
+
+    string confirmMessage = "";
+    string action = Request["action"];
+    string entity = Request["entity"];
+    string confirm = Request["confirm"];
+    string id = Request["id"];
+
+    if (action == "delete" && entity == "role" && confirm == "yes")
+    {
+        roleManage.DeleteRole(Request);
+        Response.Redirect("~/Pages/Admin/RoleManagement");
+    }
+    else if (action == "delete" && entity == "role")
+    {
+        var role = roleManage.GetRole(Request);
+        confirmMessage = $"Вы подтверждаете удаление роли '{role.Title}' для всех пользователей?";
+    }
+}
+ 
+
+<div class="alert alert-warning text-center m-4" role="alert">
+    <strong>@confirmMessage</strong>
+    <br />
+    <a href="~/Pages/Admin/Confirmation?action=@action&entity=@entity&confirm=yes&id=@id" class="btn btn-warning my-4">Да</a> <text>	&emsp;</text>
+    <a href="~/Pages/Admin/RoleManagement" class="btn btn-danger">Отмена</a>
+</div>

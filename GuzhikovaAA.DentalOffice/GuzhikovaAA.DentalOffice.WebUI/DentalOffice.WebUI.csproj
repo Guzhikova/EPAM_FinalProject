@@ -89,6 +89,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\delete.svg" />
     <Content Include="Content\Images\header\head-bg.jpg" />
     <Content Include="Content\Images\header\header-bg.jpg" />
     <Content Include="Content\Styles\bootstrap-4.4.1\bootstrap.min.css" />
@@ -106,6 +107,8 @@
     <Content Include="Pages\Status.cshtml" />
     <Content Include="Pages\Admin\RoleManagement.cshtml" />
     <Content Include="Pages\Partials\_UsersForRole.cshtml" />
+    <Content Include="Pages\Admin\Confirmation.cshtml" />
+    <Content Include="Pages\Admin\Role.cshtml" />
     <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dental-office\dental-office.registration.js" />
     <Content Include="Scripts\jquery\jquery-3.4.1.js" />
