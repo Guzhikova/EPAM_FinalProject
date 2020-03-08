@@ -15,14 +15,21 @@ namespace DentalOffice.DAL
     {
         DBConnection _dbConnection = new DBConnection();
         public void AddRoleForUser(int userId, int roleId)
-        {
+        {  try
+            {
             SqlParameter[] parameters =
             {
                 new SqlParameter() { ParameterName = "@userID", SqlDbType = SqlDbType.Int, Value = userId },
                 new SqlParameter() { ParameterName = "@roleID", SqlDbType = SqlDbType.Int, Value = roleId }
             };
 
-            _dbConnection.ExecuteStoredProcedure("dbo.AddRoleForUser", parameters);
+          
+                _dbConnection.ExecuteStoredProcedure("dbo.AddRoleForUser", parameters);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException($"Error! Trying to add nonexistent ID for user or role to the 'user_role' table of database: {ex.Message}", ex); ;
+            }
         }
 
         public void DeleteRoleForUser(int userId, int roleId)
@@ -68,20 +75,28 @@ namespace DentalOffice.DAL
 
         public void UpdateRolesForUser(User user)
         {
-            var oldRoles = GetAllRolesByUserId(user.ID);
-            var newRoles = user.Roles;
-
-            var rolesToDelete = oldRoles.Where(n => !newRoles.Any(t => t.ID == n.ID));
-            foreach (var role in rolesToDelete)
+            if (user.Roles != null)
             {
-                DeleteRoleForUser(user.ID, role.ID);
+                var oldRoles = GetAllRolesByUserId(user.ID);
+                var newRoles = user.Roles;
+
+                var rolesToDelete = oldRoles.Where(n => !newRoles.Any(t => t.ID == n.ID));
+                foreach (var role in rolesToDelete)
+                {
+                    DeleteRoleForUser(user.ID, role.ID);
+                }
+
+                var rolesToAdd = newRoles.Where(n => !oldRoles.Any(t => t.ID == n.ID));
+                foreach (var role in rolesToAdd)
+                {
+                    if (role == null)
+                        throw new NullReferenceException($"Error! User roles cannot be created/updated because requested role does not exist in database!"); 
+
+                    AddRoleForUser(user.ID, role.ID);
+                    
+                }
             }
 
-            var rolesToAdd = newRoles.Where(n => !oldRoles.Any(t => t.ID == n.ID));
-            foreach (var role in rolesToAdd)
-            {
-                AddRoleForUser(user.ID, role.ID);
-            }
         }
     }
 }

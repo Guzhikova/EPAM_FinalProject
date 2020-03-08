@@ -1,0 +1,36 @@
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Common;
+@using DentalOffice.Entities;
+@{
+    Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    RolesManagment roleManage = new RolesManagment();
+    string message = "";
+    int counter = 0;
+
+    var roles = roleManage.GetRoles(out message) ?? new List<Role>();
+
+}
+
+
+<h3>Управление ролями</h3>
+<div class="row">
+
+    <div class="col-md-4">
+        <table class="table">
+            <tbody>
+                @foreach (var role in roles)
+                {
+                    <tr>
+                        <td>@(counter++)</td>
+                        <td><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        
+
+    </div>
+    <div class="col-md-8" id="usersForRole"></div>
+</div>

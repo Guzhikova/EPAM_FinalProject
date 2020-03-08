@@ -5,6 +5,7 @@ using DentalOffice.WebUI.Log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Security;
@@ -65,7 +66,23 @@ namespace DentalOffice.WebUI.Management
 
                 if (GetRelatedUserInfoFromRequest(request, user) != null)
                 {
-                    _userLogic.Update(user);
+                    try
+                    {
+                        _userLogic.Update(user);
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        StringBuilder mess = new StringBuilder($"Exception during the update user '{user.Login}', ID = {user.ID}:{Environment.NewLine}");
+                        mess.Append($"Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
+
+                        Exception innerEx = ex.InnerException;
+                        if (innerEx != null)
+                        {
+                            mess.Append($"Inner exception: {innerEx.Message}{Environment.NewLine}Stack Trace: {innerEx.StackTrace}");
+                        }
+
+                        Logger.Log.Error(mess);
+                    }
                 }
 
                 //GetFullUserInfoFromRequest(request);
@@ -169,17 +186,7 @@ namespace DentalOffice.WebUI.Management
         {
             DateTime.TryParse(request["dateOfBirth"], out DateTime dateOfBirth);
             DateTime.TryParse(request["dateOfEmployment"], out DateTime dateOfEmployment);
-            Int32.TryParse(request["post"], out int postID);
-
-            //try
-            //{
-            Post post = _postLogic.GetById(postID) ?? new Post();
-            //}
-            //catch
-            //{
-            //    ////////////////////////////////////////////////////
-            //    ////           LOG
-            //}
+                 
 
             Employee employee = new Employee
             {
@@ -189,8 +196,24 @@ namespace DentalOffice.WebUI.Management
                 DateOfBirth = dateOfBirth,
                 DateOfEmployement = dateOfEmployment,
                 Note = request["empNote"],
-                Post = post
+              //  Post = post
             };
+
+            Int32.TryParse(request["post"], out int postID);
+
+            if (postID != 0)
+            {
+                try
+                {
+                    employee.Post = _postLogic.GetById(postID);
+                }
+                catch
+                {
+                    ////////////////////////////////////////////////////
+                    ////           LOG
+                }
+            }
+
             return employee;
         }
 

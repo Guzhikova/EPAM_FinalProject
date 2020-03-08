@@ -7,7 +7,7 @@
 
     string message = "";
     string displayAttribute = "style=display:none";
-    var page = RenderPage("~/Pages/Partials/_AuthorizationForm.cshtml");
+    HelperResult page = null;
 
     if (IsAjax)
     {
@@ -36,13 +36,19 @@
                 FormsAuthentication.SignOut();
                 page = RenderPage("~/Pages/Partials/_AuthorizationForm.cshtml");
                 break;
+
+            case "usersForRole":
+
+                //PageData["roleID"] = 
+                 page = RenderPage("~/Pages/Partials/_UsersForRole.cshtml");
+                break;
         }
     }
     else
     {
         Response.Redirect("~");
     }
-}
+    }
 
 <div class="alert alert-danger error-message" id="ajax-mess" role="alert" @displayAttribute>
     <strong>Ошибка:</strong> @message

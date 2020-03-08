@@ -21,6 +21,7 @@ namespace DentalOffice.BLL.Interfaces
         void Update(User user);
 
         User GetByLogin(string login);
+        IEnumerable<User> GetByRoleId(int id);
         bool isPairLoginPassword(string login, string password);
     }
 

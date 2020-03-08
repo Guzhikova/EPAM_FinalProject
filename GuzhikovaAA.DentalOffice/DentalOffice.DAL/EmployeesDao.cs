@@ -39,7 +39,7 @@ namespace DentalOffice.DAL
             }
 
             return employee;
-        }        
+        }
 
         public void DeleteById(int id)
         {
@@ -75,13 +75,17 @@ namespace DentalOffice.DAL
 
             if (employee != null)
             {
-                employee.Post = _post.GetById(employee.Post.ID);
+                if (employee.Post != null)
+                {
+                    employee.Post = _post.GetById(employee.Post.ID);
+                }
+
 
                 employee.Files = _empFiles.GetAllFilesByEmployeeId(employee.ID).ToList();
                 employee.Specialties = _empSpecialty.GetAllSpecialtiesByEmployeeId(employee.ID).ToList();
             }
 
-            return employee; 
+            return employee;
 
         }
 
@@ -140,7 +144,7 @@ namespace DentalOffice.DAL
             }
 
             return employees;
-        }        
+        }
 
         private Employee GetByIdFromSourceTable(int id)
         {
@@ -200,11 +204,11 @@ namespace DentalOffice.DAL
 
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
-               
-                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar, 
+
+                new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar,
                     Value = !String.IsNullOrEmpty(employee.Note) ? (object) employee.Note : DBNull.Value },
 
-                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int, 
+                new SqlParameter() { ParameterName = "@postID", SqlDbType = SqlDbType.Int,
                     Value = (employee.Post != null) ? (object) employee.Post.ID : DBNull.Value }
             };
 
@@ -230,7 +234,7 @@ namespace DentalOffice.DAL
 
                 new SqlParameter() { ParameterName = "@dateOfBirth", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfBirth },
                 new SqlParameter() { ParameterName = "@dateOfEmployment", SqlDbType = SqlDbType.DateTime2, Value = employee.DateOfEmployement },
-               
+
                 new SqlParameter() { ParameterName = "@note", SqlDbType = SqlDbType.NVarChar,
                     Value = !String.IsNullOrEmpty(employee.Note) ? (object) employee.Note : DBNull.Value },
 
@@ -243,6 +247,6 @@ namespace DentalOffice.DAL
             return employee;
         }
 
-        
+
     }
 }

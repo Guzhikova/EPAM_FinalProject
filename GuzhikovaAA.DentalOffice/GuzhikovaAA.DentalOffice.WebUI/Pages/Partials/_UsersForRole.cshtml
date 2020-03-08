@@ -1,0 +1,18 @@
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Entities;
+@{
+    Layout = null;
+
+    RolesManagment rolManage = new RolesManagment();
+    Int32.TryParse(Request["roleId"], out int roleID);
+
+    var users = rolManage.GetUsersForRole(roleID, out string massege).OrderBy(us => us.Login);
+
+}
+
+<section class="users">
+    @foreach (var user in users)
+    {
+    <p>@user.Login</p>
+    }
+</section>
