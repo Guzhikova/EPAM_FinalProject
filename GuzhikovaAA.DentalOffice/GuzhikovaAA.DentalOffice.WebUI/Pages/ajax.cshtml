@@ -39,9 +39,11 @@
 
             case "usersForRole":
 
-                //PageData["roleID"] = 
-                 page = RenderPage("~/Pages/Partials/_UsersForRole.cshtml");
+                PageData["roleID"] = Request["roleId"];
+                page = RenderPage("~/Pages/Partials/_UsersForRole.cshtml");
+            
                 break;
+
         }
     }
     else

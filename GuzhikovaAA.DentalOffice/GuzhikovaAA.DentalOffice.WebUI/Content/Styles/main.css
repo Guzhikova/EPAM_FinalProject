@@ -1,4 +1,4 @@
-﻿body{
+﻿body {
     background-color: white;
 }
 
@@ -18,45 +18,41 @@ header p {
 }
 
 /* Horizontal menu */
-#horizontal-menu
-{
+#horizontal-menu {
     height: 50px;
 }
 
-#horizontal-menu a {
-    font-weight: bold;
-    color: #cafaf2;
-}
+    #horizontal-menu a {
+        font-weight: bold;
+        color: #cafaf2;
+    }
 
-#horizontal-menu a:hover{
-    color: white;
-}
+        #horizontal-menu a:hover {
+            color: white;
+        }
 
 /* Authorization */
 
 
 #authorization, #authorization a {
     color: #cafaf2;
-
 }
 
-#signin input, #signin button{
+#signin input, #signin button {
     font-size: 13px;
 }
 
-        /* Authorization ->  Form */
+/* Authorization ->  Form */
 
 #signin input {
     height: 25px;
     width: 120px;
     margin: 10px 5px;
-   
 }
 
 #signin button {
     height: 25px;
     width: 60px;
-
     padding: 0;
 }
 
@@ -70,15 +66,12 @@ header p {
 
 #personal p {
     margin: 2px 0;
- 
     font-size: 15px;
 }
 
 
 /* Messages */
-.error-message 
-{
-
+.error-message {
     min-height: 55px;
     padding: 3px;
     margin: 0;
@@ -86,8 +79,7 @@ header p {
 }
 
 /* Ajax */
-#ajax-mess 
-{
+#ajax-mess {
     position: absolute;
     right: 0;
     top: -60px;
@@ -95,12 +87,37 @@ header p {
 
 /* Registration */
 
-#reg_form > section
-{
+#reg_form > section {
     width: 95%;
     margin-left: 5%;
     padding: 10px;
-
     background-color: #eeede7;
     border-radius: 8px;
 }
+
+
+/* Roles */
+#usersForRole {
+    margin-top: 30px;
+    background-color: #eeede7;
+    padding: 5px;
+    min-height: 200px;
+}
+
+    #usersForRole li {
+        margin: 5px;
+    }
+
+ #usersForRole .del 
+ {
+     position: absolute;
+     top: -3px;
+     right: -3px;
+     width: 20px;
+     height: 20px;
+     padding: 0;
+     margin: 0;
+     border-radius: 6px;
+     line-height: 18px;
+     color: white;
+ }

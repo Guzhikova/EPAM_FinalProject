@@ -4,15 +4,25 @@
     Layout = null;
 
     RolesManagment rolManage = new RolesManagment();
-    Int32.TryParse(Request["roleId"], out int roleID);
+
+    Int32.TryParse(PageData["roleID"], out int roleID);
+    var role = rolManage.RoleLogic.GetById(roleID);
 
     var users = rolManage.GetUsersForRole(roleID, out string massege).OrderBy(us => us.Login);
 
 }
 
-<section class="users">
-    @foreach (var user in users)
-    {
-    <p>@user.Login</p>
-    }
-</section>
+
+<div >
+    <h6 class="text-secondary text-center"> Здесь можно удалить пользователей для роли <strong>@role.Title</strong></h6>
+    <ul class="list-group list-group-horizontal-sm">
+
+        @foreach (var user in users)
+        {
+            <li class="list-group-item">@user.Login
+        <a class="del btn btn-danger">X</a></li>
+        }
+    </ul>
+</div>
+
+

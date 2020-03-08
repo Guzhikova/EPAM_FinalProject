@@ -54,11 +54,9 @@ namespace DentalOffice.BLL
                 (user => user.Login.ToLower() == login.ToLower());
         }
 
-        public IEnumerable<User> GetByRoleId(int id)
-        {
-    
-            return _usersDao.GetAll().
-                Where(user => (user.Roles != null) && user.Roles.Any(role => role.ID == id));
+        public IEnumerable<User> GetAllByRoleId(int id)
+        {   
+            return _usersDao.GetAllByRoleId(id);
         }
 
         public bool isPairLoginPassword(string login, string password)

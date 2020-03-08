@@ -16,7 +16,7 @@ namespace DentalOffice.WebUI.Management
         private IRolesLogic _roleLogic = DependencyResolver.RolesLogic;
 
         public IRolesLogic RoleLogic => _roleLogic;
-
+        public IUsersLogic UserLogic => _userLogic;
 
         public List<Role> GetRoles(out string message)
         {
@@ -35,7 +35,7 @@ namespace DentalOffice.WebUI.Management
         {
             //try
             //{
-            var users = _userLogic.GetByRoleId(roleID).ToList();
+            var users = _userLogic.GetAllByRoleId(roleID).ToList();
             message = "";
             //}
             //catch (SQLEx)

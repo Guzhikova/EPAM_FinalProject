@@ -18,5 +18,6 @@ namespace DentalOffice.DAL.Interfaces
         void DeleteById(int id);
 
         void Update(User user);
+        IEnumerable<User> GetAllByRoleId(int id);
     }
 }

@@ -20,11 +20,11 @@
     var roles = roleManage.GetRoles(out message) ?? new List<Role>();
 }
 
-<h4 class="text-center m-2">Управление ролями</h4>
+
 
 <div class="row">
     <div class="col-md-4">
-
+        <h4 class="text-center m-2">Управление ролями: </h4>
         <table class="table">
             <tbody>
                 @foreach (var role in roles)
@@ -36,26 +36,31 @@
                             </a>
                         </td>
                         <text>&#8195;</text>
-                        <td><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a></td>
+                        <td>
+                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a>
+                        </td>
                     </tr>
                 }
 
             </tbody>
         </table>
 
-
-
-    </div>
-    <div class="col-md-8" id="usersForRole">
-
-    </div>
-    <form class="form-inline ml-4" action="~/Pages/Admin/RoleManagement" method="post">
-        <div class="form-group">
-            <input type="text" class="form-control" name="title" placeholder="Название">
+        <form class="  mt-4" action="~/Pages/Admin/RoleManagement" method="post">
+            <div class="form-group">
+                <input type="text" class="form-control" name="title" placeholder="Название">
+            </div>
+            <button type="submit" class="btn btn-primary m-lg-2">Создать роль</button>
+        </form>
+        <div class="alert alert-danger " role="alert" @displayAttr>
+            <strong>Ошибка:</strong> @errMessage
         </div>
-        <button type="submit" class="btn btn-success m-lg-2">Создать роль</button>
-    </form>
-    <div class="alert alert-danger ml-4" role="alert" @displayAttr>
-       <strong>Ошибка:</strong> @errMessage
     </div>
+    <div class="col-md-8" >
+        <h5 class=" text-dark text-center mt-3">Редактирование пользователей</h5>
+        <div id="usersForRole"></div> 
+
+    </div>
+
+
+
 </div>

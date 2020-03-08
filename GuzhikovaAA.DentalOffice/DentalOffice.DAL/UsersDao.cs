@@ -23,24 +23,31 @@ namespace DentalOffice.DAL
 
             if (users != null)
             {
-                foreach (var user in users)
+                GetLinkedEntities(users);
+            }
+            return users;
+        }
+
+        private IEnumerable<User> GetLinkedEntities(IEnumerable<User> users)
+        {
+            foreach (var user in users)
+            {
+                if (user.EmployeeData != null)
                 {
-                    if (user.EmployeeData != null)
-                    {
-                        user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
-                    }
+                    user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
+                }
 
-                    if (user.PatientData != null)
-                    {
-                        user.PatientData = _patients.GetById(user.PatientData.ID);
-                    }
+                if (user.PatientData != null)
+                {
+                    user.PatientData = _patients.GetById(user.PatientData.ID);
+                }
 
-                    if (user.Roles != null)
-                    {
-                        user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
-                    }
+                if (user.Roles != null)
+                {
+                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
                 }
             }
+
             return users;
         }
 
@@ -50,12 +57,77 @@ namespace DentalOffice.DAL
 
             if (user != null)
             {
+                if (user.EmployeeData != null) 
+                { 
                 user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
-                user.PatientData = _patients.GetById(user.PatientData.ID);
+                }
+
+                if (user.PatientData != null)
+                {
+                    user.PatientData = _patients.GetById(user.PatientData.ID);
+                }
                 user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
             }
             return user;
         }
+
+        public IEnumerable<User> GetAllByRoleId(int id)
+        {
+            var users = new List<User>();
+            User user = null;
+
+            using (SqlConnection connection = new SqlConnection(_dbConnection.ConnectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "GetAllUsersByRoleId ";
+
+                var idParameter = new SqlParameter() { SqlDbType = SqlDbType.Int, ParameterName = "@id", Value = id };
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user = new User
+                    {
+                        ID = (int)reader["ID"],
+                        Login = reader["Login"] as string,
+                        Password = reader["Password"] as string,
+                        Email = reader["Email"] as string,
+                        RegistrationDate = (reader["RegistrationDate"] != DBNull.Value)
+                            ? (DateTime)reader["RegistrationDate"]
+                            : default(DateTime),
+                        Photo = reader["Photo"] as byte[]
+                    };
+
+                    if (reader["EmployeeID"] != DBNull.Value)
+                    {
+                        user.EmployeeData = new Employee
+                        {
+                            ID = (int)reader["EmployeeID"]
+                        };
+                    }
+
+                    if (reader["PatientID"] != DBNull.Value)
+                    {
+                        user.PatientData = new Patient
+                        {
+                            ID = (int)reader["PatientID"]
+                        };
+                    }
+                    users.Add(user);
+                }
+            }
+
+            if (users != null)
+            {
+                GetLinkedEntities(users);
+            }
+            return users;
+        }
+
 
         public User Add(User user)
         {
