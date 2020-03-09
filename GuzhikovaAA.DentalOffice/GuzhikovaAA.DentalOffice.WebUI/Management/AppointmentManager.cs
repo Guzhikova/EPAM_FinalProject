@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DentalOffice.BLL.Interfaces;
+using DentalOffice.Common;
+using DentalOffice.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +10,9 @@ namespace DentalOffice.WebUI.Management
 {
     public class AppointmentManager
     {
+        private AdministrationModule _adminMod = new AdministrationModule();
+        private IRecordsLogic _recordLogic = DependencyResolver.RecordsLogic;
+        DentalOfficeRoleProvider _roleProvider = new DentalOfficeRoleProvider();
 
         public DateTime GetValidDate(DateTime currentDate, out string dayOfWeek)
         {
@@ -31,8 +37,33 @@ namespace DentalOffice.WebUI.Management
             return validDate;
         }
 
+        
+        public Record CreateRecordFromRequest(HttpRequestBase request, string userLogin)
+        {
+            Record record = new Record();
+
+            DateTime.TryParse(request["date"], out DateTime date);
+            Int32.TryParse(request["time"], out int time);
+
+            date = new DateTime(date.Year, date.Month, date.Day, time, 0, 0);
+
+            User user = _adminMod.GetUserByLogin(userLogin);
+    
+
+            record.Date = date;
+            record.Patient = user.PatientData;
+
+            record = _recordLogic.Add(record);
+
+            return record;
+        }
 
 
+        private DateTime GetFullDate(DateTime currentDate, int time)
+        {
+
+            return new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, time, 0, 0);
+        }
 
         /// <summary>
         /// Compares two dates: today and announced

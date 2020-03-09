@@ -27,7 +27,8 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@employeeID", SqlDbType = SqlDbType.Int, 
                     Value = (record.Employee != null) ? (object) record.Employee.ID : DBNull.Value},
 
-                new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, Value = record.Comment }
+                new SqlParameter() { ParameterName = "@comment", SqlDbType = SqlDbType.NVarChar, 
+                    Value = !String.IsNullOrEmpty(record.Comment) ? (object)record.Comment : DBNull.Value}
             };
 
             SqlParameter idParameter =

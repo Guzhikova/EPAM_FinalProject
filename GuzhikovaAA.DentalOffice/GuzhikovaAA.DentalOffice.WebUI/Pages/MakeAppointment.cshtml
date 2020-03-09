@@ -1,69 +1,101 @@
 ﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Запись на прием";
 
     var appManager = new AppointmentManager();
+    var roleProvider = new DentalOfficeRoleProvider();
 
     string dayOfWeek = "";
     DateTime validDate = default(DateTime);
-
     DateTime currentDate = DateTime.Now;
-    DateTime tempDate = default(DateTime);
+    Record record = null;
 
+    string displayAttr = "style=display:none";
 
-    //  int dayOfWeek = (int)currentDate.DayOfWeek;
-    string btnDisabled = "disabled";
+    DateTime.TryParse(Request["date"], out DateTime reqDate);
 
+    string idAttr = "";
 
+    if (!String.IsNullOrEmpty(Request["date"]) && !String.IsNullOrEmpty(Request["time"]))
+    {
+
+        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
+        {
+            record = appManager.CreateRecordFromRequest(Request, User.Identity.Name);
+            if (record.ID != 0)
+            {
+                displayAttr = "";
+                idAttr = $"d{reqDate.Day}t{Request["time"]}";
+            }
+        }
+        else
+        {
+            Response.Redirect("~");
+        }
+
+    }
+}
+@section AdditionalScripts
+    {
+
+    <script type="text/javascript">
+        if ('@idAttr' != "")
+        {
+            document.getElementById('@idAttr').setAttribute('aria-disabled', 'true');
+            document.getElementById('@idAttr').classList.add('disabled');
+        }
+    </script>
 }
 
+<h3 class="text-center">Записаться на прием</h3>
 
-    <h3 class="text-center">Записаться на прием</h3>
-    <div class="row">
-        
-        <div class="col-md-1"></div>
+<div class="alert alert-success" role="alert" @displayAttr>
+    Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
+</div>
 
-        <div class="col-md-3">
-            @{
-                validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
-            }
-            <h6>@dayOfWeek</h6>
-            @validDate.ToString("D")
-            @for (int i = 8; i < 18; i++)
-            {
+<div class="row">
 
+    <div class="col-md-2"></div>
 
-                <a href="" class="btn btn-secondary m-2 w-75">@i:00 - @(i + 1):00</a>
-            }
-
-        </div>
-        <div class="col-md-3">
-            @{
-                validDate = appManager.GetValidDate(currentDate.AddDays(1), out dayOfWeek);
-            }
-            <h6>@dayOfWeek</h6>
-            @validDate.ToString("D")
-            @for (int i = 8; i < 18; i++)
-            {
-
-
-                <a href="" class="btn btn-secondary m-2 w-75">@i:00 - @(i + 1):00</a>
-            }
-        </div>
-        <div class="col-md-3">
-            @{
-                validDate = appManager.GetValidDate(currentDate.AddDays(2), out dayOfWeek);
-            }
-            <h6>@dayOfWeek</h6>
-            @validDate.ToString("D")
-            @for (int i = 8; i < 18; i++)
-            {
-
-
-                <a href="" class="btn btn-secondary m-2 w-75">@i:00 - @(i + 1):00</a>
-            }
-        </div>
-
-
+    <div class="col-md-3">
+        @{
+            validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
+        }
+        <h6>@dayOfWeek</h6>
+        @validDate.ToString("D")
+        @for (int i = 8; i < 18; i++)
+        {
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+        }
 
     </div>
+    <div class="col-md-3">
+        @{
+            validDate = appManager.GetValidDate(currentDate.AddDays(1), out dayOfWeek);
+        }
+        <h6>@dayOfWeek</h6>
+        @validDate.ToString("D")
+        @for (int i = 8; i < 18; i++)
+        {
+
+
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+        }
+    </div>
+    <div class="col-md-3">
+        @{
+            validDate = appManager.GetValidDate(currentDate.AddDays(2), out dayOfWeek);
+        }
+        <h6>@dayOfWeek</h6>
+        @validDate.ToString("D")
+        @for (int i = 8; i < 18; i++)
+        {
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+        }
+    </div>
+
+
+
+</div>
