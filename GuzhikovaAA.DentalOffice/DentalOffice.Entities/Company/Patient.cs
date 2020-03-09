@@ -14,5 +14,11 @@ namespace DentalOffice.Entities
         public string MiddleName { get; set; }
 
         public string Phone { get; set; }
+
+        public override string ToString()
+        {
+            
+            return $"{LastName} {FirstName} {MiddleName}";
+        }
     }
 }

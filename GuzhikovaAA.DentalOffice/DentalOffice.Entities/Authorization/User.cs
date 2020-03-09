@@ -18,7 +18,7 @@ namespace DentalOffice.Entities
         public Employee EmployeeData { get; set; }
         public Patient PatientData { get; set; }
 
-        public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; set; }      
 
     }
 }

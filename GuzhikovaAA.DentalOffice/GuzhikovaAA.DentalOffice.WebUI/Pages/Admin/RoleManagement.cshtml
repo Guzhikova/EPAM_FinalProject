@@ -8,6 +8,7 @@
     string message = "";
     string errMessage = "";
     string displayAttr = "style=display:none";
+    int counter = 1;
 
     if (IsPost)
     {
@@ -20,7 +21,13 @@
     var roles = roleManage.GetRoles(out message) ?? new List<Role>();
 }
 
+@section AdditionalScripts
+    {
 
+    <script type="text/javascript">
+       document.getElementById('role1').click();
+    </script>
+}
 
 <div class="row">
     <div class="col-md-4">
@@ -37,7 +44,7 @@
                         </td>
                         <text>&#8195;</text>
                         <td>
-                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a>
+                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" id=@("role"+@counter++)  href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a>
                         </td>
                     </tr>
                 }
@@ -55,10 +62,14 @@
             <strong>Ошибка:</strong> @errMessage
         </div>
     </div>
-    <div class="col-md-8" >
+    <div class="col-md-8">
         <h5 class=" text-dark text-center mt-3">Редактирование пользователей</h5>
-        <div id="usersForRole"></div> 
-
+        
+        <div id="usersForRole">
+            <!-- for ajax -->
+            
+        </div>
+        <a href="~/Pages/Admin/AllUsers?action=addRole&id=roleId" class="" id="addUser">Добавить пользователя +</a>
     </div>
 
 

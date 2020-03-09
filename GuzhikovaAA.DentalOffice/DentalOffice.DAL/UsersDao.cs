@@ -42,10 +42,12 @@ namespace DentalOffice.DAL
                     user.PatientData = _patients.GetById(user.PatientData.ID);
                 }
 
-                if (user.Roles != null)
+                if (user.Roles == null)
                 {
-                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+                    user.Roles = new List<Role>();
                 }
+                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+                
             }
 
             return users;

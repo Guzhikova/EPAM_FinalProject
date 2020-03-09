@@ -23,7 +23,21 @@ namespace DentalOffice.WebUI.Management
 
         public IUsersLogic UserLogic => _userLogic;
         public IRolesLogic RoleLogic => _roleLogic;
-  
+
+        public List<User> GetUsers()
+        {
+            //try
+            //{
+
+            List<User> users = _userLogic.GetAll().ToList();
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+            return users;
+        }
 
         //public User GetUserById(int id)
         //{
