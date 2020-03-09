@@ -1,5 +1,41 @@
-﻿@{
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Entities;
+@{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    var adminMod = new AdministrationModule();
+    Patient patient = new Patient();
+
+    Int32.TryParse(Request["userId"], out int userId);
+    Int32.TryParse(Request["patientId"], out int patientId);
+
+     string photoSrc = adminMod.GetUserPhoto();
+    string isRegistered = "Не зарегистрирован на сайте";
+    string userName = "";
+
+    if (userId != 0)
+    {
+        var user = adminMod.GetUserById(userId);
+       
+
+
+        patient = user.PatientData;
+        photoSrc = adminMod.GetUserPhoto(user);
+
+        isRegistered = "Зарегистрирован как пользователь";
+        userName = user.Login;
+    }
+
+
 }
 
+    <div id="patient">
+        <h4 class="text-center my-3"> Пациент </h4>
+        <img class="photo float-right" src=@photoSrc>
+        <p><strong>Фамилия:</strong> @patient.LastName</p>
+        <p><strong>Имя:</strong> @patient.FirstName</p>
+        <p><strong>Отчество:</strong> @patient.MiddleName</p>
+        <p><strong>Телефон:</strong> @patient.Phone</p>
 
+        <p class="text-info">@isRegistered <a href="~/Pages/Admin/User?action=edit&userId=@userId">@userName</a></p>
+    </div>

@@ -16,7 +16,7 @@
     int roleId = 0;
 
 
-    if(action == "addRole")
+    if (action == "addRole")
     {
         Int32.TryParse(Request["addRoleId"], out roleId);
         Role role = roleManage.GetRoleFromRequest(Request, "addRoleId");
@@ -41,49 +41,56 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in users)
+            @if (users != null)
             {
-            <tr>
-                <th class="text-secondary">@(++counter)</th>
-                <td><img class=" photo" src=@adminMod.GetUserPhoto(user)></td>
-                <th>@user.Login</th>
-                <td class="small">@user.Email</td>
-                <td class="small">@user.RegistrationDate.ToString("s")</td>
+                foreach (var user in users)
+                {
+                    <tr>
+                        <th class="text-secondary">@(++counter)</th>
+                        <td><img class=" photo" src=@adminMod.GetUserPhoto(user)></td>
+                        <th>@user.Login</th>
+                        <td class="small">@user.Email</td>
+                        <td class="small">@user.RegistrationDate.ToString("s")</td>
 
-                <td class="small">
-                    @if (user.PatientData != null)
-                    {
-                        <text>
-                            Пациент:  @user.PatientData.ToString()
-                        </text>
-                    }
+                        <td class="small">
+                            @if (user.PatientData != null)
+                            {
+                                <text>Пациент:
+                                    <a href="~/Pages/Admin/Patient?userId=@user.ID" target="_blank"> @user.PatientData.ToString()</a> </text>
+                            }
 
-                </td>
-                <td class="small">
-                    @if (user.Roles != null)
-                    {
-                        foreach (var role in user.Roles)
+                            @if (user.EmployeeData != null)
+                            {
+                                <br /> <text>Сотрудник:
+                                    <a href="~/Pages/Admin/Employee?userId=@user.ID" target="_blank"> @user.EmployeeData.ToString() </a></text>
+                            }
+
+                        </td>
+                        <td class="small">
+                            @if (user.Roles != null)
+                            {
+                                foreach (var role in user.Roles)
+                                {
+                                    @role.Title<br>
+                                }
+                            }
+                        </td>
+                        @if (action == "addRole")
                         {
-                            @role.Title<br>
+                            <td>
+                                <a href="~/Pages/Admin/RoleManagement?action=addUser&userId=@user.ID&roleId=@roleId" title="Удалить">Добавить роль</a><text>&#8195;</text>
+                            </td>
                         }
-                    }
-                </td>
-                @if (action == "addRole")
-                {
-                    <td>
-                        <a href="~/Pages/Admin/RoleManagement?action=addUser&userId=@user.ID&roleId=@roleId" title="Удалить">Добавить роль</a><text>&#8195;</text>
-                    </td>
+                        else
+                        {
+                            <td>
+                                <a href="~/Pages/Admin/Confirmation?action=delete&entity=user&id=@user.ID" title="Удалить"> <img class="img-icon w-25 h-25" src="~/Content/Images/delete.svg"></a><text>&#8195;</text>
+                                <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" title="Редактировать"> <img class="img-icon w-25 h-25" src="~/Content/Images/edit.svg"></a>
+                            </td>
+                        }
+                    </tr>
                 }
-                else
-                {
-                    <td>
-                        <a  href="~/Pages/Admin/Confirmation?action=delete&entity=user&id=@user.ID" title="Удалить"> <img class="img-icon w-25 h-25" src="~/Content/Images/delete.svg"></a><text>&#8195;</text>
-                        <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" title="Редактировать"> <img class="img-icon w-25 h-25" src="~/Content/Images/edit.svg"></a>
-                    </td>
-                }
-            </tr>
             }
-
 
         </tbody>
     </table>

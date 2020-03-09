@@ -153,14 +153,15 @@ namespace DentalOffice.WebUI.Management
             //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
         }
 
-        public string GetUserPhoto(User user)
+        public string GetUserPhoto(User user = null)
         {
-            string src = (user.Photo != null)
+            string src = (user != null && user.Photo != null)
                         ? $"data:image/png;base64,{Convert.ToBase64String(user.Photo)}"
                             : @"/Content/Images/user.png";
 
             return src;
         }
+
 
         public User GetEditedUserFromRequest(HttpRequestBase request)
         {
@@ -214,7 +215,7 @@ namespace DentalOffice.WebUI.Management
 
                 employee.LastName = patient.LastName;
                 employee.FirstName = patient.FirstName;
-                employee.MiddleName = employee.MiddleName;
+                employee.MiddleName = patient.MiddleName;
 
                 user.PatientData = _patientsLogic.Add(patient);
                 user.Roles.Add(patientRole);
@@ -240,7 +241,22 @@ namespace DentalOffice.WebUI.Management
         }
 
 
-       
+        public List<Patient> GetPatients()
+        {
+           var patients =  _patientsLogic.GetAll().OrderBy(pat => pat.LastName);
+            //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+
+            return patients.ToList();
+        }
+
+        public List<Employee> GetEmployees()
+        {
+            var employees = _employeesLogic.GetAll().OrderBy(emp => emp.LastName);
+            //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+
+            return employees.ToList();
+        }
+
 
         /// <summary>
         /// Gets user data from Request without related entities info

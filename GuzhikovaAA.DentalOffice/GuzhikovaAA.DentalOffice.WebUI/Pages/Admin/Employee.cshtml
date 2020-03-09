@@ -1,5 +1,62 @@
-﻿@{
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Entities;
+@{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    var adminMod = new AdministrationModule();
+    Employee employee = new Employee();
+
+    Int32.TryParse(Request["userId"], out int userId);
+    Int32.TryParse(Request["employeeId"], out int patientId);
+
+    string isRegistered = "Не зарегистрирован на сайте";
+    string userName = "";
+
+    string photoSrc = adminMod.GetUserPhoto();
+
+    if (userId != 0)
+    {
+        var user = adminMod.GetUserById(userId);
+        employee = user.EmployeeData;
+
+        photoSrc = adminMod.GetUserPhoto(user);
+
+        isRegistered = "Зарегистрирован как пользователь";
+        userName = user.Login;
+
+
 }
+}
+    <div id="employee">
+        <h4 class="text-center my-3"> Сотрудник </h4>
+        <img class="photo float-right" src=@photoSrc>
 
+        <p><strong>Фамилия:</strong> @employee.LastName</p>
+        <p><strong>Имя:</strong> @employee.FirstName</p>
+        <p><strong>Отчество:</strong> @employee.MiddleName</p>
+        <p><strong>Дата рождения:</strong> @employee.DateOfBirth.ToString("dd MMMM yyyy") г.</p>
+        <p class="text-secondary"><strong>Полных лет:</strong> @employee.Age</p>
+        <p><strong>Дата приема на работу:</strong> @employee.DateOfEmployement.ToString("dd MMMM yyyy") г.</p>
+        <p class="text-secondary"><strong>Стаж в компании:</strong> @employee.WorkExperience</p>
 
+        @if (employee.Post != null)
+        {
+            <p><strong>Должность:</strong> @employee.Post.Title</p>
+        }
+
+        @if (employee.Specialties != null)
+        {
+            <p>
+                <strong>Специализация:</strong>
+
+                @foreach (var specialty in employee.Specialties)
+                {
+                    <text>@(specialty.Title). </text>
+                }
+
+            </p>
+        }
+
+        <p><strong>Дополнительная информация:</strong> @employee.LastName</p>
+        <p class="text-info">@isRegistered <a href="~/Pages/Admin/User?action=edit&userId=@userId">@userName</a></p>
+    </div>

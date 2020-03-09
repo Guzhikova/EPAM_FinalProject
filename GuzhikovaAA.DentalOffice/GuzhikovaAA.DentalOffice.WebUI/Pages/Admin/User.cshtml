@@ -128,11 +128,11 @@
 
             @if (isPatient)
             {
-                <p>Пользователь зарегистрирован как <a href="____" target="_blank">пациент</a></p>
+                <p>Пользователь зарегистрирован как <a href="~/Pages/Admin/Patient?userId=@user.ID" target="_blank">пациент</a></p>
             }
             @if (isEmployee)
             {
-                <p>Пользователь зарегистрирован как <a href="____" target="_blank">сотрудник</a></p>
+                <p>Пользователь зарегистрирован как <a href="~/Pages/Admin/Employee?userId=@user.ID" target="_blank">сотрудник</a></p>
             }
 
         <p>

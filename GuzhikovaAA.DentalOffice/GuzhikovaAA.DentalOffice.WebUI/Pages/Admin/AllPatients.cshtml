@@ -1,0 +1,69 @@
+﻿@using DentalOffice.WebUI.Management;
+@using DentalOffice.Common;
+@using DentalOffice.Entities;
+@{
+    Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Пациенты";
+
+    var adminMod = new AdministrationModule();
+
+    List<Patient> patients = adminMod.GetPatients();
+    string photoSrc = adminMod.GetUserPhoto();
+
+    int counter = 0;
+
+}
+
+
+<div class="table-responsive" id="allUsers">
+    <h4 class="text-center my-3">Пациенты</h4>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="text-secondary">#</th>
+                <th></th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Телефон</th>
+                <th>Зарегистрирован как пользователь</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (patients != null)
+            {
+                foreach (var patient in patients)
+                {
+
+                    var user = adminMod.GetUsers().FirstOrDefault(us => (us.PatientData != null) && (us.PatientData.ID == patient.ID));
+                    if (user != null)
+                    {
+                        photoSrc = adminMod.GetUserPhoto(user);
+                    }
+
+
+                    <tr>
+                        <th class="text-secondary">@(++counter)</th>
+                        <td><img class=" photo" src=@photoSrc></td>
+                        <th>@patient.LastName</th>
+                        <td>@patient.FirstName</td>
+                        <td>@patient.MiddleName</td>
+                        <td>@patient.Phone</td>
+
+                        <td class="small">
+
+
+                            @if (user != null)
+                            {
+
+                                <a href="~/Pages/Admin/User?userId=@user.ID" target="_blank"> @user.Login</a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

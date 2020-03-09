@@ -128,3 +128,9 @@ header p {
 #allUsers .photo{
     width: 40px;
 }
+
+/* Employee */
+#employee .photo, #patient .photo {
+    margin: 5px 15px;
+    width: 150px;
+}

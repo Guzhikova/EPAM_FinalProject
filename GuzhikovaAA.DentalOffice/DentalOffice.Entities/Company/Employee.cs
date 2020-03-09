@@ -47,5 +47,11 @@ namespace DentalOffice.Entities
             }
             return interval;
         }
+
+
+        public override string ToString()
+        {
+            return $"{LastName} {FirstName} {MiddleName}";
+        }
     }
 }
