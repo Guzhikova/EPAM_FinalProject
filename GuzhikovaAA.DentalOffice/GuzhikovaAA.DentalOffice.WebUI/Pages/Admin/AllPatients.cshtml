@@ -22,9 +22,7 @@
             <tr>
                 <th class="text-secondary">#</th>
                 <th></th>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
+                <th>Фамилия Имя Отчество</th>
                 <th>Телефон</th>
                 <th>Зарегистрирован как пользователь</th>
             </tr>
@@ -45,9 +43,7 @@
                     <tr>
                         <th class="text-secondary">@(++counter)</th>
                         <td><img class=" photo" src=@photoSrc></td>
-                        <th>@patient.LastName</th>
-                        <td>@patient.FirstName</td>
-                        <td>@patient.MiddleName</td>
+                        <th> <a href="~/Pages/Admin/Patient?patientId=@patient.ID" target="_blank">@patient.ToString()</a> </th>
                         <td>@patient.Phone</td>
 
                         <td class="small">
@@ -56,7 +52,7 @@
                             @if (user != null)
                             {
 
-                                <a href="~/Pages/Admin/User?userId=@user.ID" target="_blank"> @user.Login</a>
+                                <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" target="_blank"> @user.Login</a>
                             }
 
                         </td>

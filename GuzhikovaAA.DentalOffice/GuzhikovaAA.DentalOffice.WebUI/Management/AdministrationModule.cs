@@ -249,6 +249,8 @@ namespace DentalOffice.WebUI.Management
             return patients.ToList();
         }
 
+
+
         public List<Employee> GetEmployees()
         {
             var employees = _employeesLogic.GetAll().OrderBy(emp => emp.LastName);

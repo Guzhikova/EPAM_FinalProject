@@ -2,6 +2,7 @@
 @using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Пациент";
 
     var adminMod = new AdministrationModule();
     Patient patient = new Patient();
@@ -9,15 +10,13 @@
     Int32.TryParse(Request["userId"], out int userId);
     Int32.TryParse(Request["patientId"], out int patientId);
 
-     string photoSrc = adminMod.GetUserPhoto();
+    string photoSrc = adminMod.GetUserPhoto();
     string isRegistered = "Не зарегистрирован на сайте";
     string userName = "";
 
     if (userId != 0)
     {
         var user = adminMod.GetUserById(userId);
-       
-
 
         patient = user.PatientData;
         photoSrc = adminMod.GetUserPhoto(user);
@@ -25,7 +24,10 @@
         isRegistered = "Зарегистрирован как пользователь";
         userName = user.Login;
     }
-
+    else if (patientId != 0)
+    {
+        patient = adminMod.GetPatients().FirstOrDefault(pat => pat.ID == patientId) ?? patient;
+    }
 
 }
 

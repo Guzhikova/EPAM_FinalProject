@@ -2,12 +2,13 @@
 @using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Сотрудник";
 
     var adminMod = new AdministrationModule();
     Employee employee = new Employee();
 
     Int32.TryParse(Request["userId"], out int userId);
-    Int32.TryParse(Request["employeeId"], out int patientId);
+    Int32.TryParse(Request["employeeId"], out int employeeId);
 
     string isRegistered = "Не зарегистрирован на сайте";
     string userName = "";
@@ -23,9 +24,11 @@
 
         isRegistered = "Зарегистрирован как пользователь";
         userName = user.Login;
-
-
 }
+     else if (employeeId != 0)
+    {
+       employee = adminMod.GetEmployees().FirstOrDefault(emp => emp.ID == employeeId) ?? employee;
+    }
 }
     <div id="employee">
         <h4 class="text-center my-3"> Сотрудник </h4>

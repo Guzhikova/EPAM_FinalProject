@@ -3,6 +3,7 @@
 @using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Сотрудники";
 
     var adminMod = new AdministrationModule();
 
@@ -15,51 +16,64 @@
 
 
 <div class="table-responsive" id="allUsers">
-    <h4 class="text-center my-3">Зарегистрированные пользователи</h4>
+    <h4 class="text-center my-3">Сотрудники</h4>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th class="text-secondary">#</th>
                 <th></th>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
-                <th>Телефон</th>
-                <th class="small">Зарегистрирован как пользователь</th>
+                <th>Фамилия Имя Отчество</th>
+                <th>Возраст</th>
+                <th>Стаж</th>
+                <th>Должность</th>
+                <th>Специализация</th>
+                <th>Дополнительно</th>
+                <th>Зарегистрирован как пользователь</th>
             </tr>
         </thead>
         <tbody>
-            @if (patients != null)
+            @if (employees != null)
             {
-                foreach (var patient in patients)
+                foreach (var employee in employees)
                 {
-                   
-                        var user = adminMod.GetUsers().FirstOrDefault(us => (us.PatientData != null) && (us.PatientData.ID == patient.ID));
-                        if (user != null)
+                    var user = adminMod.GetUsers().FirstOrDefault(us => (us.EmployeeData != null) && (us.EmployeeData.ID == employee.ID));
+                    if (user != null)
+                    {
+                        photoSrc = adminMod.GetUserPhoto(user);
+                    }
+
+            <tr>
+                <th class="text-secondary">@(++counter)</th>
+                <td><img class=" photo" src=@photoSrc></td>
+                <th><a href="~/Pages/Admin/Employee?patientId=@employee.ID" target="_blank">@employee.ToString()</a></th>
+                <td>@employee.Age</td>
+                <td>@employee.WorkExperience</td>
+                <td>
+                    @if (employee.Post != null)
+                    {
+                        @employee.Post.Title
+
+                    }
+                </td>
+                <td>
+                    @if (employee.Specialties != null)
+                    {
+
+                        foreach (var specialty in employee.Specialties)
                         {
-                            photoSrc = adminMod.GetUserPhoto(user);
+                            <text>@(specialty.Title). </text>
                         }
-                  
 
-                    <tr>
-                        <th class="text-secondary">@(++counter)</th>
-                        <td><img class=" photo" src=@photoSrc></td>
-                        <th>@patient.LastName</th>
-                        <td>@patient.FirstName</td>
-                        <td>@patient.MiddleName</td>
-                        <td>@patient.Phone</td>
-
-                        <td class="small">
-
-
-                            @if (user != null)
-                            {
-                               
-                                    <a href="~/Pages/Admin/User?userId=@user.ID" target="_blank"> @user.Login</a>
-                            }
-
-                        </td>
-                    </tr>
+                    }
+                </td>
+                <td>@employee.Note</td>
+                    <td>
+                        @if (user != null)
+                        {
+                            <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" target="_blank"> @user.Login</a>
+                        }
+                    </td>
+                </tr>
                 }
 
             }

@@ -3,6 +3,7 @@
 @using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+    PageData["Title"] = "Пользователи";
 
     var adminMod = new AdministrationModule();
     var roleManage = new RolesManagment();
@@ -20,7 +21,7 @@
     {
         Int32.TryParse(Request["addRoleId"], out roleId);
         Role role = roleManage.GetRoleFromRequest(Request, "addRoleId");
-        activeRole = $"Выбор пользователя для роли{role.Title}";
+        activeRole = $"Выбор пользователя для роли {role.Title}";
     }
 }
 
@@ -75,19 +76,17 @@
                                 }
                             }
                         </td>
-                        @if (action == "addRole")
-                        {
-                            <td>
+                        <td>
+                            @if (action == "addRole")
+                            {
                                 <a href="~/Pages/Admin/RoleManagement?action=addUser&userId=@user.ID&roleId=@roleId" title="Удалить">Добавить роль</a><text>&#8195;</text>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
+                            }
+                            else
+                            {
                                 <a href="~/Pages/Admin/Confirmation?action=delete&entity=user&id=@user.ID" title="Удалить"> <img class="img-icon w-25 h-25" src="~/Content/Images/delete.svg"></a><text>&#8195;</text>
                                 <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" title="Редактировать"> <img class="img-icon w-25 h-25" src="~/Content/Images/edit.svg"></a>
-                            </td>
-                        }
+                            }
+                        </td>
                     </tr>
                 }
             }

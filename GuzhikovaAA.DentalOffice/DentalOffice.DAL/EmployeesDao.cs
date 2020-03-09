@@ -61,7 +61,11 @@ namespace DentalOffice.DAL
             {
                 foreach (var employee in employees)
                 {
-                    employee.Post = _post.GetById(employee.Post.ID);
+                    if (employee.Post != null)
+                    {
+                        employee.Post = _post.GetById(employee.Post.ID);
+                    }
+
                     employee.Files = _empFiles.GetAllFilesByEmployeeId(employee.ID).ToList();
                     employee.Specialties = _empSpecialty.GetAllSpecialtiesByEmployeeId(employee.ID).ToList();
                 }
