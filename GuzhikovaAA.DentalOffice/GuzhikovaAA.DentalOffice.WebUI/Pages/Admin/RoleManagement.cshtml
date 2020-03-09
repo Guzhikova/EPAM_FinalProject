@@ -4,6 +4,15 @@
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
+    var roleProvider = new DentalOfficeRoleProvider();
+
+    if (!roleProvider.IsUserInRole(User.Identity.Name, "Админ"))
+    {
+        Response.Redirect("~");
+    }
+
+    PageData["Title"] = "Роли";
+
     var roleManage = new RolesManagment();
     var adminMod = new AdministrationModule();
 
@@ -17,7 +26,7 @@
     string displayAttr = "style=display:none";
 
     Int32.TryParse(Request["roleId"], out reqRoleId);
-        Int32.TryParse(Request["userId"], out reqUserId);
+    Int32.TryParse(Request["userId"], out reqUserId);
     activeRoleId = reqRoleId;
 
     if (IsPost)
@@ -29,11 +38,11 @@
     }
     else if (action == "addUser")
     {
-        
+
 
         if (reqRoleId != 0 && reqUserId != 0)
         {
-            
+
             User user = adminMod.GetUserById(reqUserId);
             Role role = roleManage.GetRoleFromRequest(Request, "roleId");
             user.Roles.Add(role);
@@ -43,7 +52,7 @@
 
     var roles = roleManage.GetRoles(out message) ?? new List<Role>();
 
-    if ( activeRoleId==0 && roles.Count() > 0)
+    if (activeRoleId == 0 && roles.Count() > 0)
     {
         activeRoleId = roles.ElementAt(0).ID;
     }
@@ -73,7 +82,7 @@
                         <text>&#8195;</text>
                         <td>
                             <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" id=@("role"+@role.ID) href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">
-                            @role.Title
+                                @role.Title
                             </a>
                         </td>
                     </tr>
@@ -97,7 +106,7 @@
         <h5 class=" text-dark text-center mt-3">Редактирование пользователей</h5>
 
         <div id="usersForRole"> <!-- for ajax --> </div>
-        
+
     </div>
 
 

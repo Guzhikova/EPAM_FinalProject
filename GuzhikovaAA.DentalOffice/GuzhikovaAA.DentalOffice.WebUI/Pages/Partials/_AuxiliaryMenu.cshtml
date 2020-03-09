@@ -3,11 +3,11 @@
 @{
     Layout = null;
     int userId = 0;
+    var adminMod = new AdministrationModule();
+    var roleProvider = new DentalOfficeRoleProvider();
 
     if (User.Identity.IsAuthenticated)
     {
-        var adminMod = new AdministrationModule();
-
         User user = adminMod.GetUserByLogin(User.Identity.Name);
         if (user != null)
         {
@@ -16,27 +16,33 @@
     }
 
 }
-<!-- A vertical navbar -->
-<nav class="navbar bg-light">
 
-    <!-- Links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="~/Pages/Admin/User?action=edit&userId=@userId">Личный кабинет</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="~/Pages/Admin/RoleManagement">Управление ролями</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="~/Pages/Admin/AllUsers">Пользователи</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="~/Pages/Admin/AllEmployees">Сотрудники</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="~/Pages/Admin/AllPatients">Пациенты</a>
-        </li>
+@if (User.Identity.IsAuthenticated)
+{
+    <nav class="navbar bg-light">
 
-    </ul>
 
-</nav>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="~/Pages/Admin/User?action=edit&userId=@userId">Личный кабинет</a>
+            </li>
+
+            @if (roleProvider.IsUserInRole(User.Identity.Name, "Админ"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Pages/Admin/RoleManagement">Управление ролями</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Pages/Admin/AllUsers">Пользователи</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Pages/Admin/AllEmployees">Сотрудники</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Pages/Admin/AllPatients">Пациенты</a>
+                </li>
+            }
+        </ul>
+
+    </nav>
+}

@@ -104,7 +104,6 @@
     <Content Include="Pages\Partials\_AuthorizationForm.cshtml" />
     <Content Include="Pages\Partials\_AuthorizationPersonal.cshtml" />
     <Content Include="Pages\Registration.cshtml" />
-    <Content Include="Pages\Person.cshtml" />
     <Content Include="Pages\Partials\_PatientInputs.cshtml" />
     <Content Include="Pages\Partials\_EmployeeInputs.cshtml" />
     <Content Include="Pages\Status.cshtml" />
@@ -117,6 +116,7 @@
     <Content Include="Pages\Admin\Employee.cshtml" />
     <Content Include="Pages\Admin\AllPatients.cshtml" />
     <Content Include="Pages\Admin\AllEmployees.cshtml" />
+    <Content Include="Pages\MakeAppointment.cshtml" />
     <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dental-office\dental-office.registration.js" />
     <Content Include="Scripts\jquery\jquery-3.4.1.js" />
@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Management\AdministrationModule.cs" />
     <Compile Include="Management\DentalOfficeRoleProvider.cs" />
+    <Compile Include="Management\AppointmentManager.cs" />
     <Compile Include="Management\Log4net\Logger.cs" />
     <Compile Include="Management\RolesManagment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

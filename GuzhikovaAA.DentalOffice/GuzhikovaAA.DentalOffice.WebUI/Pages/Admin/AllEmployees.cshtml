@@ -5,7 +5,14 @@
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
     PageData["Title"] = "Сотрудники";
 
+
     var adminMod = new AdministrationModule();
+    var roleProvider = new DentalOfficeRoleProvider();
+
+    if (!roleProvider.IsUserInRole(User.Identity.Name, "Админ"))
+    {
+        Response.Redirect("~");
+    }
 
     List<Employee> employees = adminMod.GetEmployees();
     string photoSrc = adminMod.GetUserPhoto();

@@ -3,6 +3,11 @@
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~");
+    }
+
     var adminMod = new AdministrationModule();
     User user = null;
     string confirmMessage = "";
@@ -27,9 +32,9 @@
 
     if (IsPost)
     {
-       user = adminMod.GetEditedUserFromRequest(Request);
+        user = adminMod.GetEditedUserFromRequest(Request);
         adminMod.UpdateUser(user);
-          Response.Redirect("~/Pages/Admin/AllUsers");
+        Response.Redirect("~/Pages/Admin/AllUsers");
 
     }
     else if (userId != 0)

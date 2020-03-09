@@ -3,6 +3,14 @@
 @using DentalOffice.Entities;
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
+
+    var roleProvider = new DentalOfficeRoleProvider();
+
+    if (!roleProvider.IsUserInRole(User.Identity.Name, "Админ"))
+    {
+        Response.Redirect("~");
+    }
+
     PageData["Title"] = "Пациенты";
 
     var adminMod = new AdministrationModule();
