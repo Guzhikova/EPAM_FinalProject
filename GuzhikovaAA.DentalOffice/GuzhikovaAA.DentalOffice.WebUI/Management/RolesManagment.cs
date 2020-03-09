@@ -31,6 +31,8 @@ namespace DentalOffice.WebUI.Management
             //}
             return roles;
         }
+
+
         public List<User> GetUsersForRole(int roleID, out string message)
         {
             //try
@@ -77,11 +79,11 @@ namespace DentalOffice.WebUI.Management
             }
         }
 
-        public Role GetRole(HttpRequestBase request)
+        public Role GetRoleFromRequest(HttpRequestBase request, string idParamName = "id")
         {
             Role role = null;
 
-            Int32.TryParse(request["id"], out int id);
+            Int32.TryParse(request[idParamName], out int id);
             if (id != 0)
             {
                 role = _roleLogic.GetById(id);

@@ -4,11 +4,21 @@
 @{
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
-    RolesManagment roleManage = new RolesManagment();
+    var roleManage = new RolesManagment();
+    var adminMod = new AdministrationModule();
+
+    string action = Request["action"];
+    int reqRoleId = 0;
+    int reqUserId = 0;
+    int activeRoleId = 0;
+
     string message = "";
     string errMessage = "";
     string displayAttr = "style=display:none";
-    int counter = 1;
+
+    Int32.TryParse(Request["roleId"], out reqRoleId);
+        Int32.TryParse(Request["userId"], out reqUserId);
+    activeRoleId = reqRoleId;
 
     if (IsPost)
     {
@@ -17,15 +27,33 @@
             displayAttr = "";
         }
     }
+    else if (action == "addUser")
+    {
+        
+
+        if (reqRoleId != 0 && reqUserId != 0)
+        {
+            
+            User user = adminMod.GetUserById(reqUserId);
+            Role role = roleManage.GetRoleFromRequest(Request, "roleId");
+            user.Roles.Add(role);
+            adminMod.UpdateUser(user);
+        }
+    }
 
     var roles = roleManage.GetRoles(out message) ?? new List<Role>();
+
+    if ( activeRoleId==0 && roles.Count() > 0)
+    {
+        activeRoleId = roles.ElementAt(0).ID;
+    }
 }
 
 @section AdditionalScripts
     {
 
     <script type="text/javascript">
-       document.getElementById('role1').click();
+       document.getElementById('@("role"+activeRoleId)').click();
     </script>
 }
 
@@ -44,7 +72,9 @@
                         </td>
                         <text>&#8195;</text>
                         <td>
-                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" id=@("role"+@counter++)  href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">@role.Title</a>
+                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#usersForRole" id=@("role"+@role.ID) href="~/Pages/ajax?action=usersForRole&roleId=@role.ID">
+                            @role.Title
+                            </a>
                         </td>
                     </tr>
                 }
@@ -64,12 +94,12 @@
     </div>
     <div class="col-md-8">
         <h5 class=" text-dark text-center mt-3">Редактирование пользователей</h5>
-        
+
         <div id="usersForRole">
             <!-- for ajax -->
-            
+
         </div>
-        <a href="~/Pages/Admin/AllUsers?action=addRole&id=roleId" class="" id="addUser">Добавить пользователя +</a>
+        
     </div>
 
 

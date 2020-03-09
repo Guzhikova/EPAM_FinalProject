@@ -39,10 +39,19 @@ namespace DentalOffice.WebUI.Management
             return users;
         }
 
-        //public User GetUserById(int id)
-        //{
+        public User GetUserById(int id)
+        {
+            //try
+            //{
+            User user = _userLogic.GetById(id);
+            //}
+            //catch (Exception)
+            //{
 
-        //}
+            //    throw;
+            //}
+            return user;
+        }
         public bool TryAuthenticateUser(HttpRequestBase request, out string errorMessage)
         {
             errorMessage = "";

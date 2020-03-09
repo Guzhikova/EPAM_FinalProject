@@ -5,17 +5,21 @@
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
     var adminMod = new AdministrationModule();
+    var roleManage = new RolesManagment();
 
     List<User> users = adminMod.GetUsers();
 
     string action = Request["action"];
+    string activeRole = "";
     int counter = 0;
     int roleId = 0;
-    
+
 
     if(action == "addRole")
     {
-        Int32.TryParse(Request["roleId"], out roleId);
+        Int32.TryParse(Request["addRoleId"], out roleId);
+        Role role = roleManage.GetRoleFromRequest(Request, "addRoleId");
+        activeRole = $"Выбор пользователя для роли{role.Title}";
     }
 }
 
@@ -31,7 +35,7 @@
                 <th>Дата регистрации</th>
                 <th>Зарегистрирован как</th>
                 <th>Роли</th>
-                <th></th>
+                <th class="text-danger">@activeRole</th>
             </tr>
         </thead>
         <tbody>

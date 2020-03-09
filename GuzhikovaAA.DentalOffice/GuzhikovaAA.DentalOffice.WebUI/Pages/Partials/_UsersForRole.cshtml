@@ -13,16 +13,21 @@
 }
 
 
-    <h6 class="text-secondary text-center"> Здесь можно удалить пользователей для роли <strong>@role.Title</strong></h6>
-    <ul class="list-group list-group-horizontal-sm">
+<h6 class="text-secondary text-center"> Здесь можно удалять и добавлять пользователей для роли <strong>@role.Title</strong></h6>
 
-        @foreach (var user in users)
-        {
-            <li class="list-group-item">@user.Login
-        <a class="del btn btn-danger" href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@role.ID&after=backRoles">X</a></li>
-        }
-    </ul>
+<ul class="list-group list-group-horizontal-sm">
 
-    
+    @foreach (var user in users)
+    {
+        <li class="list-group-item">
+            @user.Login
+        <a class="del btn btn-danger" href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@role.ID&after=backRoles">X</a>
+    </li>
+   
+}
+<li class="list-group-item"><a href="~/Pages/Admin/AllUsers?action=addRole&addRoleId=@role.ID" id="addUser">Добавить пользователя +</a></li>
+</ul>
+
+
 
 
