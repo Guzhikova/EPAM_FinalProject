@@ -20,7 +20,7 @@
         @foreach (var user in users)
         {
             <li class="list-group-item">@user.Login
-        <a class="del btn btn-danger">X</a></li>
+        <a class="del btn btn-danger" href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@role.ID&after=backRoles">X</a></li>
         }
     </ul>
 </div>

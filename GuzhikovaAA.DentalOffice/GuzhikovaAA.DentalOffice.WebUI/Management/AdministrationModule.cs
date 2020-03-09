@@ -21,7 +21,14 @@ namespace DentalOffice.WebUI.Management
         private IEmployeesLogic _employeesLogic = DependencyResolver.EmployeesLogic;
         private IPatientsLogic _patientsLogic = DependencyResolver.PatientsLogic;
 
+        public IUsersLogic UserLogic => _userLogic;
+        public IRolesLogic RoleLogic => _roleLogic;
+  
 
+        //public User GetUserById(int id)
+        //{
+
+        //}
         public bool TryAuthenticateUser(HttpRequestBase request, out string errorMessage)
         {
             errorMessage = "";
@@ -62,28 +69,7 @@ namespace DentalOffice.WebUI.Management
 
             try
             {
-                _userLogic.Add(user);
-
-                if (GetRelatedUserInfoFromRequest(request, user) != null)
-                {
-                    try
-                    {
-                        _userLogic.Update(user);
-                    }
-                    catch (NullReferenceException ex)
-                    {
-                        StringBuilder mess = new StringBuilder($"Exception during the update user '{user.Login}', ID = {user.ID}:{Environment.NewLine}");
-                        mess.Append($"Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
-
-                        Exception innerEx = ex.InnerException;
-                        if (innerEx != null)
-                        {
-                            mess.Append($"Inner exception: {innerEx.Message}{Environment.NewLine}Stack Trace: {innerEx.StackTrace}");
-                        }
-
-                        Logger.Log.Error(mess);
-                    }
-                }
+              UpdateUser(user);
 
                 //GetFullUserInfoFromRequest(request);
                 result = true;
@@ -109,11 +95,45 @@ namespace DentalOffice.WebUI.Management
             return result;
         }
 
+        public bool UpdateUser(User user)
+        {
+            bool result = false;
+            try
+            {
+                _userLogic.Update(user);
+                result = true;
+            }
+            catch (NullReferenceException ex)
+            {
+                StringBuilder mess = new StringBuilder($"Exception during the update user '{user.Login}', ID = {user.ID}:{Environment.NewLine}");
+                mess.Append($"Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
+
+                Exception innerEx = ex.InnerException;
+                if (innerEx != null)
+                {
+                    mess.Append($"Inner exception: {innerEx.Message}{Environment.NewLine}Stack Trace: {innerEx.StackTrace}");
+                }
+
+                Logger.Log.Error(mess);
+            }
+
+            return result;
+        }
         public List<Post> GetPosts()
         {
             return _postLogic.GetAll().ToList();
             //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
         }
+
+        public string GetUserPhoto(User user)
+        {
+            string src = (user.Photo != null)
+                        ? $"data:image/png;base64,{Convert.ToBase64String(user.Photo)}"
+                            : @"/Content/images/user.png";
+
+            return src;
+        }
+
 
         private User GetRelatedUserInfoFromRequest(HttpRequestBase request, User user)
         {
@@ -128,8 +148,8 @@ namespace DentalOffice.WebUI.Management
                 return null;
             }
 
-            var patientRole = _roleLogic.GetByRoleName("patient");
-            var employeeRole = _roleLogic.GetByRoleName("Employee");
+            var patientRole = _roleLogic.GetByRoleName("Пациент");
+            var employeeRole = _roleLogic.GetByRoleName("Сотрудник");
             user.Roles = new List<Role>();
 
             if (isPatientExist && isEmployeeExist)

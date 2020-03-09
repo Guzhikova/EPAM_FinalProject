@@ -64,7 +64,7 @@ namespace DentalOffice.DAL
                 {
                     role = new Role
                     {
-                        ID = id,
+                        ID = (int)reader["ID"],
                         Title = reader["Title"] as string
                     };
                     roles.Add(role);
