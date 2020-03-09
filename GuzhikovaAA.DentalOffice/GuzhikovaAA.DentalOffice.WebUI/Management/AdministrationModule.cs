@@ -40,6 +40,20 @@ namespace DentalOffice.WebUI.Management
             return users.ToList();
         }
 
+        public User GetUserByLogin(string login)
+        {
+            //try
+            //{
+            User user = _userLogic.GetByLogin(login);
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+            return user;
+        }
+
         public User GetUserById(int id)
         {
             //try
@@ -259,6 +273,7 @@ namespace DentalOffice.WebUI.Management
             return employees.ToList();
         }
 
+        
 
         /// <summary>
         /// Gets user data from Request without related entities info
