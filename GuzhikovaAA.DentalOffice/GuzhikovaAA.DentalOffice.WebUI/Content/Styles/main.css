@@ -106,6 +106,7 @@ header p {
 
     #usersForRole li {
         margin: 5px;
+  
     }
 
  #usersForRole .del 
@@ -122,7 +123,8 @@ header p {
      color: white;
  }
 
-#addUser
-{
 
+ /* All Users */
+#allUsers .photo{
+    width: 40px;
 }

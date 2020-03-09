@@ -4,12 +4,15 @@
     Layout = "~/Pages/Layouts/_MainLayout.cshtml";
 
     var roleManage = new RolesManagment();
+    var adminMod = new AdministrationModule();
 
     string confirmMessage = "";
     string action = Request["action"];
     string entity = Request["entity"];
     string confirm = Request["confirm"];
     string id = Request["id"];
+
+    Int32.TryParse(id, out int reqId);
 
     if (action == "delete" && entity == "role" && confirm == "yes")
     {
@@ -18,11 +21,31 @@
     }
     else if (action == "delete" && entity == "role")
     {
-        var role = roleManage.GetRole(Request);
+        var role = roleManage.GetRoleFromRequest(Request);
         confirmMessage = $"Вы подтверждаете удаление роли '{role.Title}' для всех пользователей?";
     }
+
+
+    if (action == "delete" && entity == "user" && confirm == "yes")
+    {
+        if (reqId != 0)
+        {
+            adminMod.UserLogic.DeleteById(reqId);
+        }
+
+
+        Response.Redirect("~/Pages/Admin/AllUsers");
+    }
+    else if (action == "delete" && entity == "user")
+    {
+        if (reqId != 0)
+        {
+            var user = adminMod.GetUserById(reqId);
+            confirmMessage = $"Вы подтверждаете удаление пользователя '{user.Login}'?";
+        }
+    }
 }
- 
+
 
 <div class="alert alert-warning text-center m-4" role="alert">
     <strong>@confirmMessage</strong>

@@ -29,14 +29,15 @@ namespace DentalOffice.WebUI.Management
             //try
             //{
 
-            List<User> users = _userLogic.GetAll().ToList();
+            var users = _userLogic.GetAll().OrderBy(us => us.Login);
+      
             //}
             //catch (Exception)
             //{
 
             //    throw;
             //}
-            return users;
+            return users.ToList();
         }
 
         public User GetUserById(int id)
@@ -92,9 +93,13 @@ namespace DentalOffice.WebUI.Management
 
             try
             {
-              UpdateUser(user);
+               
+              user =  GetRelatedUserInfoFromRequest(request, user)  ;
+                _userLogic.Add(user);
+                   
+               // UpdateUser(user);
 
-                //GetFullUserInfoFromRequest(request);
+                
                 result = true;
                 //try
                 //{
@@ -152,12 +157,39 @@ namespace DentalOffice.WebUI.Management
         {
             string src = (user.Photo != null)
                         ? $"data:image/png;base64,{Convert.ToBase64String(user.Photo)}"
-                            : @"/Content/images/user.png";
+                            : @"/Content/Images/user.png";
 
             return src;
         }
 
+        public User GetEditedUserFromRequest(HttpRequestBase request)
+        {
+            Int32.TryParse(request["userId"], out int id);
+            byte[] photo = GetAndResizeImageFromRequest();
+            User user = null;
 
+            if (id != 0)
+            {
+                user = GetUserById(id);
+
+                user.Login = request["login"];
+
+                if (!String.IsNullOrEmpty(request["password"]))
+                {
+                    user.Password = request["password"];
+                }
+
+                user.Email = request["email"];
+
+                if (photo != null)
+                {
+                    user.Photo = photo;
+                }
+            }
+
+            return user;
+
+        }
         private User GetRelatedUserInfoFromRequest(HttpRequestBase request, User user)
         {
             Patient patient = null;
@@ -166,10 +198,10 @@ namespace DentalOffice.WebUI.Management
             bool isPatientExist = (request["patientExist"] == "exist");
             bool isEmployeeExist = (request["employeeExist"] == "exist");
 
-            if (!isPatientExist && !isEmployeeExist)
-            {
-                return null;
-            }
+            //if (!isPatientExist && !isEmployeeExist)
+            //{
+            //    return null;
+            //}
 
             var patientRole = _roleLogic.GetByRoleName("Пациент");
             var employeeRole = _roleLogic.GetByRoleName("Сотрудник");
@@ -206,6 +238,9 @@ namespace DentalOffice.WebUI.Management
 
             return user;
         }
+
+
+       
 
         /// <summary>
         /// Gets user data from Request without related entities info

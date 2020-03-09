@@ -8,7 +8,7 @@
     string confirmMessage = "";
     string displayAttr = "style=display:none";
 
-
+    string title = "";
     string action = Request["action"];
     string after = Request["after"];
     string backUrl = "";
@@ -25,14 +25,16 @@
 
     int roleId = 0;
 
-
-    if (userId != 0)
+    if (IsPost)
     {
-        if (IsPost)
-        {
+       user = adminMod.GetEditedUserFromRequest(Request);
+        adminMod.UpdateUser(user);
+          Response.Redirect("~/Pages/Admin/AllUsers");
 
-        }
-        else if (action == "deleteRole" || action == "edit")
+    }
+    else if (userId != 0)
+    {
+        if (action == "deleteRole" || action == "edit")
         {
             displayAttr = "";
             user = adminMod.UserLogic.GetById(userId);
@@ -56,9 +58,9 @@
                         backUrl = (after == "backRoles")
                            ?
                            $"/Pages/Admin/RoleManagement?roleId={roleId}"
-                           :"";
+                           : "";
 
-                        if(Request["confirm"] == "yes")
+                        if (Request["confirm"] == "yes")
                         {
                             user.Roles.RemoveAll(r => r.ID == roleId);
                             adminMod.UpdateUser(user);
@@ -68,6 +70,11 @@
 
 
                         confirmMessage = $"Вы действительно хотите удалить роль {user.Roles.FirstOrDefault(r => r.ID == roleId).Title} для данного пользователя?";
+                        break;
+
+                    case "edit":
+                        displayAttr = "style=display:none";
+                        title = "Редактирование пользователя";
                         break;
                 }
 
@@ -86,13 +93,14 @@
 }
 <div class="row">
     <div class="col-md-7 offset-sm-3">
+        <h4 class="text-center my-3">@title</h4>
         <div class="alert alert-danger text-center m-4" role="alert" @displayAttr>
             <strong>@confirmMessage</strong>
             <br />
             <a href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@roleId&confirm=yes&after=@after" class="btn btn-secondary my-4">Да</a> <text>	&emsp;</text>
             <a href=@backUrl class="btn btn-danger">Отмена</a>
         </div>
-        <form action="~/____" enctype="multipart/form-data" id="reg_form" method="post">
+        <form action="~/Pages/Admin/User.cshtml" enctype="multipart/form-data" id="reg_form" method="post">
             Пользователь <strong>@user.Login</strong> зарегистрирован @registrationDate
 
             <img class="w-25 h-25 rounded-circle" src=@photoSrc>
@@ -120,29 +128,31 @@
 
             @if (isPatient)
             {
-                <p>Пользователь зарегистрирован как <a href="____">пациент</a></p>
+                <p>Пользователь зарегистрирован как <a href="____" target="_blank">пациент</a></p>
             }
             @if (isEmployee)
             {
-                <p>Пользователь зарегистрирован как <a href="____">сотрудник</a></p>
+                <p>Пользователь зарегистрирован как <a href="____" target="_blank">сотрудник</a></p>
             }
 
         <p>
 
-            Роли:
+
             @if (user.Roles != null)
             {
+                <strong>Роли:</strong>
+
                 foreach (var role in user.Roles)
                 {
                     if (after != "backRoles")
                     {
-                        <text>@role.Title</text>
+                        <span class="mx-1">@role.Title</span>
                     }
-                    else 
-                    { 
-                    <a href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@roleId&confirm=yes&after=no">
-                        <text>@role.Title</text>
-                    </a>
+                    else
+                    {
+                        <a href="~/Pages/Admin/User?action=deleteRole&userId=@user.ID&roleId=@roleId&confirm=yes&after=no">
+                            <text>@role.Title</text>
+                        </a>
                     }
                 }
             }
