@@ -9,30 +9,35 @@
 
     List<Post> posts = adminModule.GetPosts() ?? new List<Post>();
 
+
+    DateTime maxDate = DateTime.Now.AddYears(-18);
+    string validMaxDate = maxDate.ToString("yyyy-MM-dd");
+    string today = DateTime.Now.ToString("yyyy-MM-dd");
+
 }
 
 <section class="form-group" id="empFullName">
     <div class="form-group">
-        <label for="empLastName">* Фамилия:</label>
-        <input type="text" class="form-control" name="empLastName" id="empLastName" placeholder="Фамилия" required>
+        <label for="empLastName">* Фамилия: <span class="small text-secondary">(русский, английский алфавит; не короче 2 букв)</span></label>
+        <input type="text" class="form-control" name="empLastName" id="empLastName" placeholder="Фамилия"   pattern="[A-Za-zА-Яа-яЁё]{2,}"  required>
     </div>
     <div class="form-group">
-        <label for="empFirstName">* Имя:</label>
-        <input type="text" class="form-control" name="empFirstName" id="empFirstName" placeholder="Имя" required>
+        <label for="empFirstName">* Имя: <span class="small text-secondary">(русский, английский алфавит; не короче 2 букв)</span></label>
+        <input type="text" class="form-control" name="empFirstName" id="empFirstName" placeholder="Имя"  pattern="[A-Za-zА-Яа-яЁё]{2,}" required>
     </div>
     <div class="form-group">
-        <label for="empMiddleName">Отчество:</label>
-        <input type="text" class="form-control" name="empMiddleName" id="empMiddleName" placeholder="Отчество">
+        <label for="empMiddleName">Отчество:</label> <span class="small text-secondary">(русский, английский алфавит)</span>
+        <input type="text" class="form-control" name="empMiddleName" id="empMiddleName"  pattern="[A-Za-zА-Яа-яЁё]*" placeholder="Отчество">
     </div>
 </section>
 <div class="form-group">
     <label for="dateOfBirth">Дата рождения:</label>
-    <input type="date" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="dd.mm.yyyy" required>
+    <input type="date" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="dd.mm.yyyy" min="1930-01-01" max=@validMaxDate required>
 </div>
 
 <div class="form-group">
     <label for="dateOfEmployment">Дата трудоустройства</label>
-    <input type="date" name="dateOfEmployment" id="dateOfEmployment" class="form-control" required placeholder="dd.mm.yyyy" required>
+    <input type="date" name="dateOfEmployment" id="dateOfEmployment" class="form-control" required placeholder="dd.mm.yyyy" min="2000-01-01" max=@today required>
 </div>
 
 <div class="form-group">
