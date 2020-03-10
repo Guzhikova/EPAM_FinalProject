@@ -12,6 +12,14 @@
     DateTime currentDate = DateTime.Now;
     Record record = null;
 
+
+
+    List<Record> records = null;
+
+    string disAttr = "";
+    string disClass = "";
+
+
     string displayAttr = "style=display:none";
 
     DateTime.TryParse(Request["date"], out DateTime reqDate);
@@ -20,8 +28,11 @@
 
     if (!String.IsNullOrEmpty(Request["date"]) && !String.IsNullOrEmpty(Request["time"]))
     {
-
-        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
+        if(Request["result"] == "success")
+        {
+            displayAttr = "";
+                idAttr = $"d{reqDate.Day}t{Request["time"]}";
+        }        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
         {
             record = appManager.CreateRecordFromRequest(Request, User.Identity.Name);
             if (record.ID != 0)
@@ -32,7 +43,7 @@
         }
         else
         {
-            Response.Redirect("~");
+            Response.Redirect($"~/Pages/UnregisteredPatient?date={Request["date"]}&time={Request["time"]}");
         }
 
     }
@@ -51,9 +62,13 @@
 
 <h3 class="text-center">Записаться на прием</h3>
 
+@if (record != null)
+{
 <div class="alert alert-success" role="alert" @displayAttr>
     Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
 </div>
+}
+
 
 <div class="row">
 
@@ -62,37 +77,69 @@
     <div class="col-md-3">
         @{
             validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
+            records = appManager.GetAllOnDate(validDate);
+
         }
         <h6>@dayOfWeek</h6>
         @validDate.ToString("D")
         @for (int i = 8; i < 18; i++)
         {
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+            if (records.Any(rec => rec.Date.Hour == i))
+            {
+                disAttr = "aria-disabled=true";
+                disClass = "disabled";
+            }
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}") @disAttr>@i:00 - @(i + 1):00</a>
+
+            {
+                disAttr = "";
+                disClass = "";
+            }
         }
 
     </div>
     <div class="col-md-3">
         @{
             validDate = appManager.GetValidDate(currentDate.AddDays(1), out dayOfWeek);
+            records = appManager.GetAllOnDate(validDate);
         }
         <h6>@dayOfWeek</h6>
         @validDate.ToString("D")
         @for (int i = 8; i < 18; i++)
         {
+            if (records.Any(rec => rec.Date.Hour == i))
+            {
+                disAttr = "aria-disabled=true";
+                disClass = "disabled";
+            }
 
-
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}") @disAttr>@i:00 - @(i + 1):00</a>
+            {
+                disAttr = "";
+                disClass = "";
+            }
         }
     </div>
     <div class="col-md-3">
         @{
             validDate = appManager.GetValidDate(currentDate.AddDays(2), out dayOfWeek);
+            records = appManager.GetAllOnDate(validDate);
         }
         <h6>@dayOfWeek</h6>
         @validDate.ToString("D")
         @for (int i = 8; i < 18; i++)
         {
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75" id=@($"d{validDate.Day}t{i}")>@i:00 - @(i + 1):00</a>
+
+            if (records.Any(rec => rec.Date.Hour == i))
+            {
+                disAttr = "aria-disabled=true";
+                disClass = "disabled";
+            }
+            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}")  @disAttr>@i:00 - @(i + 1):00</a>
+            {
+                disAttr = "";
+                disClass = "";
+            }
         }
     </div>
 

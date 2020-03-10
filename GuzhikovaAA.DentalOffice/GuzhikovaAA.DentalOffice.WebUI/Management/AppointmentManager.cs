@@ -20,11 +20,12 @@ namespace DentalOffice.WebUI.Management
             int currentDayOfWeek = (int)currentDate.DayOfWeek;
             DateTime validDate = default(DateTime);
 
-            if(currentDayOfWeek == 0)
+            if (currentDayOfWeek == 0)
             {
                 validDate = currentDate.AddDays(1);
                 dayOfWeek = validDate.DayOfWeek.ToString();
-            }else if  (currentDayOfWeek < 6)
+            }
+            else if (currentDayOfWeek < 6)
             {
                 validDate = currentDate;
                 dayOfWeek = validDate.DayOfWeek.ToString();
@@ -37,8 +38,8 @@ namespace DentalOffice.WebUI.Management
             return validDate;
         }
 
-        
-        public Record CreateRecordFromRequest(HttpRequestBase request, string userLogin)
+
+        public Record CreateRecordFromRequest(HttpRequestBase request, string userLogin = null, Patient patient = null)
         {
             Record record = new Record();
 
@@ -46,19 +47,37 @@ namespace DentalOffice.WebUI.Management
             Int32.TryParse(request["time"], out int time);
 
             date = new DateTime(date.Year, date.Month, date.Day, time, 0, 0);
-
-            User user = _adminMod.GetUserByLogin(userLogin);
-    
-
             record.Date = date;
-            record.Patient = user.PatientData;
 
+            if (patient == null)
+            {
+                User user = _adminMod.GetUserByLogin(userLogin);
+                record.Patient = user.PatientData;
+            }
+            else if (userLogin == null)
+            {
+                record.Patient = patient;
+            }
             record = _recordLogic.Add(record);
 
             return record;
         }
 
 
+        public List<Record> GetAllOnDate(DateTime date)
+        {
+            //try
+            //{
+            var records = _recordLogic.GetAllOnDate(date);
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+
+            return records.ToList();
+        }
         private DateTime GetFullDate(DateTime currentDate, int time)
         {
 

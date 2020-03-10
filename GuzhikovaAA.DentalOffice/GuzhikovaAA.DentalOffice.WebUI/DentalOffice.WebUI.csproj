@@ -117,6 +117,7 @@
     <Content Include="Pages\Admin\AllPatients.cshtml" />
     <Content Include="Pages\Admin\AllEmployees.cshtml" />
     <Content Include="Pages\MakeAppointment.cshtml" />
+    <Content Include="Pages\UnregisteredPatient.cshtml" />
     <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dental-office\dental-office.registration.js" />
     <Content Include="Scripts\jquery\jquery-3.4.1.js" />

@@ -273,7 +273,31 @@ namespace DentalOffice.WebUI.Management
             return employees.ToList();
         }
 
-        
+        public Patient GetNewPatientFromRequest(HttpRequestBase request)
+        {
+            Patient patient = new Patient
+            {
+                LastName = request["patientLastName"],
+                FirstName = request["patientFirstName"],
+                MiddleName = request["patientMiddleName"],
+                Phone = request["patientPhone"]
+            };
+            return patient;
+        }
+
+        public Patient AddPatient(Patient patient)
+        {
+            //try
+            //{
+            patient = _patientsLogic.Add(patient);
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+            return patient;
+        }
 
         /// <summary>
         /// Gets user data from Request without related entities info
@@ -328,17 +352,7 @@ namespace DentalOffice.WebUI.Management
             return employee;
         }
 
-        private Patient GetNewPatientFromRequest(HttpRequestBase request)
-        {
-            Patient patient = new Patient
-            {
-                LastName = request["patientLastName"],
-                FirstName = request["patientFirstName"],
-                MiddleName = request["patientMiddleName"],
-                Phone = request["patientPhone"]
-            };
-            return patient;
-        }
+    
 
         private byte[] GetAndResizeImageFromRequest(int width = 100, int height = 100)
         {
