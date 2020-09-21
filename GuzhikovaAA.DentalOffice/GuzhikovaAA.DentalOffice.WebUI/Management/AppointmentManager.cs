@@ -3,7 +3,9 @@ using DentalOffice.Common;
 using DentalOffice.Entities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace DentalOffice.WebUI.Management
@@ -13,6 +15,7 @@ namespace DentalOffice.WebUI.Management
         private AdministrationModule _adminMod = new AdministrationModule();
         private IRecordsLogic _recordLogic = DependencyResolver.RecordsLogic;
         DentalOfficeRoleProvider _roleProvider = new DentalOfficeRoleProvider();
+     
 
         public DateTime GetValidDate(DateTime currentDate, out string dayOfWeek)
         {
@@ -23,17 +26,18 @@ namespace DentalOffice.WebUI.Management
             if (currentDayOfWeek == 0)
             {
                 validDate = currentDate.AddDays(1);
-                dayOfWeek = validDate.DayOfWeek.ToString();
+                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
             }
             else if (currentDayOfWeek < 6)
             {
                 validDate = currentDate;
-                dayOfWeek = validDate.DayOfWeek.ToString();
+                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
+            
             }
             else
             {
                 validDate = currentDate.AddDays(2);
-                dayOfWeek = validDate.DayOfWeek.ToString();
+                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
             }
             return validDate;
         }
