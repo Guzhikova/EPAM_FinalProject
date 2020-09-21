@@ -21,6 +21,10 @@ namespace DentalOffice.WebUI.Log4net
             XmlConfigurator.Configure();
         }
 
-
+        public static void LogShortErrorInfo(Exception ex)
+        {
+            string message = $"{Environment.NewLine} ~ {ex.Message}.{Environment.NewLine} ~ Stack Trace: {ex.StackTrace}";
+            Log.Error(message + Environment.NewLine);
+        }
     }
 }

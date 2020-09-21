@@ -7,20 +7,24 @@
     var appManager = new AppointmentManager();
     var roleProvider = new DentalOfficeRoleProvider();
 
+
+    string errorMessage = "";
+    string adminInfo = "Обратитесь за помощью к администратору admin@mystom.ru";
+
     string dayOfWeek = "";
-    DateTime validDate = default(DateTime);
-    DateTime currentDate = DateTime.Now;
     Record record = null;
 
 
 
-    List<Record> records = null;
+    DateTime currentDate = DateTime.Now;
+    DateTime validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
+    var records = appManager.GetAllOnDate(validDate, out errorMessage);
+
 
     string disAttr = "";
     string disClass = "";
-
-
     string displayAttr = "style=display:none";
+
 
     DateTime.TryParse(Request["date"], out DateTime reqDate);
 
@@ -28,11 +32,12 @@
 
     if (!String.IsNullOrEmpty(Request["date"]) && !String.IsNullOrEmpty(Request["time"]))
     {
-        if(Request["result"] == "success")
+        if (Request["result"] == "success")
         {
             displayAttr = "";
-                idAttr = $"d{reqDate.Day}t{Request["time"]}";
-        }        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
+            idAttr = $"d{reqDate.Day}t{Request["time"]}";
+        }
+        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
         {
             record = appManager.CreateRecordFromRequest(Request, User.Identity.Name);
             if (record.ID != 0)
@@ -47,6 +52,7 @@
         }
 
     }
+
 }
 @section AdditionalScripts
     {
@@ -60,89 +66,73 @@
     </script>
 }
 
-<h3 class="text-center">Записаться на прием</h3>
+<div class="row">
 
-@if (record != null)
-{
-<div class="alert alert-success" role="alert" @displayAttr>
-    Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
+    @if (record != null)
+    {
+        <div class="alert alert-success" role="alert" @displayAttr>
+            Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
+        </div>
+    }
+
+    @if (records != null)
+    {<h5 class="text-center">Запись на приём осуществляется на ближайшие три рабочих дня. Выберите любое свободное время.</h5>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage. @adminInfo
+        </div>
+    }
 </div>
+
+@if (records != null)
+{
+
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        @for (int day = 0; day < 3; day++)
+        {
+            <div class="col-md-3">
+                @{
+                    if (day > 0)
+                    {
+
+                        validDate = appManager.GetValidDate(currentDate.AddDays(day), out dayOfWeek);
+                        records = appManager.GetAllOnDate(validDate, out errorMessage);
+                    }
+                }
+
+                <h6>@dayOfWeek</h6>
+                @validDate.ToString("D")
+
+
+                @for (int i = 8; i < 18; i++)
+                {
+                    if (records.Any(rec => rec.Date.Hour == i))
+                    {
+                        disAttr = "aria-disabled=true";
+                        disClass = "disabled";
+                    }
+                    <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}") @disAttr>
+                        @i:00 - @(i + 1):00
+                    </a>
+
+                    {
+                        disAttr = "";
+                        disClass = "";
+                    }
+                }
+
+            </div>
+        }
+    </div>
 }
 
 
-<div class="row">
-
-    <div class="col-md-2"></div>
-
-    <div class="col-md-3">
-        @{
-            validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
-            records = appManager.GetAllOnDate(validDate);
-
-        }
-        <h6>@dayOfWeek</h6>
-        @validDate.ToString("D")
-        @for (int i = 8; i < 18; i++)
-        {
-            if (records.Any(rec => rec.Date.Hour == i))
-            {
-                disAttr = "aria-disabled=true";
-                disClass = "disabled";
-            }
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}") @disAttr>@i:00 - @(i + 1):00</a>
-
-            {
-                disAttr = "";
-                disClass = "";
-            }
-        }
-
-    </div>
-    <div class="col-md-3">
-        @{
-            validDate = appManager.GetValidDate(currentDate.AddDays(1), out dayOfWeek);
-            records = appManager.GetAllOnDate(validDate);
-        }
-        <h6>@dayOfWeek</h6>
-        @validDate.ToString("D")
-        @for (int i = 8; i < 18; i++)
-        {
-            if (records.Any(rec => rec.Date.Hour == i))
-            {
-                disAttr = "aria-disabled=true";
-                disClass = "disabled";
-            }
-
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}") @disAttr>@i:00 - @(i + 1):00</a>
-            {
-                disAttr = "";
-                disClass = "";
-            }
-        }
-    </div>
-    <div class="col-md-3">
-        @{
-            validDate = appManager.GetValidDate(currentDate.AddDays(2), out dayOfWeek);
-            records = appManager.GetAllOnDate(validDate);
-        }
-        <h6>@dayOfWeek</h6>
-        @validDate.ToString("D")
-        @for (int i = 8; i < 18; i++)
-        {
-
-            if (records.Any(rec => rec.Date.Hour == i))
-            {
-                disAttr = "aria-disabled=true";
-                disClass = "disabled";
-            }
-            <a href="~/Pages/MakeAppointment?date=@validDate.ToString("d")&time=@i" class="btn btn-secondary m-2 w-75 @disClass" id=@($"d{validDate.Day}t{i}")  @disAttr>@i:00 - @(i + 1):00</a>
-            {
-                disAttr = "";
-                disClass = "";
-            }
-        }
-    </div>
 
 
 
-</div>
+

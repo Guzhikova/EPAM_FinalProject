@@ -1,8 +1,10 @@
 ﻿using DentalOffice.BLL.Interfaces;
 using DentalOffice.Common;
 using DentalOffice.Entities;
+using DentalOffice.WebUI.Log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -15,7 +17,7 @@ namespace DentalOffice.WebUI.Management
         private AdministrationModule _adminMod = new AdministrationModule();
         private IRecordsLogic _recordLogic = DependencyResolver.RecordsLogic;
         DentalOfficeRoleProvider _roleProvider = new DentalOfficeRoleProvider();
-     
+
 
         public DateTime GetValidDate(DateTime currentDate, out string dayOfWeek)
         {
@@ -32,7 +34,7 @@ namespace DentalOffice.WebUI.Management
             {
                 validDate = currentDate;
                 dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
-            
+
             }
             else
             {
@@ -68,25 +70,36 @@ namespace DentalOffice.WebUI.Management
         }
 
 
-        public List<Record> GetAllOnDate(DateTime date)
+        public List<Record> GetAllOnDate(DateTime date, out string errorMessage)
         {
-            //try
-            //{
-            var records = _recordLogic.GetAllOnDate(date);
-            //}
-            //catch (Exception)
-            //{
+           try
+            {
+                var records = _recordLogic.GetAllOnDate(date);
+                errorMessage = "";
 
-            //    throw;
-            //}
-
-            return records.ToList();
+                return records.ToList();
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                errorMessage = "Не удалось подключиться к базе данных стоматологического кабинета";
+            }
+            catch (Exception ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                errorMessage = "Произошла непредвиденная ошибка.";
+            }
+            return null;
         }
         private DateTime GetFullDate(DateTime currentDate, int time)
         {
 
             return new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, time, 0, 0);
         }
+
+
+       
+
 
         /// <summary>
         /// Compares two dates: today and announced
