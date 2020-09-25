@@ -7,18 +7,25 @@
     var appManager = new AppointmentManager();
     Patient patient = null;
 
-    if(IsPost)
+    string date = Request["date"];
+    string time = Request["time"];
+
+
+    if (IsPost)
     {
         patient = adminMod.GetNewPatientFromRequest(Request);
         patient = adminMod.AddPatient(patient);
-        appManager.CreateRecordFromRequest(Request, null, patient);
-        Response.Redirect("~/Pages/MakeAppointment");
+        appManager.CreateRecordFromRequest(date, time, null, patient);
+
+        string urlWhithParameters = $"~/Pages/MakeAppointment?result=success&date={date}&time={time}";
+
+        Response.Redirect(urlWhithParameters);
     }
 }
 
 <h6 class=" my-3 offset-1">Для регистрации на прием необходимо заполнить данную форму:</h6>
 <div class="col-md-6 offset-1">
-    <form action="~/Pages/UnregisteredPatient?date=@Request["date"]&time=@Request["time"]" method="post">
+    <form action="~/Pages/UnregisteredPatient?date=@date&time=@time" method="post">
         @RenderPage("~/Pages/Partials/_PatientInputs.cshtml")
 
         <button class="btn btn-primary w-100" type="submit">Отправить</button>

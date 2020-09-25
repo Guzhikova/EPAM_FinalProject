@@ -12,51 +12,54 @@
     string adminInfo = "Обратитесь за помощью к администратору admin@mystom.ru";
 
     string dayOfWeek = "";
-    Record record = null;
-
+    bool result = false;
 
 
     DateTime currentDate = DateTime.Today;
     DateTime validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
     var records = appManager.GetAllOnDate(validDate, out errorMessage);
 
-
+    //Tag attributes
     string disAttr = "";
     string disClass = "";
     string displayAttr = "style=display:none";
 
-
-    DateTime.TryParse(Request["date"], out DateTime reqDate);
-
     string idAttr = "";
 
-    if (!String.IsNullOrEmpty(Request["date"]) && !String.IsNullOrEmpty(Request["time"]))
+    //Parameters from Request
+    string date = Request["date"];
+    string time = Request["time"];
+
+    DateTime.TryParse(date, out DateTime reqDate);
+
+
+    if (!String.IsNullOrEmpty(date) && !String.IsNullOrEmpty(time))
     {
         if (Request["result"] == "success")
         {
             displayAttr = "";
-            idAttr = $"d{reqDate.Day}t{Request["time"]}";
+            idAttr = $"d{reqDate.Day}t{time}";
+            result = true;
         }
-        if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
+        else if (roleProvider.IsUserInRole(User.Identity.Name, "Пациент"))
         {
-            record = appManager.CreateRecordFromRequest(Request, User.Identity.Name);
+            var record = appManager.CreateRecordFromRequest(date, time, User.Identity.Name);
             if (record.ID != 0)
             {
                 displayAttr = "";
-                idAttr = $"d{reqDate.Day}t{Request["time"]}";
+                idAttr = $"d{reqDate.Day}t{time}";
+                result = true;
             }
         }
         else
         {
-            Response.Redirect($"~/Pages/UnregisteredPatient?date={Request["date"]}&time={Request["time"]}");
+            Response.Redirect($"~/Pages/UnregisteredPatient?date={date}&time={time}");
         }
-
     }
-
 }
+
 @section AdditionalScripts
     {
-
     <script type="text/javascript">
         if ('@idAttr' != "")
         {
@@ -66,18 +69,24 @@
     </script>
 }
 
+<!-- Information messages -->
+
 <div class="row">
 
-    @if (record != null)
+    @if (result)
     {
-        <div class="alert alert-success" role="alert" >
-            Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
+        <div class="alert alert-success" role="alert">
+            <h5 class="text-center">
+                Поздравляем, вы успешно записаны на прием <strong>@reqDate.ToString("dd MMMM") в @time:00</strong> !
+            </h5>
         </div>
     }
 
     @if (records != null)
-    {<h5 class="text-center">Запись на приём осуществляется на ближайшие три рабочих дня. Выберите любое свободное время.</h5>
-
+    {
+        <h5 class="text-center">
+            Запись на приём осуществляется на ближайшие три рабочих дня. Выберите любое свободное время.
+        </h5>
     }
     else
     {
@@ -87,9 +96,10 @@
     }
 </div>
 
+<!-- Timetable -->
+
 @if (records != null)
 {
-
     <div class="row">
         <div class="col-md-2"></div>
 

@@ -45,15 +45,15 @@ namespace DentalOffice.WebUI.Management
         }
 
 
-        public Record CreateRecordFromRequest(HttpRequestBase request, string userLogin = null, Patient patient = null)
+        public Record CreateRecordFromRequest(string date, string time, string userLogin = null, Patient patient = null)
         {
             Record record = new Record();
 
-            DateTime.TryParse(request["date"], out DateTime date);
-            Int32.TryParse(request["time"], out int time);
+            DateTime.TryParse(date, out DateTime recordDate);
+            Int32.TryParse(time, out int recordTime);
 
-            date = new DateTime(date.Year, date.Month, date.Day, time, 0, 0);
-            record.Date = date;
+            recordDate = new DateTime(recordDate.Year, recordDate.Month, recordDate.Day, recordTime, 0, 0);
+            record.Date = recordDate;
 
             if (patient == null)
             {
