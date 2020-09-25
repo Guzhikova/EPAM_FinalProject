@@ -12,8 +12,8 @@ namespace DentalOffice.DAL
     internal class DBConnection
     {
         public string ConnectionString =>
-         @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DentalOffice;Integrated Security=True";
-        //   @"Data Source=(local)\SQLEXPRESS;Initial Catalog=DentalOffice;Integrated Security=True";
+        // @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DentalOffice;Integrated Security=True";
+           @"Data Source=(local)\SQLEXPRESS;Initial Catalog=DentalOffice_VS;Integrated Security=True";
 
         /// <summary>
         /// Executes stored procedure with input parameters.

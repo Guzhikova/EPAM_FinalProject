@@ -16,7 +16,7 @@
 
 
 
-    DateTime currentDate = DateTime.Now;
+    DateTime currentDate = DateTime.Today;
     DateTime validDate = appManager.GetValidDate(currentDate, out dayOfWeek);
     var records = appManager.GetAllOnDate(validDate, out errorMessage);
 
@@ -70,7 +70,7 @@
 
     @if (record != null)
     {
-        <div class="alert alert-success" role="alert" @displayAttr>
+        <div class="alert alert-success" role="alert" >
             Поздравляем, вы успешно записаны на прием @record.Date.ToString("f")
         </div>
     }
@@ -100,7 +100,7 @@
                     if (day > 0)
                     {
 
-                        validDate = appManager.GetValidDate(currentDate.AddDays(day), out dayOfWeek);
+                        validDate = appManager.GetValidDate(currentDate.AddDays(day), out dayOfWeek, day);
                         records = appManager.GetAllOnDate(validDate, out errorMessage);
                     }
                 }

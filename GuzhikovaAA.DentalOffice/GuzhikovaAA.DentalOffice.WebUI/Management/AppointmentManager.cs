@@ -19,7 +19,7 @@ namespace DentalOffice.WebUI.Management
         DentalOfficeRoleProvider _roleProvider = new DentalOfficeRoleProvider();
 
 
-        public DateTime GetValidDate(DateTime currentDate, out string dayOfWeek)
+        public DateTime GetValidDate(DateTime currentDate, out string dayOfWeek, int dayStep = 0)
         {
 
             int currentDayOfWeek = (int)currentDate.DayOfWeek;
@@ -27,7 +27,7 @@ namespace DentalOffice.WebUI.Management
 
             if (currentDayOfWeek == 0)
             {
-                validDate = currentDate.AddDays(1);
+                validDate = (dayStep > 0) ? currentDate.AddDays(2) : currentDate.AddDays(1);
                 dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
             }
             else if (currentDayOfWeek < 6)
@@ -72,7 +72,7 @@ namespace DentalOffice.WebUI.Management
 
         public List<Record> GetAllOnDate(DateTime date, out string errorMessage)
         {
-           try
+            try
             {
                 var records = _recordLogic.GetAllOnDate(date);
                 errorMessage = "";
@@ -96,28 +96,5 @@ namespace DentalOffice.WebUI.Management
 
             return new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, time, 0, 0);
         }
-
-
-       
-
-
-        /// <summary>
-        /// Compares two dates: today and announced
-        /// </summary>
-        /// <param name="tempDate"></param>
-        /// <param name="currentDate"></param>
-        /// <returns> < 0 − If today date is earlier than announced date
-        /// 0 − If date1 is the same as date2
-        /// > 0 − If date1 is later than date2</returns>
-        //public  int CompareWhithCurrentDate(int dayOfWeek, int hour)
-        //{
-        //    //DateTime currentDate = DateTime.Now;
-        //    //int currentDayOfWeek = (int)currentDate.DayOfWeek;
-
-        //    //if(currentDate)
-
-        //    //tempDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, i, 0, 0);
-        //    //return
-        //}
     }
 }
