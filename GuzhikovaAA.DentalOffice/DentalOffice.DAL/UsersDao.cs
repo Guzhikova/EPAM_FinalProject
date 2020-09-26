@@ -243,7 +243,7 @@ namespace DentalOffice.DAL
                     users.Add(user);
                 }
             }
-            return users;
+            return users.Count() > 0 ? users : null; 
         }
 
         private User GetByIdFromSourceTable(int id)

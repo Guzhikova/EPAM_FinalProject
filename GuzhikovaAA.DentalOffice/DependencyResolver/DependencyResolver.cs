@@ -64,7 +64,7 @@ namespace DentalOffice.Common
             _specialtiesLogic = new SpecialtiesLogic(_specialtiesDao);
 
             _usersDao = new UsersDao();
-            _usersLogic = new UsersLogic(_usersDao);
+            _usersLogic = new UsersLogic(_usersDao, _rolesDao);
         }
 
         public static IEmployeesDao EmployeesDao => _employeesDao;

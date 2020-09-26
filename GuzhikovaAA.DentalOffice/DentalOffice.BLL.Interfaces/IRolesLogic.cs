@@ -9,6 +9,7 @@ namespace DentalOffice.BLL.Interfaces
 {
     public interface IRolesLogic
     {
+        void InitialRolesData(params string[] roleNames);
         IEnumerable<Role> GetAll();
 
         Role GetById(int id);

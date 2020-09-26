@@ -22,7 +22,6 @@ namespace DentalOffice.DAL
                 new SqlParameter() { ParameterName = "@userID", SqlDbType = SqlDbType.Int, Value = userId },
                 new SqlParameter() { ParameterName = "@roleID", SqlDbType = SqlDbType.Int, Value = roleId }
             };
-
           
                 _dbConnection.ExecuteStoredProcedure("dbo.AddRoleForUser", parameters);
             }

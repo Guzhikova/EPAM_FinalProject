@@ -18,6 +18,18 @@ namespace DentalOffice.BLL
             _rolesDao = rolesDao;
         }
 
+        public void InitialRolesData(params string[] roleNames)
+        {
+            if (GetAll().Count() == 0)
+            {
+                for (int i = 0; i < roleNames.Length; i++)
+                {
+                    Add(new Role { ID = i, Title = roleNames[i] });
+                }
+
+            }
+        }
+
         public Role Add(Role role)
         {
             if (GetByRoleName(role.Title) != null)
@@ -33,7 +45,14 @@ namespace DentalOffice.BLL
 
         public IEnumerable<Role> GetAll()
         {
-            return _rolesDao.GetAll();
+            try
+            {
+                return _rolesDao.GetAll();
+            }
+            catch (NullReferenceException)
+            {
+                return null;
+            }
         }
 
         public Role GetById(int id)
@@ -42,9 +61,19 @@ namespace DentalOffice.BLL
         }
         public Role GetByRoleName(string roleName)
         {
-           
-            return  _rolesDao.GetAll().FirstOrDefault
-                (role => role.Title.ToLower() == roleName.ToLower());
+            try
+            {
+                return _rolesDao.GetAll().FirstOrDefault
+                                (role => role.Title.ToLower() == roleName.ToLower());
+            }
+            catch (NullReferenceException)
+            {
+
+                return null;
+            }
+
+
+
         }
         public void Update(Role role)
         {

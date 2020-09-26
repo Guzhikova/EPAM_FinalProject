@@ -1,4 +1,5 @@
 ﻿using DentalOffice.WebUI.Log4net;
+using GuzhikovaAA.DentalOffice.WebUI.Management;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace GuzhikovaAA.DentalOffice.WebUI
 {
     public class Global : System.Web.HttpApplication
     {
-
+        
         protected void Application_Start(object sender, EventArgs e)
         {
             Logger.InitLogger();
+            InitialData.InitRoles();
+            InitialData.InitAdmin();
         }
 
         protected void Session_Start(object sender, EventArgs e)

@@ -24,11 +24,11 @@
             </div>
         </div>
         <div class="row bg-info w-100 ml-1">
-            <div class="col-md-6">
+            <div class="col-md-6 ml-5">
                 @RenderPage("~/Pages/Partials/_HorizontalMenu.cshtml")
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
 
                 @if (!IsSectionDefined("Authorization"))
                 {
@@ -41,11 +41,11 @@
 
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-10  m-4 >
+        <div class="row justify-content-md-center">
+            <div class="col-md-9 col-xs-12 " >
                 @RenderBody()
             </div>
-            <div class="col-sm-2 m-4 p-4>
+            <div class="col-md-2 col-xs-12">
                 @RenderPage("~/Pages/Partials/_AuxiliaryMenu.cshtml")
             </div>
 

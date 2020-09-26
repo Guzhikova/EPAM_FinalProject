@@ -10,6 +10,8 @@ namespace DentalOffice.BLL.Interfaces
 
     public interface IUsersLogic
     {
+        void InitialAdmin(User admin, string roleName);
+
         IEnumerable<User> GetAll();
 
         User GetById(int id);

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DentalOffice.DAL
 {
-   
+
     public class RolesDao : IRolesDao
-    { 
+    {
         DBConnection _dbConnection = new DBConnection();
         public IEnumerable<Role> GetAll()
         {
@@ -38,7 +38,8 @@ namespace DentalOffice.DAL
                     roles.Add(role);
                 }
             }
-            return roles;
+          
+           return roles.Count() > 0 ? roles : null;
         }
 
         public Role GetById(int id)

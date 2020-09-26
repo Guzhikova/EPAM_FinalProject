@@ -12,18 +12,27 @@ namespace DentalOffice.BLL
 {
     public class UsersLogic : IUsersLogic
     {
-        private readonly IUsersDao _usersDao;
+        private IUsersDao _usersDao;
+        private IRolesLogic _rolesLogic;
 
-        public UsersLogic(IUsersDao usersDao)
+
+        public UsersLogic(IUsersDao usersDao, IRolesDao rolesDao)
         {
             _usersDao = usersDao;
+            _rolesLogic = new RolesLogic(rolesDao);
         }
+
 
         public User Add(User user)
         {
+            try { 
             if (GetByLogin(user.Login) != null)
                 throw new OperationCanceledException("User with this login already exists! Operation to create user canceled.");
+            }
+            catch (NullReferenceException)
+            {
 
+            }
             user.Password = ConvertToMD5(user.Password);
             return _usersDao.Add(user);
         }
@@ -50,12 +59,21 @@ namespace DentalOffice.BLL
 
         public User GetByLogin(string login)
         {
-            return _usersDao.GetAll().FirstOrDefault
-                (user => user.Login.ToLower() == login.ToLower());
+            try
+            {
+                return _usersDao.GetAll().FirstOrDefault
+                                    (user => user.Login.ToLower() == login.ToLower());
+            }
+            catch (System.ArgumentNullException)
+            {
+                return null;
+            }
+                
+
         }
 
         public IEnumerable<User> GetAllByRoleId(int id)
-        {   
+        {
             return _usersDao.GetAllByRoleId(id);
         }
 
@@ -81,6 +99,27 @@ namespace DentalOffice.BLL
                 sb.Append(hash[i].ToString("x2"));
             }
             return sb.ToString();
+        }
+
+        public void InitialAdmin(User admin, string roleName)
+        {
+            var users = GetAll();
+
+            if (users == null || users.Count() == 0)
+            {
+                Role role = _rolesLogic.GetByRoleName(roleName);
+
+                if (role != null)
+                {
+                    admin.Roles = new List<Role> { role };
+                    Add(admin);
+                }
+                else
+                {
+                    throw new OperationCanceledException($"The operation canceled because role '{roleName}' does not exist.");
+                }
+            }
+
         }
     }
 }

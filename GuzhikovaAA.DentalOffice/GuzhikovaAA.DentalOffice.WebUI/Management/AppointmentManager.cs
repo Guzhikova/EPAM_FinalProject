@@ -25,22 +25,27 @@ namespace DentalOffice.WebUI.Management
             int currentDayOfWeek = (int)currentDate.DayOfWeek;
             DateTime validDate = default(DateTime);
 
-            if (currentDayOfWeek == 0)
+            if (currentDayOfWeek == 6)
+            {
+                validDate = currentDate.AddDays(2);
+            }
+            else if (currentDayOfWeek == 0)
             {
                 validDate = (dayStep > 0) ? currentDate.AddDays(2) : currentDate.AddDays(1);
-                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
             }
-            else if (currentDayOfWeek < 6)
+            else if (currentDayOfWeek == 1)
             {
-                validDate = currentDate;
-                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
-
+                validDate = (dayStep > 0) ? currentDate.AddDays(dayStep) : currentDate;
+            }
+            else if (currentDayOfWeek == 2)
+            {
+                validDate = (dayStep == 2) ? currentDate.AddDays(1) : currentDate;
             }
             else
             {
-                validDate = currentDate.AddDays(2);
-                dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
+                validDate = currentDate;
             }
+            dayOfWeek = DateTimeFormatInfo.CurrentInfo.GetDayName(validDate.DayOfWeek);
             return validDate;
         }
 

@@ -70,30 +70,30 @@
 }
 
 <!-- Information messages -->
-
 <div class="row">
+    <div class="col-12 text-center">
+        @if (result)
+        {
+            <div class="alert alert-success" role="alert">
+                <h5 class="text-center">
+                    Поздравляем, вы успешно записаны на прием <strong>@reqDate.ToString("dd MMMM") в @time:00</strong> !
+                </h5>
+            </div>
+        }
 
-    @if (result)
-    {
-        <div class="alert alert-success" role="alert">
+        @if (records != null)
+        {
             <h5 class="text-center">
-                Поздравляем, вы успешно записаны на прием <strong>@reqDate.ToString("dd MMMM") в @time:00</strong> !
+                Запись на приём осуществляется на ближайшие три рабочих дня. Выберите любое свободное время.
             </h5>
-        </div>
-    }
-
-    @if (records != null)
-    {
-        <h5 class="text-center">
-            Запись на приём осуществляется на ближайшие три рабочих дня. Выберите любое свободное время.
-        </h5>
-    }
-    else
-    {
-        <div class="alert alert-danger" role="alert">
-            @errorMessage. @adminInfo
-        </div>
-    }
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage. @adminInfo
+            </div>
+        }
+    </div>
 </div>
 
 <!-- Timetable -->
