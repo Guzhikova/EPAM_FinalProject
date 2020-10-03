@@ -14,7 +14,7 @@ var roleProvider = new DentalOfficeRoleProvider();
     PageData["Title"] = "Пользователи";
 
     var adminMod = new AdministrationModule();
-    var roleManage = new RolesManagment();
+    var roleManage = new DentalOfficeRoleProvider();
 
     List<User> users = adminMod.GetUsers();
 

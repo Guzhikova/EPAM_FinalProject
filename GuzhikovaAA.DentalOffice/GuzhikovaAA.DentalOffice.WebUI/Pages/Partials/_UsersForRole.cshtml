@@ -3,12 +3,12 @@
 @{
     Layout = null;
 
-    RolesManagment rolManage = new RolesManagment();
+    var rolManage = new DentalOfficeRoleProvider();
 
     Int32.TryParse(PageData["roleID"], out int roleID);
     var role = rolManage.RoleLogic.GetById(roleID);
 
-    var users = rolManage.GetUsersForRole(roleID, out string massege).OrderBy(us => us.Login);
+    var users = rolManage.GetUsersInRoleByRoleID(roleID).OrderBy(us => us.Login);
 
 }
 

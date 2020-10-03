@@ -137,7 +137,6 @@
     <Compile Include="Management\AppointmentManager.cs" />
     <Compile Include="Management\InitialData.cs" />
     <Compile Include="Management\Log4net\Logger.cs" />
-    <Compile Include="Management\RolesManagment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

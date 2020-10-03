@@ -11,7 +11,7 @@
     }
 
     PageData["Title"] = "Подтверждение";
-    var roleManage = new RolesManagment();
+    var roleManage = new DentalOfficeRoleProvider();
     var adminMod = new AdministrationModule();
 
     string confirmMessage = "";
@@ -24,7 +24,9 @@
 
     if (action == "delete" && entity == "role" && confirm == "yes")
     {
-        roleManage.DeleteRole(Request);
+        Int32.TryParse(id, out int roleID);
+        var role = roleManage.GetRoleByID(roleID);
+        roleManage.DeleteRole(role.Title, false);
         Response.Redirect("~/Pages/Admin/RoleManagement");
     }
     else if (action == "delete" && entity == "role")

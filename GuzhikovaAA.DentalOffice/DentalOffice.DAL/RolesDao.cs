@@ -38,8 +38,9 @@ namespace DentalOffice.DAL
                     roles.Add(role);
                 }
             }
-          
-           return roles.Count() > 0 ? roles : null;
+
+            // return roles.Count() > 0 ? roles : null;
+            return roles;
         }
 
         public Role GetById(int id)

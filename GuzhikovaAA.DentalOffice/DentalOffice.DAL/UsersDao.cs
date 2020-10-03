@@ -46,8 +46,8 @@ namespace DentalOffice.DAL
                 {
                     user.Roles = new List<Role>();
                 }
-                    user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
-                
+                user.Roles = _userRole.GetAllRolesByUserId(user.ID).ToList();
+
             }
 
             return users;
@@ -59,9 +59,9 @@ namespace DentalOffice.DAL
 
             if (user != null)
             {
-                if (user.EmployeeData != null) 
-                { 
-                user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
+                if (user.EmployeeData != null)
+                {
+                    user.EmployeeData = _employees.GetById(user.EmployeeData.ID);
                 }
 
                 if (user.PatientData != null)
@@ -243,7 +243,7 @@ namespace DentalOffice.DAL
                     users.Add(user);
                 }
             }
-            return users.Count() > 0 ? users : null; 
+            return users.Count() > 0 ? users : null;
         }
 
         private User GetByIdFromSourceTable(int id)

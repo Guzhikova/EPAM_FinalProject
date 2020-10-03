@@ -13,7 +13,7 @@
 
     PageData["Title"] = "Роли";
 
-    var roleManage = new RolesManagment();
+    var roleManage = new DentalOfficeRoleProvider();
     var adminMod = new AdministrationModule();
 
     string action = Request["action"];
@@ -21,7 +21,7 @@
     int reqUserId = 0;
     int activeRoleId = 0;
 
-    string message = "";
+
     string errMessage = "";
     string displayAttr = "style=display:none";
 
@@ -31,7 +31,7 @@
 
     if (IsPost)
     {
-        if (!roleManage.AddRole(Request, out errMessage))
+        if (!roleManage.CreateRole(Request["title"], out errMessage))
         {
             displayAttr = "";
         }
@@ -50,7 +50,7 @@
         }
     }
 
-    var roles = roleManage.GetRoles(out message) ?? new List<Role>();
+    var roles = roleManage.GetRoles();
 
     if (activeRoleId == 0 && roles.Count() > 0)
     {
