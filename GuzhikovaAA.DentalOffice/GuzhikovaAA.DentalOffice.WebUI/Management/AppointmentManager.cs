@@ -63,7 +63,10 @@ namespace DentalOffice.WebUI.Management
             if (patient == null)
             {
                 User user = _adminMod.GetUserByLogin(userLogin);
-                record.Patient = user.PatientData;
+                if (user != null)
+                {
+                    record.Patient = user.PatientData;
+                }
             }
             else if (userLogin == null)
             {

@@ -40,14 +40,16 @@
         </thead>
         <tbody>
             @if (employees != null)
-            {
-                foreach (var employee in employees)
-                {
-                    var user = adminMod.GetUsers().FirstOrDefault(us => (us.EmployeeData != null) && (us.EmployeeData.ID == employee.ID));
-                    if (user != null)
-                    {
-                        photoSrc = adminMod.GetUserPhoto(user);
-                    }
+                        {
+                            var user = new User();
+
+                            foreach (var employee in employees)
+                            {
+                                user = adminMod.GetUsers().FirstOrDefault(us => (us.EmployeeData != null) && (us.EmployeeData.ID == employee.ID));
+                                if (user != null)
+                                {
+                                    photoSrc = adminMod.GetUserPhoto(user);
+                                }
 
             <tr>
                 <th class="text-secondary">@(++counter)</th>
@@ -76,7 +78,7 @@
                 <td>@employee.Note</td>
                     <td>
                         @if (user != null)
-                        {
+                    {
                             <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" target="_blank"> @user.Login</a>
                         }
                     </td>

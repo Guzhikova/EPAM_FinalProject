@@ -21,7 +21,7 @@ namespace DentalOffice.DAL
         {
             var users = this.GetAllFromSourceTable();
 
-            if (users != null)
+            if (users != null && users.Count() > 0)
             {
                 GetLinkedEntities(users);
             }
@@ -243,7 +243,7 @@ namespace DentalOffice.DAL
                     users.Add(user);
                 }
             }
-            return users.Count() > 0 ? users : null;
+            return users;
         }
 
         private User GetByIdFromSourceTable(int id)

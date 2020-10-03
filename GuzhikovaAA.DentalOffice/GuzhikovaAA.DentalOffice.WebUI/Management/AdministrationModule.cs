@@ -4,6 +4,7 @@ using DentalOffice.Entities;
 using DentalOffice.WebUI.Log4net;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -26,45 +27,45 @@ namespace DentalOffice.WebUI.Management
 
         public List<User> GetUsers()
         {
-            //try
-            //{
-
-            var users = _userLogic.GetAll().OrderBy(us => us.Login);
-      
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
-            return users.ToList();
+            try
+            {
+                var users = _userLogic.GetAll().OrderBy(us => us.Login);
+                return users.ToList();
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
         }
 
         public User GetUserByLogin(string login)
         {
-            //try
-            //{
-            User user = _userLogic.GetByLogin(login);
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
+            var user = new User();
+            try
+            {
+                user = _userLogic.GetByLogin(login);
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
             return user;
         }
 
         public User GetUserById(int id)
         {
-            //try
-            //{
-            User user = _userLogic.GetById(id);
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
+            var user = new User();
+            try
+            {
+                user = _userLogic.GetById(id);
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
             return user;
         }
         public bool TryAuthenticateUser(HttpRequestBase request, out string errorMessage)
@@ -107,16 +108,12 @@ namespace DentalOffice.WebUI.Management
 
             try
             {
-               
-              user =  GetRelatedUserInfoFromRequest(request, user)  ;
-                _userLogic.Add(user);
-                   
-               // UpdateUser(user);
 
-                
+                user = GetRelatedUserInfoFromRequest(request, user);
+                _userLogic.Add(user);
+
                 result = true;
-                //try
-                //{
+
 
                 FormsAuthentication.SetAuthCookie(user.Login, createPersistentCookie: true);
                 message = "Поздравляем! Регистрация прошла успешно!";
@@ -126,14 +123,6 @@ namespace DentalOffice.WebUI.Management
                 Logger.Log.Warn($"For user name '{user.Login}' occurred exception: {ex.Message}. {ex.StackTrace}");
                 message = ("Регистрация отклонена, т.к. пользователь с таким именем уже существует. Пожалуйста, измените логин и повторите попытку.");
             }
-
-
-
-            //}
-            //catch
-            //{
-            // LOG --- MESSAGE
-            //}
             return result;
         }
 
@@ -163,8 +152,19 @@ namespace DentalOffice.WebUI.Management
         }
         public List<Post> GetPosts()
         {
-            return _postLogic.GetAll().ToList();
-            //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+            var posts = new List<Post>();
+            try
+            {
+                posts = _postLogic.GetAll().ToList();
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
+            return posts;
+
+
         }
 
         public string GetUserPhoto(User user = null)
@@ -213,11 +213,6 @@ namespace DentalOffice.WebUI.Management
             bool isPatientExist = (request["patientExist"] == "exist");
             bool isEmployeeExist = (request["employeeExist"] == "exist");
 
-            //if (!isPatientExist && !isEmployeeExist)
-            //{
-            //    return null;
-            //}
-
             var patientRole = _roleLogic.GetByRoleName("Пациент");
             var employeeRole = _roleLogic.GetByRoleName("Сотрудник");
             user.Roles = new List<Role>();
@@ -257,20 +252,48 @@ namespace DentalOffice.WebUI.Management
 
         public List<Patient> GetPatients()
         {
-           var patients =  _patientsLogic.GetAll().OrderBy(pat => pat.LastName);
-            //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+            try
+            {
+                var patients = _patientsLogic.GetAll();
+                if (patients != null && patients.Count() > 0)
+                {
+                    return patients.OrderBy(pat => pat.LastName).ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
+            catch (NullReferenceException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+            }
 
-            return patients.ToList();
+            return new List<Patient>();
         }
 
 
 
         public List<Employee> GetEmployees()
         {
-            var employees = _employeesLogic.GetAll().OrderBy(emp => emp.LastName);
-            //ДОПОЛНИТЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬЬ
+            var employees = new List<Employee>();
 
-            return employees.ToList();
+            try
+            {
+                employees = _employeesLogic.GetAll().OrderBy(emp => emp.LastName).ToList();
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
+            catch (NullReferenceException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+            }
+
+            return employees;
         }
 
         public Patient GetNewPatientFromRequest(HttpRequestBase request)
@@ -287,15 +310,15 @@ namespace DentalOffice.WebUI.Management
 
         public Patient AddPatient(Patient patient)
         {
-            //try
-            //{
-            patient = _patientsLogic.Add(patient);
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
+            try
+            {
+                patient = _patientsLogic.Add(patient);
+            }
+            catch (SqlException ex)
+            {
+                Logger.LogShortErrorInfo(ex);
+                return null;
+            }
             return patient;
         }
 
@@ -321,7 +344,7 @@ namespace DentalOffice.WebUI.Management
         {
             DateTime.TryParse(request["dateOfBirth"], out DateTime dateOfBirth);
             DateTime.TryParse(request["dateOfEmployment"], out DateTime dateOfEmployment);
-                 
+
 
             Employee employee = new Employee
             {
@@ -331,28 +354,19 @@ namespace DentalOffice.WebUI.Management
                 DateOfBirth = dateOfBirth,
                 DateOfEmployement = dateOfEmployment,
                 Note = request["empNote"],
-              //  Post = post
             };
 
             Int32.TryParse(request["post"], out int postID);
 
             if (postID != 0)
             {
-                try
-                {
-                    employee.Post = _postLogic.GetById(postID);
-                }
-                catch
-                {
-                    ////////////////////////////////////////////////////
-                    ////           LOG
-                }
+                employee.Post = _postLogic.GetById(postID);
             }
 
             return employee;
         }
 
-    
+
 
         private byte[] GetAndResizeImageFromRequest(int width = 100, int height = 100)
         {
