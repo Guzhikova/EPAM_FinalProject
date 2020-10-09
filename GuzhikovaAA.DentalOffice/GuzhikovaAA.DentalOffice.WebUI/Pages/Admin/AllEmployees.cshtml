@@ -40,49 +40,51 @@
         </thead>
         <tbody>
             @if (employees != null)
-                        {
-                            var user = new User();
+            {
+                var user = new User();
 
-                            foreach (var employee in employees)
+                foreach (var employee in employees)
+                {
+                    user = adminMod.GetUsers().FirstOrDefault(us => (us.EmployeeData != null) && (us.EmployeeData.ID == employee.ID));
+                    if (user != null)
+                    {
+                        photoSrc = adminMod.GetUserPhoto(user);
+                    }
+
+                    <tr>
+                        <th class="text-secondary">@(++counter)</th>
+                        <td><img class=" photo" src=@photoSrc></td>
+                        <th>
+                            <a href="~/Pages/Admin/Employee?employeeId=@employee.ID" target="_blank">@employee.ToString() </a>
+                        </th>
+                        <td>@employee.Age</td>
+                        <td>@employee.WorkExperience</td>
+                        <td>
+                            @if (employee.Post != null)
                             {
-                                user = adminMod.GetUsers().FirstOrDefault(us => (us.EmployeeData != null) && (us.EmployeeData.ID == employee.ID));
-                                if (user != null)
+                                @employee.Post.Title
+
+                            }
+                        </td>
+                        <td>
+                            @if (employee.Specialties != null)
+                            {
+
+                                foreach (var specialty in employee.Specialties)
                                 {
-                                    photoSrc = adminMod.GetUserPhoto(user);
+                                    <text>@(specialty.Title). </text>
                                 }
 
-            <tr>
-                <th class="text-secondary">@(++counter)</th>
-                <td><img class=" photo" src=@photoSrc></td>
-                <th><a href="~/Pages/Admin/Employee?patientId=@employee.ID" target="_blank">@employee.ToString() </a></th>
-                <td>@employee.Age</td>
-                <td>@employee.WorkExperience</td>
-                <td>
-                    @if (employee.Post != null)
-                    {
-                        @employee.Post.Title
-
-                    }
-                </td>
-                <td>
-                    @if (employee.Specialties != null)
-                    {
-
-                        foreach (var specialty in employee.Specialties)
-                        {
-                            <text>@(specialty.Title). </text>
-                        }
-
-                    }
-                </td>
-                <td>@employee.Note</td>
-                    <td>
-                        @if (user != null)
-                    {
-                            <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" target="_blank"> @user.Login</a>
-                        }
-                    </td>
-                </tr>
+                            }
+                        </td>
+                        <td>@employee.Note</td>
+                        <td>
+                            @if (user != null)
+                            {
+                                <a href="~/Pages/Admin/User?action=edit&userId=@user.ID" target="_blank"> @user.Login</a>
+                            }
+                        </td>
+                    </tr>
                 }
 
             }

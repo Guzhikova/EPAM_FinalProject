@@ -23,14 +23,6 @@ namespace DentalOffice.WebUI.Management
 
         public override bool IsUserInRole(string userName, string roleName)
         {
-            if (roleName == null || roleName == "")
-                throw new ProviderException("Role name cannot be empty or null.");
-
-            if (userName == null || userName == "")
-                throw new ProviderException("User name cannot be empty or null.");
-
-            if (!RoleExists(roleName))
-                throw new ProviderException("Role does not exist.");
 
             var user = new User();
             user = _userLogic.GetByLogin(userName);
